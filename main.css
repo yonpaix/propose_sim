@@ -4,16 +4,41 @@ body
 	height: 100vh;
 	width: 100vw;
 
-	background-color: black;
+	background-color: pink;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-canvas
+#scene-window
 {
-	border: 1px solid #000;
-	background-color: white;
-	image-rendering: pixelated;
+	height: 658px;
+	width: 800px;
+
+	display: flex;
+	
+}
+
+#scene
+{
+	transition: 1.0s linear 0s;
+
+	height: 100%;
+	width: 100%;
+	//background: url('1.png');
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#line-text
+{
+	margin-top: 50%;
+	font-size: 50px;
+	color: white;
+	text-shadow: 0 0 10px #000000;
+	text-transform: uppercase;
+	font-family: 'Roboto', sans-serif;
 }
