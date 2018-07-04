@@ -7,18 +7,20 @@
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
 <body>
-	<div id="scene-window">
-		<div id="scene">
-			<p id = "line-text">
-
-			</p>
+	<div class="wrapper">
+		<div id="scene-window">
+			<div id="scene">
+				<p id = "line-text"></p>
+			</div>
 		</div>
+		<form>
+	      <span>What will he say?</span>
+	      <br/>
+	      <input id="line-text-input" type="text"><br/>
+	      
+	    </form>
+		<button onclick="startAnimation()">Click me</button>
 	</div>
-	<div>
-      <span>What will he say?</span><br/>
-      <input id="line-text-input" type="text"><br/>
-    </div>
-	<button onclick="startAnimation()">Click me</button>
 	<script src="canvas.js"></script>
 </body>
 </html>

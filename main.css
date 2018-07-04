@@ -1,3 +1,8 @@
+*
+{
+	box-sizing: border-box;
+}
+
 body
 {
 	margin: 0;
@@ -11,13 +16,38 @@ body
 	align-items: center;
 }
 
+/*
+**********WRAPPING BODIES**************
+*/
+
+.wrapper
+{
+	width: 75%;
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+}
+
 #scene-window
 {
 	height: 658px;
 	width: 800px;
 
+	background-color: #ffe6e6;
+	border: 3px solid #ff0066;
+	border-radius: 15px;
+
 	display: flex;
-	
+}
+
+form
+{
+	display: flex;
+	justify-content: center;
 }
 
 #scene
@@ -26,7 +56,6 @@ body
 
 	height: 100%;
 	width: 100%;
-	//background: url('1.png');
 
 	display: flex;
 	justify-content: center;

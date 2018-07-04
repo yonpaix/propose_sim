@@ -23,7 +23,8 @@ CLASS DEFINITIONS
 // speechSynthesis.speak(msg);
 
 let scene_i = 0;
-let scene_array = ['1.png','2.png','3.png','4.png','5.png',];
+// let scene_array = ['1.png','2.png','3.png','4.png','5.png'];
+let scene_array = ['1-1','1-2','1-3','1-4','1-5'];
 let scene_elem = document.getElementById('scene');
 let line_text_elem = document.getElementById('line-text');
 
@@ -40,7 +41,7 @@ function speechSynth(msgText)
 	
 	msg.voiceURI = 'native';
 	msg.volume = 1; // 0 to 1
-	msg.rate = 10; // 0.1 to 10
+	msg.rate = 1; // 0.1 to 10
 	msg.pitch = 1; //0 to 2
 	msg.text = msgText;
 	msg.lang = 'ja-JP';
@@ -66,7 +67,7 @@ function audioFunction(songName) {
 function sceneSlide()
 {
 	let waitTime = 5000;
-	scene_elem.style.backgroundImage = `url(${scene_i + 1}.png)`;
+	scene_elem.style.backgroundImage = `url(1-${scene_i + 1}.jpg)`;
 	
 	console.log(scene_i);
 
