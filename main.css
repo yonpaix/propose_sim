@@ -38,7 +38,6 @@ body
 	width: 800px;
 
 	background-color: #ffe6e6;
-	border: 3px solid #ff0066;
 	border-radius: 15px;
 
 	display: flex;
@@ -60,6 +59,11 @@ form
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	border: 3px solid #ff0066;
+	border-radius: 15px;
+
+
 }
 
 #line-text
@@ -70,4 +74,85 @@ form
 	text-shadow: 0 0 10px #000000;
 	text-transform: uppercase;
 	font-family: 'Roboto', sans-serif;
+}
+
+/*
+***************VOICE BOX**************
+*/
+
+#voice-box
+{
+	width: 640px;
+	background: #FFF;
+	padding: 1em;
+	margin: 1em auto;
+	box-shadow: 0 2px 10px rgba(0,0,0,0.8);
+	margin-top: 100px;
+
+	/*display: none;*/
+}
+
+h1
+{
+	margin-top: 0;
+}
+
+#msg
+{
+	font-size: 0.9em;
+	line-height: 1.4em;
+}
+
+input[type="text"]
+{
+	width: 100%;
+	padding: 0.5em;
+	font-size: 1.2em;
+	border-radius: 3px;
+	border: 1px solid #D9D9D9;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.1) inset;
+}
+
+input[type="range"]
+{
+	width: 300px;
+}
+
+label
+{
+	display: inline-block;
+	float: left;
+	width: 150px;
+}
+
+.option
+{
+	margin: 1em 0;
+	margin-bottom: 20px;
+}
+
+button
+{
+	display: inline-block;
+	border-radius: 3px;
+	border: none;
+	font-size: 0.9rem;
+	padding: 0.5rem 0.8em;
+	background: #2E7D32;
+	color: white;
+	font-weight: bold;
+	margin: 0;
+	width: 100%;
+	text-align: center;
+}
+
+button:hover, button:focus
+{
+	opacity: 0.75;
+	cursor: pointer;
+}
+
+button:active
+{
+	opacity: 1;
 }

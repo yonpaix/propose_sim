@@ -14,48 +14,61 @@ EVENT LISTENERS
 CLASS DEFINITIONS
 **********************/
 
-// speechSynthesis.getVoices().forEach(function(voice) {
-//   console.log(voice.name, voice.default ? voice.default :'');
-// });
+class Scene
+{
+	constructor(duration, imgSource)
+	{
+		this.duration = duration;
+		this.imgSource = imgSource;
+	}
+}
 
-// var msg = new SpeechSynthesisUtterance('Because that was the default!');
-// msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == 'Whisper'; })[0];
-// speechSynthesis.speak(msg);
+/*********************
+FUNCTIONS
+**********************/
 
-let scene_i = 0;
-// let scene_array = ['1.png','2.png','3.png','4.png','5.png'];
-let scene_array = ['1-1','1-2','1-3','1-4','1-5'];
-let scene_elem = document.getElementById('scene');
-let line_text_elem = document.getElementById('line-text');
+function loadVoices()
+{
+	var voices = speechSynthesis.getVoices();
+	voices.forEach(
+		function(voice, i)
+		{
+			var option = document.createElement("option");
+			option.value = voice.name;
+			option.innerHTML = voice.name;
+			voiceSelect.appendChild(option);
+		}
+	);
+}
 
-function speechSynth(msgText)
+function speak(text)
 {
 	var msg = new SpeechSynthesisUtterance();
-	var voices = window.speechSynthesis.getVoices();
-	msg.voice = voices[10]; // Note: some voices don't support altering params
-	console.log(voices.length + ' voices available.');
-	voices.forEach(function(element) {
-	  console.log(element);
-	});
+	msg.text = text;
+	msg.volume = parseFloat(volumeInput.value);
+	msg.rate = parseFloat(rateInput.value);
+	msg.pitch = parseFloat(pitchInput.value);
 
-	
-	msg.voiceURI = 'native';
-	msg.volume = 1; // 0 to 1
-	msg.rate = 1; // 0.1 to 10
-	msg.pitch = 1; //0 to 2
-	msg.text = msgText;
-	msg.lang = 'ja-JP';
+	if(voiceSelect.value)
+	{
+		msg.voice = speechSynthesis.getVoices().filter
+		(
+			function(voice)
+			{
+				return voice.name == voiceSelect.value
+			}
+		)[0];
+	}
 
 	msg.onend = function(e) {
 	  console.log('Finished in ' + event.elapsedTime + ' seconds.');
 	};
 
-	speechSynthesis.speak(msg);
+	window.speechSynthesis.speak(msg);
 }
 
 function startAnimation()
 {
-	//console.log(document.getElementById("lineText").value);
 	sceneSlide();
 }
 
@@ -76,8 +89,8 @@ function sceneSlide()
         audioFunction('intro');
         break;
     case 3:
-    	speechSynth(document.getElementById("line-text-input").value);
-    	line_text_elem.innerHTML = document.getElementById("line-text-input").value;
+    	speak(speechMsgInput.value);
+    	line_text_elem.innerHTML = speechMsgInput.value;
     	break;
     case 4:
     	line_text_elem.innerHTML = '';
@@ -97,3 +110,43 @@ function sceneSlide()
 	}
 }
 
+let scene_i = 0;
+let scene_array = ['1-1','1-2','1-3','1-4','1-5'];
+let scene_elem = document.getElementById('scene');
+let line_text_elem = document.getElementById('line-text');
+
+var supportMsg = document.getElementById("msg");
+var button = document.getElementById("speak");
+var speechMsgInput = document.getElementById("speech-msg");
+var voiceSelect = document.getElementById("voice");
+var volumeInput = document.getElementById("volume");
+var rateInput = document.getElementById("rate");
+var pitchInput = document.getElementById("pitch");
+
+if('speechSynthesis' in window)
+{
+	supportMsg.innerHTML = "Your browser <strong>supports</strong> speech synthesis.";
+
+}
+else
+{
+	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis.";
+}
+
+loadVoices();
+
+window.speechSynthesis.onvoiceschanged = function(e)
+	{
+		loadVoices();
+	};
+
+button.addEventListener('click', function(e)
+	{
+		console.log(speechMsgInput.value.length);
+		if(speechMsgInput.value.length > 0)
+		{
+			speak(speechMsgInput.value);
+		}
+	}
+
+);

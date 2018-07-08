@@ -10,6 +10,35 @@
 	<div class="wrapper">
 		<div id="scene-window">
 			<div id="scene">
+
+				<!-- FORM BOX -->
+				<div id="voice-box">
+					<h1>Web Speech Example</h1>
+					<p id="msg"></p>
+					<input type="text" name="speech-msg" id="speech-msg">
+					<div class="option">
+						<label for="voice">Voice</label>
+						<select name="voice" id="voice"></select>
+					</div>
+					
+					<div class="option">
+						<label for="volume">Volume</label>
+						<input type="range" min="0" max="1" step="0.1" name="volume" id="volume" value="1" />
+					</div>
+
+					<div class="option">
+						<label for="rate">Rate</label>
+						<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value="1" />
+					</div>
+
+					<div class="option">
+						<label for="pitch">Pitch</label>
+						<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
+					</div>
+					<!-- END FORM BOX -->
+					<button id="speak">Speak</button>
+				</div>
+
 				<p id = "line-text"></p>
 			</div>
 		</div>
@@ -17,10 +46,11 @@
 	      <span>What will he say?</span>
 	      <br/>
 	      <input id="line-text-input" type="text"><br/>
-	      
+
 	    </form>
 		<button onclick="startAnimation()">Click me</button>
 	</div>
+
 	<script src="canvas.js"></script>
 </body>
 </html>
