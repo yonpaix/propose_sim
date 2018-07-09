@@ -1,4 +1,48 @@
 /*********************
+CLASS DEFINITIONS
+**********************/
+
+class Scene
+{
+	constructor(imgSource, duration, sounds, confession)
+	{
+		this.duration = duration;
+		this.imgSource = imgSource;
+		this.sounds = sounds; //array of SceneSound objects
+		this.confession = confession;
+	}
+}
+
+class SceneSound
+{
+	constructor(songName, startTime)
+	{
+		this.songName = songName;
+		this.startTime = startTime;
+	}
+
+	playSong()
+	{
+		var audio = new Audio(`${this.songName}.ogg`);
+		//audio.play();
+		console.log(audio);
+		setTimeout
+		(
+			function()
+			{
+				audio.play();
+			},
+			this.startTime
+		);
+	}
+}
+
+/*class SceneImage
+{
+	constructor(imgSource, )
+}*/
+
+/*********************
 CONSTANTS
 **********************/
 
@@ -6,22 +50,72 @@ CONSTANTS
 GLOBAL VARIABLES
 **********************/
 
+let scene_i = 0;
+
+let scenes = 
+[
+	new Scene('1-1', 5000, [new SceneSound('intro', 2000)], false),
+	new Scene('1-2', 2000, null, false),
+	new Scene('1-2b', 2000, null, false),
+	new Scene('1-2c', 2000, null, false),
+	new Scene('1-2b', 2000, null, false),
+	new Scene('1-3', 2000, null, false),
+	new Scene('1-3b', 2000, null, false),
+	new Scene('1-4', 2000, null, false),
+	new Scene('1-4b', 5000, [new SceneSound('plove', 0)], true),
+	new Scene('1-5', 5000, null, false)
+]; //contains individual scene objects
+
+
+
+// var n = 100;
+// var sample = [];
+// for (var i = 0; i < n; i++)
+//     sample.push({});
+
+
+let scene_elem = document.getElementById('scene');
+let line_text_elem = document.getElementById('line-text');
+
+var voiceBox = document.getElementById("voice-box");
+var supportMsg = document.getElementById("msg");
+var confessionButton = document.getElementById("confession-button");
+var playSceneButton = document.getElementById("play-button");
+var speechMsgInput = document.getElementById("speech-msg");
+var voiceSelect = document.getElementById("voice");
+var volumeInput = document.getElementById("volume");
+var rateInput = document.getElementById("rate");
+var pitchInput = document.getElementById("pitch");
+
 /*********************
 EVENT LISTENERS
 **********************/
 
-/*********************
-CLASS DEFINITIONS
-**********************/
-
-class Scene
+if(confessionButton)
 {
-	constructor(duration, imgSource)
-	{
-		this.duration = duration;
-		this.imgSource = imgSource;
-	}
+	confessionButton.addEventListener
+	('click', function(e)
+		{
+			if(speechMsgInput.value.length > 0)
+			{
+				startAnimation();
+			}
+		}
+
+	);
 }
+
+if(playSceneButton)
+{
+	playSceneButton.addEventListener
+	('click', function(e)
+		{
+			startAnimation();
+		}
+
+	);
+}
+
 
 /*********************
 FUNCTIONS
@@ -70,37 +164,53 @@ function speak(text)
 function startAnimation()
 {
 	sceneSlide();
-}
-
-function audioFunction(songName) {
-	var audio = new Audio(`${songName}.ogg`);
-	audio.play();
+	console.log('slide complete');
 }
 
 function sceneSlide()
 {
-	let waitTime = 5000;
-	scene_elem.style.backgroundImage = `url(1-${scene_i + 1}.jpg)`;
-	
+	let waitTime = scenes[scene_i].duration;
+	scene_elem.style.backgroundImage = `url(${scenes[scene_i].imgSource}.jpg)`;
+	if(scenes[scene_i].confession) //handles the scene where user inputs the dialogue
+	{
+		console.log(speechMsgInput.value);
+		if(speechMsgInput.value == '')
+		{
+			voiceBox.style.display = 'initial';
+			scene_i = 0;
+			return;
+		}
+		else
+		{
+			console.log('second round');
+		}
+		
+	}
+
+	if(scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
+	{
+		for(let sound_i = 0; sound_i < scenes[scene_i].sounds.length; sound_i++)
+		{
+			scenes[scene_i].sounds[sound_i].playSong();
+		}
+	}
+
 	console.log(scene_i);
 
-	switch(scene_i) {
-    case 0:
-        audioFunction('intro');
-        break;
-    case 3:
-    	speak(speechMsgInput.value);
-    	line_text_elem.innerHTML = speechMsgInput.value;
-    	break;
-    case 4:
-    	line_text_elem.innerHTML = '';
-    	audioFunction('plove');
-    	break;
-}
+	/*switch(scene_i)
+	{
+	    case 3:
+	    	speak(speechMsgInput.value);
+	    	line_text_elem.innerHTML = speechMsgInput.value;
+	    	break;
+	    case 4:
+	    	line_text_elem.innerHTML = '';
+	    	break;
+	}*/
 
 	scene_i++
 
-	if(scene_i < scene_array.length)
+	if(scene_i < scenes.length)
 	{
 		setTimeout('sceneSlide()', waitTime);
 	}
@@ -110,18 +220,11 @@ function sceneSlide()
 	}
 }
 
-let scene_i = 0;
-let scene_array = ['1-1','1-2','1-3','1-4','1-5'];
-let scene_elem = document.getElementById('scene');
-let line_text_elem = document.getElementById('line-text');
-
-var supportMsg = document.getElementById("msg");
-var button = document.getElementById("speak");
-var speechMsgInput = document.getElementById("speech-msg");
-var voiceSelect = document.getElementById("voice");
-var volumeInput = document.getElementById("volume");
-var rateInput = document.getElementById("rate");
-var pitchInput = document.getElementById("pitch");
+function audioFunction(songName)
+	{
+		var audio = new Audio(`${songName}.ogg`);
+		audio.play();
+	}
 
 if('speechSynthesis' in window)
 {
@@ -140,13 +243,4 @@ window.speechSynthesis.onvoiceschanged = function(e)
 		loadVoices();
 	};
 
-button.addEventListener('click', function(e)
-	{
-		console.log(speechMsgInput.value.length);
-		if(speechMsgInput.value.length > 0)
-		{
-			speak(speechMsgInput.value);
-		}
-	}
-
-);
+// startAnimation();

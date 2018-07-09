@@ -62,7 +62,7 @@ form
 
 	border: 3px solid #ff0066;
 	border-radius: 15px;
-
+	background-repeat: no-repeat;
 
 }
 
@@ -89,7 +89,7 @@ form
 	box-shadow: 0 2px 10px rgba(0,0,0,0.8);
 	margin-top: 100px;
 
-	/*display: none;*/
+	display: none;
 }
 
 h1
