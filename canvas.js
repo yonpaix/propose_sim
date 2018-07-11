@@ -131,7 +131,8 @@ FUNCTIONS
 function loadVoices()
 {
 	var voices = speechSynthesis.getVoices();
-	voices.forEach(
+	voices.forEach
+	(
 		function(voice, i)
 		{
 			var option = document.createElement("option");
@@ -254,6 +255,7 @@ window.speechSynthesis.onvoiceschanged = function(e)
 
 msg.onboundary = function(event)
 {
+	console.log('onboundary fired');
   	var word = getWordAt(speechMsgInput.value,event.charIndex);
     // Show Speaking word : x
   	line_text_elem.innerHTML += word + " ";
