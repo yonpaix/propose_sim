@@ -9,7 +9,7 @@ class Scene
 		this.duration = duration;
 		this.imgSource = imgSource;
 		this.sounds = sounds; //array of SceneSound objects
-		this.confession = confession;
+		this.confession = confession; //boolean whether this scene is the proposal theme
 	}
 }
 
@@ -52,14 +52,16 @@ GLOBAL VARIABLES
 
 let scene_i = 0;
 
+//KITCHEN SCENE
+
 let scenes = 
 [
-	new Scene('1-1', 5000, [new SceneSound('intro', 2000)], false),
-	new Scene('1-2', 2000, null, false),
-	new Scene('1-2b', 2000, null, false),
-	new Scene('1-2c', 2000, null, false),
-	new Scene('1-2b', 2000, null, false),
-	new Scene('1-3', 2000, null, false),
+	new Scene('1-1', 4000, [new SceneSound('intro', 2000)], false),
+	new Scene('1-2', 1200, null, false),
+	new Scene('1-2b', 1800, null, false),
+	new Scene('1-2c', 1900, null, false),
+	new Scene('1-2b', 1800, null, false),
+	new Scene('1-3', 2700, null, false),
 	new Scene('1-3b', 2000, null, false),
 	new Scene('1-4', 2000, null, false),
 	new Scene('1-4b', 5000, [new SceneSound('plove', 0)], true),
@@ -87,6 +89,9 @@ var volumeInput = document.getElementById("volume");
 var rateInput = document.getElementById("rate");
 var pitchInput = document.getElementById("pitch");
 
+var msg = new SpeechSynthesisUtterance();
+var wordIndex = 0;
+
 /*********************
 EVENT LISTENERS
 **********************/
@@ -99,6 +104,7 @@ if(confessionButton)
 			if(speechMsgInput.value.length > 0)
 			{
 				startAnimation();
+				voiceBox.style.display = 'none';
 			}
 		}
 
@@ -111,6 +117,7 @@ if(playSceneButton)
 	('click', function(e)
 		{
 			startAnimation();
+			playSceneButton.style.display = 'none';
 		}
 
 	);
@@ -137,7 +144,7 @@ function loadVoices()
 
 function speak(text)
 {
-	var msg = new SpeechSynthesisUtterance();
+	
 	msg.text = text;
 	msg.volume = parseFloat(volumeInput.value);
 	msg.rate = parseFloat(rateInput.value);
@@ -153,10 +160,6 @@ function speak(text)
 			}
 		)[0];
 	}
-
-	msg.onend = function(e) {
-	  console.log('Finished in ' + event.elapsedTime + ' seconds.');
-	};
 
 	window.speechSynthesis.speak(msg);
 }
@@ -182,7 +185,8 @@ function sceneSlide()
 		}
 		else
 		{
-			console.log('second round');
+			speak(speechMsgInput.value);
+
 		}
 		
 	}
@@ -194,19 +198,6 @@ function sceneSlide()
 			scenes[scene_i].sounds[sound_i].playSong();
 		}
 	}
-
-	console.log(scene_i);
-
-	/*switch(scene_i)
-	{
-	    case 3:
-	    	speak(speechMsgInput.value);
-	    	line_text_elem.innerHTML = speechMsgInput.value;
-	    	break;
-	    case 4:
-	    	line_text_elem.innerHTML = '';
-	    	break;
-	}*/
 
 	scene_i++
 
@@ -243,4 +234,38 @@ window.speechSynthesis.onvoiceschanged = function(e)
 		loadVoices();
 	};
 
-// startAnimation();
+/////////////////////////////////
+
+msg.onboundary = function(event)
+{
+  	var word = getWordAt(speechMsgInput.value,event.charIndex);
+    // Show Speaking word : x
+  	line_text_elem.innerHTML += word + " ";
+    //Increase index of span to highlight
+    
+    wordIndex++;
+};
+
+msg.onend = function()
+{
+    wordIndex = 0;
+};
+
+// Get the word of a string given the string and the index
+function getWordAt(str, pos)
+{
+    // Perform type conversions.
+    str = String(str);
+    pos = Number(pos) >>> 0;
+
+    // Search for the word's beginning and end.
+    var left = str.slice(0, pos + 1).search(/\S+$/),
+        right = str.slice(pos).search(/\s/);
+
+    // The last word in the string is a special case.
+    if (right < 0) {
+        return str.slice(left);
+    }
+    // Return the word, using the located bounds to extract it from the string.
+    return str.slice(left, right + pos);
+}
