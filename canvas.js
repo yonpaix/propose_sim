@@ -69,13 +69,6 @@ let scenes =
 ]; //contains individual scene objects
 
 
-
-// var n = 100;
-// var sample = [];
-// for (var i = 0; i < n; i++)
-//     sample.push({});
-
-
 let scene_elem = document.getElementById('scene');
 let line_text_elem = document.getElementById('line-text');
 
@@ -83,6 +76,7 @@ var voiceBox = document.getElementById("voice-box");
 var supportMsg = document.getElementById("msg");
 var confessionButton = document.getElementById("confession-button");
 var playSceneButton = document.getElementById("play-button");
+var skipButton = document.getElementById("skip-button");
 var speechMsgInput = document.getElementById("speech-msg");
 var voiceSelect = document.getElementById("voice");
 var volumeInput = document.getElementById("volume");
@@ -103,11 +97,10 @@ if(confessionButton)
 		{
 			if(speechMsgInput.value.length > 0)
 			{
-				startAnimation();
-				voiceBox.style.display = 'none';
+				sceneSlide(false);
+				
 			}
 		}
-
 	);
 }
 
@@ -116,12 +109,19 @@ if(playSceneButton)
 	playSceneButton.addEventListener
 	('click', function(e)
 		{
-			startAnimation();
-			playSceneButton.style.display = 'none';
+			sceneSlide(false);
+			
 		}
 
 	);
 }
+
+skipButton.addEventListener
+('click', function(e)
+	{
+		sceneSlide(true);
+	}
+);
 
 
 /*********************
@@ -164,15 +164,31 @@ function speak(text)
 	window.speechSynthesis.speak(msg);
 }
 
-function startAnimation()
+function sceneSlide(skip) //plays the scene, if skip is true, goes to the proposal right away
 {
-	sceneSlide();
-	console.log('slide complete');
-}
+	voiceBox.style.display = 'none';
+	playSceneButton.style.display = 'none';
+	//handles the skip button
+	if(skip)
+	{
+		console.log("skip activated");
+		for(let skip_i = 0; skip_i < scenes.length; skip_i++)
+		{
+			console.log(skip_i);
+			if(scenes[skip_i].confession == true)
+			{
+				scene_i = skip_i
+				break;
+			}
+		}
+	}
+	else
+	{
+		console.log('no skip detected');
+	}
 
-function sceneSlide()
-{
 	let waitTime = scenes[scene_i].duration;
+
 	scene_elem.style.backgroundImage = `url(${scenes[scene_i].imgSource}.jpg)`;
 	if(scenes[scene_i].confession) //handles the scene where user inputs the dialogue
 	{
@@ -230,9 +246,9 @@ else
 loadVoices();
 
 window.speechSynthesis.onvoiceschanged = function(e)
-	{
-		loadVoices();
-	};
+{
+	loadVoices();
+};
 
 /////////////////////////////////
 
