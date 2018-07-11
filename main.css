@@ -74,10 +74,9 @@ form
 #line-text
 {
 	margin-top: 50%;
-	font-size: 50px;
+	font-size: 30px;
 	color: white;
 	text-shadow: 0 0 10px #000000;
-	text-transform: uppercase;
 	font-family: 'Roboto', sans-serif;
 }
 

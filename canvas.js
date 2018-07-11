@@ -15,10 +15,11 @@ class Scene
 
 class SceneSound
 {
-	constructor(songName, startTime)
+	constructor(songName, startTime, confession)
 	{
 		this.songName = songName;
 		this.startTime = startTime;
+		this.confession = confession;
 	}
 
 	playSong()
@@ -46,6 +47,8 @@ class SceneSound
 CONSTANTS
 **********************/
 
+const DEFAULT_LINE = "The brown fox jumps over the lazy dog."
+
 /*********************
 GLOBAL VARIABLES
 **********************/
@@ -56,7 +59,7 @@ let scene_i = 0;
 
 let scenes = 
 [
-	new Scene('1-1', 4000, [new SceneSound('intro', 2000)], false),
+	new Scene('1-1', 4000, [new SceneSound('intro', 2000, false)], false),
 	new Scene('1-2', 1200, null, false),
 	new Scene('1-2b', 1800, null, false),
 	new Scene('1-2c', 1900, null, false),
@@ -64,7 +67,7 @@ let scenes =
 	new Scene('1-3', 2700, null, false),
 	new Scene('1-3b', 2000, null, false),
 	new Scene('1-4', 2000, null, false),
-	new Scene('1-4b', 5000, [new SceneSound('plove', 0)], true),
+	new Scene('1-4b', 5000, [new SceneSound('plove', 1000, true)], true),
 	new Scene('1-5', 5000, null, false)
 ]; //contains individual scene objects
 
@@ -169,6 +172,8 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 {
 	voiceBox.style.display = 'none';
 	playSceneButton.style.display = 'none';
+	//let songWaitTime;
+
 	//handles the skip button
 	if(skip)
 	{
@@ -188,6 +193,7 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 		console.log('no skip detected');
 	}
 
+	let songWaitTime = 0;
 	let waitTime = scenes[scene_i].duration;
 
 	scene_elem.style.backgroundImage = `url(${scenes[scene_i].imgSource}.jpg)`;
@@ -202,30 +208,53 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 		}
 		else
 		{
-			speak(speechMsgInput.value);
+			msg.onend = function(event)
+			{
+				// waitTime += Math.floor(event.elapsedTime);
+				// songWaitTime += Math.floor(event.elapsedTime) + 1000; //gap before song plays after utterance
+				soundIterator();
+				scene_i++;
+				sceneEnd(waitTime);
+  			}
 
+			speak(speechMsgInput.value);		
 		}
 		
 	}
+	else
+	{
+		soundIterator();
+		scene_i++;
 
+		sceneEnd(waitTime);
+	}
+}
+
+function soundIterator()
+{
 	if(scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
 	{
+
 		for(let sound_i = 0; sound_i < scenes[scene_i].sounds.length; sound_i++)
 		{
+			console.log('song start: ' + scenes[scene_i].sounds[sound_i].startTime);
+
 			scenes[scene_i].sounds[sound_i].playSong();
 		}
 	}
+}
 
-	scene_i++
-
+function sceneEnd(waitTime)
+{
 	if(scene_i < scenes.length)
-	{
-		setTimeout('sceneSlide()', waitTime);
-	}
-	else
-	{
-		scene_i = 0;
-	}
+		{
+			console.log('wait time: ' + waitTime);
+			setTimeout('sceneSlide()', waitTime);
+		}
+		else
+		{
+			scene_i = 0;
+		}
 }
 
 function audioFunction(songName)
