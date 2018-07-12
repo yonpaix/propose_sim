@@ -1,3 +1,10 @@
+:root {
+  --main-bg-color: #fbe7e9;
+  --border-color: #d8347e;
+  --border-radius: 1%;
+}
+
+
 *
 {
 	box-sizing: border-box;
@@ -9,12 +16,28 @@ body
 	height: 100vh;
 	width: 100vw;
 
-	background-color: pink;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	background-color: var(--main-bg-color, pink);
 }
+/*
+//////////STYLING//////////////////////
+*/
+
+#dimmer /*allows the bg to dim when scene is playing*/
+{
+	height: 100%;
+	width: 100%;
+	background-color: black;
+	position: absolute;
+
+	opacity: 0.5;
+	transition: 1.0s linear 0s;
+	z-index: -1;
+}
+
 
 /*
 **********WRAPPING BODIES**************
@@ -34,39 +57,41 @@ body
 
 #scene-window
 {
-	/*height: 658px;
-	width: 800px;*/
-	width: 100%;
-	height: 80vh;
+	width: 50vw;
+	height: 50vh;
+	padding: 2% 1%;
 
 	background-color: #ffe6e6;
-	border-radius: 15px;
+	border: 2px solid var(--border-color, magenta);
+	border-radius: var(--border-radius, 1%);
 
-	display: flex;
+
+	/*display: flex;*/
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-}
 
-form
-{
-	display: flex;
-	justify-content: center;
+	display: hidden;
 }
 
 #scene
 {
 	transition: 1.0s linear 0s;
 
-	height: 453px;
-	width: 802px;
+	/*height: 453px;
+	width: 802px;*/
+
+	width: 100%;
+	height: 100%;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	border: 3px solid #ff0066;
-	border-radius: 15px;
+	border: 2px solid var(--border-color, magenta);
+
+	background-position: center;
+	background-size: cover;
 	background-repeat: no-repeat;
 
 }
@@ -138,15 +163,17 @@ label
 button
 {
 	display: inline-block;
+	
 	border-radius: 3px;
 	border: none;
+
 	font-size: 0.9rem;
 	padding: 0.5rem 0.8em;
-	background: #2E7D32;
+	background: var(--border-color, magenta);
 	color: white;
 	font-weight: bold;
 	margin: 0;
-	width: 100%;
+	/*width: 100%;*/
 	text-align: center;
 }
 

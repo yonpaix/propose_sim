@@ -2,6 +2,21 @@
 CLASS DEFINITIONS
 **********************/
 
+class Scenario //array of scenes + information about voice box positioning
+{
+	constructor(scenarioName, scenes)
+	{
+		this.scenes = scenes;
+		this.scenarioName = scenarioName;
+	}
+
+	toString()
+	{
+		return this.scenarioName;
+	}
+}
+
+
 class Scene
 {
 	constructor(imgSource, duration, sounds, confession)
@@ -57,22 +72,26 @@ let scene_i = 0;
 
 //KITCHEN SCENE
 
-let scenes = 
-[
-	new Scene('1-1', 4000, [new SceneSound('intro', 2000, false)], false),
-	new Scene('1-2', 1200, null, false),
-	new Scene('1-2b', 1800, null, false),
-	new Scene('1-2c', 1900, null, false),
-	new Scene('1-2b', 1800, null, false),
-	new Scene('1-3', 2700, null, false),
-	new Scene('1-3b', 2000, null, false),
-	new Scene('1-4', 2000, null, false),
-	new Scene('1-4b', 5000, [new SceneSound('plove', 1000, true)], true),
-	new Scene('1-5', 5000, null, false)
-]; //contains individual scene objects
+let scene1 = new Scenario
+(
+	"Kitchen Proposal",
+	[
+		new Scene('1-1', 4000, [new SceneSound('intro', 2000, false)], false),
+		new Scene('1-2', 1200, null, false),
+		new Scene('1-2b', 1800, null, false),
+		new Scene('1-2c', 1900, null, false),
+		new Scene('1-2b', 1800, null, false),
+		new Scene('1-3', 2700, null, false),
+		new Scene('1-3b', 2000, null, false),
+		new Scene('1-4', 2000, null, false),
+		new Scene('1-4b', 5000, [new SceneSound('plove', 1000, true)], true),
+		new Scene('1-5', 5000, null, false)
+	]
+); //contains individual scene objects
 
 
 let scene_elem = document.getElementById('scene');
+let sceneWindow = document.getElementById('scene-window');
 let line_text_elem = document.getElementById('line-text');
 
 var voiceBox = document.getElementById("voice-box");
@@ -100,29 +119,31 @@ if(confessionButton)
 		{
 			if(speechMsgInput.value.length > 0)
 			{
-				sceneSlide(false);
+				sceneSlide(scene1, false);
 				
 			}
 		}
 	);
 }
 
-if(playSceneButton)
-{
-	playSceneButton.addEventListener
-	('click', function(e)
-		{
-			sceneSlide(false);
-			
-		}
+// if(playSceneButton)
+// {
+playSceneButton.addEventListener
+(
+	'click', function(e)
+	{
+		//scene.style.display = 'flex';
+		console.log('scene button pressed. scene arg is ' + scene1);
+		sceneSlide(scene1, false);
+	}
 
-	);
-}
+);
+// }
 
 skipButton.addEventListener
 ('click', function(e)
 	{
-		sceneSlide(true);
+		sceneSlide(scene1, true);
 	}
 );
 
@@ -168,20 +189,20 @@ function speak(text)
 	window.speechSynthesis.speak(msg);
 }
 
-function sceneSlide(skip) //plays the scene, if skip is true, goes to the proposal right away
+function sceneSlide(scenario, skip) //plays the scene, if skip is true, goes to the proposal right away
 {
 	voiceBox.style.display = 'none';
-	playSceneButton.style.display = 'none';
+	//playSceneButton.style.display = 'none';
 	//let songWaitTime;
 
 	//handles the skip button
 	if(skip)
 	{
 		console.log("skip activated");
-		for(let skip_i = 0; skip_i < scenes.length; skip_i++)
+		for(let skip_i = 0; skip_i < scenario.scenes.length; skip_i++)
 		{
 			console.log(skip_i);
-			if(scenes[skip_i].confession == true)
+			if(scenario.scenes[skip_i].confession == true)
 			{
 				scene_i = skip_i
 				break;
@@ -194,10 +215,12 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 	}
 
 	let songWaitTime = 0;
-	let waitTime = scenes[scene_i].duration;
+	console.log('scene is ' + scenario);
+	console.log('scene duration is ' + scenario.scenes[scene_i].imgSource)
+	let waitTime = scenario.scenes[scene_i].duration;
 
-	scene_elem.style.backgroundImage = `url(${scenes[scene_i].imgSource}.jpg)`;
-	if(scenes[scene_i].confession) //handles the scene where user inputs the dialogue
+	scene_elem.style.backgroundImage = `url(${scenario.scenes[scene_i].imgSource}.jpg)`;
+	if(scenario.scenes[scene_i].confession) //handles the scene where user inputs the dialogue
 	{
 		console.log(speechMsgInput.value);
 		if(speechMsgInput.value == '')
@@ -212,9 +235,9 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 			{
 				// waitTime += Math.floor(event.elapsedTime);
 				// songWaitTime += Math.floor(event.elapsedTime) + 1000; //gap before song plays after utterance
-				soundIterator();
+				soundIterator(scenario);
 				scene_i++;
-				sceneEnd(waitTime);
+				sceneEnd(scenario, waitTime);
   			}
 
 			speak(speechMsgInput.value);		
@@ -223,33 +246,33 @@ function sceneSlide(skip) //plays the scene, if skip is true, goes to the propos
 	}
 	else
 	{
-		soundIterator();
+		soundIterator(scenario);
 		scene_i++;
 
-		sceneEnd(waitTime);
+		sceneEnd(scenario, waitTime);
 	}
 }
 
-function soundIterator()
+function soundIterator(scenario)
 {
-	if(scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
+	if(scenario.scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
 	{
 
-		for(let sound_i = 0; sound_i < scenes[scene_i].sounds.length; sound_i++)
+		for(let sound_i = 0; sound_i < scenario.scenes[scene_i].sounds.length; sound_i++)
 		{
-			console.log('song start: ' + scenes[scene_i].sounds[sound_i].startTime);
+			console.log('song start: ' + scenario.scenes[scene_i].sounds[sound_i].startTime);
 
-			scenes[scene_i].sounds[sound_i].playSong();
+			scenario.scenes[scene_i].sounds[sound_i].playSong();
 		}
 	}
 }
 
-function sceneEnd(waitTime)
+function sceneEnd(scenario, waitTime)
 {
-	if(scene_i < scenes.length)
+	if(scene_i < scenario.scenes.length)
 		{
 			console.log('wait time: ' + waitTime);
-			setTimeout('sceneSlide()', waitTime);
+			setTimeout(function(){sceneSlide(scenario)}, waitTime);
 		}
 		else
 		{
