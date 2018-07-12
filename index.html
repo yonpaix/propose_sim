@@ -9,7 +9,9 @@
 <body>
 	
 	<div class="wrapper">
-		<button id="play-button">Watch Scene</button>
+		<button id="play-button" onClick="buttonClick(0)">Kitchen Scenario</button>
+		<button id="play-button2" onClick="buttonClick(1)">Train Scenario</button>
+
 		<div id="scene-window">
 			<div id="scene">
 
@@ -37,7 +39,7 @@
 						<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
 					</div>
 					<!-- END FORM BOX -->
-					<button id="confession-button">Watch Scene</button>
+					<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
 				</div>
 				<p id = "line-text"></p>
 			</div>
