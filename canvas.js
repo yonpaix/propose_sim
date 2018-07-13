@@ -35,22 +35,30 @@ class SceneSound
 	{
 		this.songName = songName;
 		this.startTime = startTime;
-		//this.confession = confession;
+		this.audio =  new Audio(`${this.songName}.ogg`);
 	}
 
 	playSong()
 	{
-		var audio = new Audio(`${this.songName}.ogg`);
-		//audio.play();
-		console.log(audio);
+		let playAudio = this.audio;
 		setTimeout
 		(
 			function()
 			{
-				audio.play();
+				playAudio.play();
 			},
 			this.startTime
 		);
+	}
+
+	stopSong()
+	{
+		this.audio.pause();
+	}
+
+	queueSong()
+	{
+		soundList.push(this.audio);
 	}
 }
 
@@ -102,8 +110,8 @@ let scenario_1 = new Scenario
 		new Scene('1.png', 5000, [new SceneSound('intro', 0)]),
 		new Scene('2.png', 5000, null),
 		new Scene('3.png', 5000, null),
-		new Scene('4.png', 5000, null),
-		new Scene('5.png', 5000, [new SceneSound('will', 1000)])
+		new Scene('4.png', 5000, [new SceneSound('will', 1000)]),
+		new Scene('5.png', 5000, null)
 	],
 	3
 );
@@ -115,10 +123,12 @@ let scenarioList =
 	scenario_0, scenario_1
 ];
 
+let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
+
 let scene_elem = document.getElementById('scene');
 let sceneWindow = document.getElementById('scene-window');
 let line_text_elem = document.getElementById('line-text');
-
+let dimmer = document.getElementById('dimmer');
 var voiceBox = document.getElementById("voice-box");
 var supportMsg = document.getElementById("msg");
 var confessionButton = document.getElementById("confession-button");
@@ -138,47 +148,20 @@ var wordIndex = 0;
 /*********************
 EVENT LISTENERS
 **********************/
-///////////////////////////////////////////////////////////////////////////
-//need the confession button check for length of input > 0 in the buttonclick master functionXXXXX
-/////////////////////////////////////////////////////////////////////////
-// if(confessionButton)
-// {
-// 	confessionButton.addEventListener
-// 	('click', function(e)
-// 		{
-// 			if(speechMsgInput.value.length > 0)
-// 			{
-// 				playScenario(currentScenario, false);
-// 			}
-// 		}
-// 	);
-// }
-
-// if(playScenarioButton)
-// {
-// playScenarioButton.addEventListener
-// (
-// 	'click', function(e)
-// 	{
-// 		playScenario(scenario_0, false);
-// 	}
-
-// );
-// //	}
-// playScenarioButton2.addEventListener
-// (
-// 	'click', function(e)
-// 	{
-// 		playScenario(scene2, false);
-// 	}
-
-// );
 
 skipButton.addEventListener
 ('click', function(e)
 	{
+
 		scene_i = scenarioList[currentScenario].proposal - 1;
 		skip = true;
+		skipButton.style.display = 'none';
+		for (i in soundList) 
+  			{
+  				console.log('deleting sounds');
+			    soundList[i].pause();
+			    soundList[i].currentTime = 0;
+			}
 		playScenario(scenarioList[currentScenario]);
 	}
 );
@@ -186,12 +169,24 @@ skipButton.addEventListener
 //master button listener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
+	console.log('input length is: ' + speechMsgInput.value.length + '\nscene_i: ' + scene_i);
+	if(speechMsgInput.value.length <= 0 && voiceBox.style.display) //button does nothing if no user input on voicebox
+	{
+		console.log('need to input a message');
+		return;
+		//should put warning message in the future
+	}
 	if(scenario < 0)
 	{
 		scenario = currentScenario;
 	}
 
+
+	dimmer.style.opacity = 0.5;
+	sceneWindow.style.display = 'initial';
+
 	currentScenario = scenario;
+	skipButton.style.display = 'initial';
 	playScenario(scenarioList[currentScenario]);
 }
 
@@ -240,7 +235,9 @@ function speak(text)
 function playScenario(scenario) //plays the scene, if skip is true, goes to the proposal right away
 {
 	if(!skip)
+	{
 		voiceBox.style.display = 'none';
+	}
 	let songWaitTime = 0;
 	console.log('XXXscene is ' + scene_i);
 	let waitTime = scenario.scenes[scene_i].duration;
@@ -252,6 +249,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 		if(speechMsgInput.value == '')
 		{
 			voiceBox.style.display = 'initial';
+			console.log(voiceBox.style.display);
 			scene_i = 0;
 			return;
 		}
@@ -266,7 +264,15 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 				sceneEnd(scenario, waitTime);
   			}
   			console.log('proposal number is ' + scene_i);
-			speak(speechMsgInput.value);		
+				
+			setTimeout
+			(
+				function()
+				{
+					speak(speechMsgInput.value);
+				},
+				2000
+			);
 		}
 		
 	}
@@ -281,15 +287,26 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 
 function soundIterator(scenario)
 {
+	
 	if(scenario.scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
 	{
+			for(let sound_i = 0; sound_i < scenario.scenes[scene_i].sounds.length; sound_i++)
+			{
+				//console.log('song start: ' + scenario.scenes[scene_i].sounds[sound_i].startTime);
+				scenario.scenes[scene_i].sounds[sound_i].queueSong();
 
-		for(let sound_i = 0; sound_i < scenario.scenes[scene_i].sounds.length; sound_i++)
-		{
-			console.log('song start: ' + scenario.scenes[scene_i].sounds[sound_i].startTime);
-
-			scenario.scenes[scene_i].sounds[sound_i].playSong();
-		}
+				setTimeout
+				(
+					function()
+					{
+						soundList[soundList.length - 1].play();
+					},
+					scenario.scenes[scene_i].sounds[sound_i].startTime
+				);
+				
+			}
+		
+		
 	}
 }
 
@@ -298,6 +315,7 @@ function sceneEnd(scenario, waitTime)
 	if(skip)
 	{
 		skip = false;
+
 		return;
 	}
 	if(scene_i < scenario.scenes.length)
@@ -308,20 +326,22 @@ function sceneEnd(scenario, waitTime)
 		else
 		{
 			scene_i = 0;
+			
+			setTimeout
+			(
+				function()
+				{
+					sceneWindow.style.display = 'none';
+
+					dimmer.style.opacity = 0;
+
+					console.log('end of the line');
+				},
+				5000
+			);
+
+			
 		}
-}
-
-function audioFunction(songName)
-{
-	var audio = new Audio(`${songName}.ogg`);
-	audio.play();
-
-	// skipButton.addEventListener
-	// ('click', function(e)
-	// 	{
-	// 		audio.pause();
-	// 	}
-	// );
 }
 
 if('speechSynthesis' in window)
@@ -348,7 +368,7 @@ msg.onboundary = function(event)
 	console.log('onboundary fired');
   	var word = getWordAt(speechMsgInput.value,event.charIndex);
     // Show Speaking word : x
-  	line_text_elem.innerHTML += word + " ";
+  	line_text_elem.innerHTML = word + " ";
     //Increase index of span to highlight
     
     wordIndex++;

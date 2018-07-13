@@ -21,6 +21,7 @@ body
 	align-items: center;
 
 	background-color: var(--main-bg-color, pink);
+	background-image: url('flower.svg');
 }
 /*
 //////////STYLING//////////////////////
@@ -33,7 +34,7 @@ body
 	background-color: black;
 	position: absolute;
 
-	opacity: 0.5;
+	opacity: 0;
 	transition: 1.0s linear 0s;
 	z-index: -1;
 }
@@ -71,7 +72,9 @@ body
 	align-items: center;
 	justify-content: center;
 
-	display: hidden;
+	display: none;
+	z-index: 2;
+	position: absolute;
 }
 
 #scene
@@ -186,4 +189,9 @@ button:hover, button:focus
 button:active
 {
 	opacity: 1;
+}
+
+#skip-button
+{
+	display: none;
 }
