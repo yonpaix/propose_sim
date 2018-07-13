@@ -211,7 +211,6 @@ function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 		scenario = currentScenario;
 	}
 
-
 	dimmer.style.opacity = 0.5;
 	sceneWindow.style.display = 'initial';
 
@@ -243,7 +242,7 @@ function loadVoices()
 
 function speakTxt(text)
 {
-	
+
 	msg.text = text;
 	msg.volume = parseFloat(volumeInput.value);
 	msg.rate = parseFloat(rateInput.value);
@@ -260,7 +259,9 @@ function speakTxt(text)
 		)[0];
 	}
 
-	window.speechSynthesis.speak(msg);
+		window.speechSynthesis.speak(msg);
+
+	
 }
 
 function playScenario(scenario) //plays the scene, if skip is true, goes to the proposal right away
@@ -296,6 +297,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 			voiceBox.style.display = 'initial';
 			
 			scene_i = 0;
+			console.log('checking out');
 			return;
 		}
 		else
@@ -399,6 +401,8 @@ function sceneEnd(scenario, waitTime)
 			speechMsgInput.value = ''; //reset user input, doesn't work?
 			
 			cleanUpSounds();
+			msg.onboundary = null;
+			msg.onend = null;
 			
 			console.log('end of the line');
 		};

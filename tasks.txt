@@ -10,3 +10,11 @@ figure out audio
 CSS---
 
 align window to center
+
+BUG: 
+
+7f19aae
+
+Added close button. Still needs work, currently buggy. Closing is good if no further action is taken. If quickly click on another scenario. All hell breaks loose.
+
+BUG: Playing though the first time, after the second time, using the PREVIEW button replays the scene. Once this happens. Weird shit can happen if you click on Watch Scene or Preview multiple times.
