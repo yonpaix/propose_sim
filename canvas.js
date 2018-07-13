@@ -87,7 +87,7 @@ let scenario_0 = new Scenario
 (
 	"Kitchen Proposal",
 	[
-		new Scene('1-1.jpg', 4000, [new SceneSound('intro', 2000)]),
+		new Scene('1-1.jpg', 4000, [new SceneSound('intro', 0)]),
 		new Scene('1-2.jpg', 1200, null),
 		new Scene('1-2b.jpg', 1800, null),
 		new Scene('1-2c.jpg', 1900, null),
@@ -130,7 +130,7 @@ let sceneWindow = document.getElementById('scene-window');
 let line_text_elem = document.getElementById('line-text');
 let dimmer = document.getElementById('dimmer');
 var voiceBox = document.getElementById("voice-box");
-var supportMsg = document.getElementById("msg");
+var supportMsg = document.getElementById("support-msg");
 var confessionButton = document.getElementById("confession-button");
 var playScenarioButton = document.getElementById("play-button");
 var playScenarioButton2 = document.getElementById("play-button2");
@@ -156,12 +156,7 @@ skipButton.addEventListener
 		scene_i = scenarioList[currentScenario].proposal - 1;
 		skip = true;
 		skipButton.style.display = 'none';
-		for (i in soundList) 
-  			{
-  				console.log('deleting sounds');
-			    soundList[i].pause();
-			    soundList[i].currentTime = 0;
-			}
+		cleanUpSounds();
 		playScenario(scenarioList[currentScenario]);
 	}
 );
@@ -170,7 +165,7 @@ skipButton.addEventListener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
 	console.log('input length is: ' + speechMsgInput.value.length + '\nscene_i: ' + scene_i);
-	if(speechMsgInput.value.length <= 0 && voiceBox.style.display) //button does nothing if no user input on voicebox
+	if(speechMsgInput.value.length <= 0 && voiceBox.style.display == 'initial') //button does nothing if no user input on voicebox
 	{
 		console.log('need to input a message');
 		return;
@@ -238,18 +233,27 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 	{
 		voiceBox.style.display = 'none';
 	}
-	let songWaitTime = 0;
-	console.log('XXXscene is ' + scene_i);
+	
+	
 	let waitTime = scenario.scenes[scene_i].duration;
 
 	scene_elem.style.backgroundImage = `url(${scenario.scenes[scene_i].imgSource})`;
+	
+	///////////////////////////
+	if(scene_i == 1)
+	{
+		scene_elem.style.animationDuration = '1s';
+		scene_elem.classList.add('zoom');
+	}
+	//////////////////////////
+
 	if(scene_i == scenario.proposal) //handles the scene where user inputs the dialogue
 	{
 		console.log(speechMsgInput.value);
 		if(speechMsgInput.value == '')
 		{
 			voiceBox.style.display = 'initial';
-			console.log(voiceBox.style.display);
+			
 			scene_i = 0;
 			return;
 		}
@@ -257,8 +261,6 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 		{
 			msg.onend = function(event)
 			{
-				// waitTime += Math.floor(event.elapsedTime);
-				// songWaitTime += Math.floor(event.elapsedTime) + 1000; //gap before song plays after utterance
 				soundIterator(scenario);
 				scene_i++;
 				sceneEnd(scenario, waitTime);
@@ -295,11 +297,13 @@ function soundIterator(scenario)
 				//console.log('song start: ' + scenario.scenes[scene_i].sounds[sound_i].startTime);
 				scenario.scenes[scene_i].sounds[sound_i].queueSong();
 
+
 				setTimeout
 				(
 					function()
 					{
-						soundList[soundList.length - 1].play();
+						
+							soundList[soundList.length - 1].play();
 					},
 					scenario.scenes[scene_i].sounds[sound_i].startTime
 				);
@@ -320,28 +324,34 @@ function sceneEnd(scenario, waitTime)
 	}
 	if(scene_i < scenario.scenes.length)
 		{
-			
 			setTimeout(function(){playScenario(scenario)}, waitTime);
 		}
 		else
 		{
 			scene_i = 0;
-			
-			setTimeout
-			(
-				function()
-				{
-					sceneWindow.style.display = 'none';
 
-					dimmer.style.opacity = 0;
+			soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
+			function()
+			{
+				sceneWindow.style.display = 'none';
 
-					console.log('end of the line');
-				},
-				5000
-			);
-
+				dimmer.style.opacity = 0;
+				speechMsgInput.value = ''; //reset user input, doesn't work?
+				cleanUpSounds();
+				console.log('end of the line');
+			};
 			
 		}
+}
+
+function cleanUpSounds()
+{
+	for (i in soundList) 
+	{
+				console.log('deleting sounds');
+		    soundList[i].pause();
+		    soundList[i].currentTime = 0;
+	}
 }
 
 if('speechSynthesis' in window)

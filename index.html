@@ -7,43 +7,47 @@
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
 <body>
-	
-	<div class="wrapper">
-		<button id="play-button" onClick="buttonClick(0)">Kitchen Scenario</button>
-		<button id="play-button2" onClick="buttonClick(1)">Train Scenario</button>
+	<!-- Voice Box -->
+	<div id="voice-box">
+		<input type="text" name="speech-msg" id="speech-msg">
+		<div class="option">
+			<label for="voice">Voice</label>
+			<select name="voice" id="voice"></select>
+		</div>
+		
+		<div class="option">
+			<label for="volume">Volume</label>
+			<input type="range" min="0" max="1" step="0.1" name="volume" id="volume" value="1" />
+		</div>
 
+		<div class="option">
+			<label for="rate">Rate</label>
+			<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value="1" />
+		</div>
+
+		<div class="option">
+			<label for="pitch">Pitch</label>
+			<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
+		</div>
+		<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
+	</div>
+	<div class="wrapper">
+		<!-- Compatibility Text -->
+		<p id="support-msg"></p>
+		
+		<!-- Scene Buttons go here -->
+		<div id="scene-picker">
+			<button id="play-button" onClick="buttonClick(0)">Kitchen Scenario</button>
+			<button id="play-button2" onClick="buttonClick(1)">Train Scenario</button>
+		</div>
+
+		<!-- Scene Window -->
 		<div id="scene-window">
 			<div id="scene">
-
-				<!-- FORM BOX -->
-				<div id="voice-box">
-					<p id="msg"></p>
-					<input type="text" name="speech-msg" id="speech-msg">
-					<div class="option">
-						<label for="voice">Voice</label>
-						<select name="voice" id="voice"></select>
-					</div>
-					
-					<div class="option">
-						<label for="volume">Volume</label>
-						<input type="range" min="0" max="1" step="0.1" name="volume" id="volume" value="1" />
-					</div>
-
-					<div class="option">
-						<label for="rate">Rate</label>
-						<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value="1" />
-					</div>
-
-					<div class="option">
-						<label for="pitch">Pitch</label>
-						<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
-					</div>
-					<!-- END FORM BOX -->
-					<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
-				</div>
 				<p id = "line-text"></p>
 			</div>
 			<button id="skip-button">Skip</button>
+			
 		</div>
 	</div>
 
