@@ -80,6 +80,7 @@ GLOBAL VARIABLES
 let scene_i = 0; //current scene #
 let currentScenario = 0; //current scenario #
 let skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
+let close = false; //flag, exits whole process
 
 //KITCHEN SCENE
 
@@ -125,29 +126,49 @@ let scenarioList =
 
 let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
 
-let scene_elem = document.getElementById('scene');
+let sceneElem = document.getElementById('scene');
 let sceneWindow = document.getElementById('scene-window');
-let line_text_elem = document.getElementById('line-text');
+let lineText = document.getElementById('line-text');
 let dimmer = document.getElementById('dimmer');
-var voiceBox = document.getElementById("voice-box");
-var supportMsg = document.getElementById("support-msg");
-var confessionButton = document.getElementById("confession-button");
-var playScenarioButton = document.getElementById("play-button");
-var playScenarioButton2 = document.getElementById("play-button2");
+let voiceBox = document.getElementById("voice-box");
+let supportMsg = document.getElementById("support-msg");
 
-var skipButton = document.getElementById("skip-button");
-var speechMsgInput = document.getElementById("speech-msg");
-var voiceSelect = document.getElementById("voice");
-var volumeInput = document.getElementById("volume");
-var rateInput = document.getElementById("rate");
-var pitchInput = document.getElementById("pitch");
+let confessionButton = document.getElementById("confession-button");
+let skipButton = document.getElementById("skip-button");
+let previewButton = document.getElementById("preview-button");
+let closeButton = document.getElementById("close-button");
 
-var msg = new SpeechSynthesisUtterance();
-var wordIndex = 0;
+let speechMsgInput = document.getElementById("speech-msg");
+let voiceSelect = document.getElementById("voice");
+let volumeInput = document.getElementById("volume");
+let rateInput = document.getElementById("rate");
+let pitchInput = document.getElementById("pitch");
+
+let msg = new SpeechSynthesisUtterance();
 
 /*********************
 EVENT LISTENERS
 **********************/
+
+previewButton.addEventListener
+('click', function(e)
+	{
+		window.speechSynthesis.cancel(); //cancel current voice audio
+		
+		if(speechMsgInput.value.length > 0)
+		{
+			setTimeout
+			(
+				function()
+				{
+					speakTxt(speechMsgInput.value);
+				},
+				250
+			);
+		}
+
+	}
+);
 
 skipButton.addEventListener
 ('click', function(e)
@@ -161,10 +182,24 @@ skipButton.addEventListener
 	}
 );
 
+closeButton.addEventListener
+('click', function(e)
+	{
+		voiceBox.style.display = 'none';
+		sceneWindow.style.display = 'none';
+		skipButton.style.display = 'initial';
+		dimmer.style.opacity = 0;
+		window.speechSynthesis.cancel(); //cancel current voice audio
+		cleanUpSounds();
+		
+		close = true;
+		//debugger;
+	}
+);
+
 //master button listener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
-	console.log('input length is: ' + speechMsgInput.value.length + '\nscene_i: ' + scene_i);
 	if(speechMsgInput.value.length <= 0 && voiceBox.style.display == 'initial') //button does nothing if no user input on voicebox
 	{
 		console.log('need to input a message');
@@ -182,6 +217,7 @@ function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 
 	currentScenario = scenario;
 	skipButton.style.display = 'initial';
+	window.speechSynthesis.cancel(); //cancel current voice audio
 	playScenario(scenarioList[currentScenario]);
 }
 
@@ -205,7 +241,7 @@ function loadVoices()
 	);
 }
 
-function speak(text)
+function speakTxt(text)
 {
 	
 	msg.text = text;
@@ -233,23 +269,28 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 	{
 		voiceBox.style.display = 'none';
 	}
-	
+	//get rid of reset button when the proposal scene is reached
+	if(scene_i == scenario.proposal - 1)
+		skipButton.style.display = 'none';
+
+	//reset linetext
+	if(scene_i == scenario.proposal + 1)
+		lineText.innerHTML = '';
 	
 	let waitTime = scenario.scenes[scene_i].duration;
 
-	scene_elem.style.backgroundImage = `url(${scenario.scenes[scene_i].imgSource})`;
-	
+	sceneElem.style.backgroundImage = `url(${scenario.scenes[scene_i].imgSource})`;
+
 	///////////////////////////
-	if(scene_i == 1)
-	{
-		scene_elem.style.animationDuration = '1s';
-		scene_elem.classList.add('zoom');
-	}
+	// if(scene_i == 1)
+	// {
+	// 	sceneElem.style.animationDuration = '1s';
+	// 	sceneElem.classList.add('zoom');
+	// }
 	//////////////////////////
 
 	if(scene_i == scenario.proposal) //handles the scene where user inputs the dialogue
 	{
-		console.log(speechMsgInput.value);
 		if(speechMsgInput.value == '')
 		{
 			voiceBox.style.display = 'initial';
@@ -259,30 +300,36 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 		}
 		else
 		{
+			msg.onboundary = function(event)
+			{
+				console.log('onboundary fired');
+			  	var word = getWordAt(speechMsgInput.value,event.charIndex);
+			    // Show Speaking word : x
+			  	lineText.innerHTML = word + " ";
+			};
+
 			msg.onend = function(event)
 			{
 				soundIterator(scenario);
 				scene_i++;
 				sceneEnd(scenario, waitTime);
-  			}
-  			console.log('proposal number is ' + scene_i);
-				
+  			}				
 			setTimeout
 			(
 				function()
 				{
-					speak(speechMsgInput.value);
+					speakTxt(speechMsgInput.value);
 				},
-				2000
+				1000
 			);
 		}
 		
 	}
+
 	else
 	{
 		soundIterator(scenario);
 		scene_i++;
-
 		sceneEnd(scenario, waitTime);
 	}
 }
@@ -294,7 +341,6 @@ function soundIterator(scenario)
 	{
 			for(let sound_i = 0; sound_i < scenario.scenes[scene_i].sounds.length; sound_i++)
 			{
-				//console.log('song start: ' + scenario.scenes[scene_i].sounds[sound_i].startTime);
 				scenario.scenes[scene_i].sounds[sound_i].queueSong();
 
 
@@ -322,33 +368,48 @@ function sceneEnd(scenario, waitTime)
 
 		return;
 	}
-	if(scene_i < scenario.scenes.length)
-		{
-			setTimeout(function(){playScenario(scenario)}, waitTime);
-		}
-		else
-		{
-			scene_i = 0;
+	if(close)
+	{
+		close = false;
+		console.log('close scenario');
 
-			soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
-			function()
-			{
-				sceneWindow.style.display = 'none';
+		scene_i = 0;
+		sceneWindow.style.display = 'none';
+		dimmer.style.opacity = 0;
+		speechMsgInput.value = ''; //reset user input, doesn't work?
+		window.speechSynthesis.cancel(); //cancel current voice audio
+		cleanUpSounds();
+		
+		console.log('end of the line');
+	}
+	else if(scene_i < scenario.scenes.length)
+	{
+		setTimeout(function(){playScenario(scenario)}, waitTime);
+	}
+	else
+	{
+		scene_i = 0;
 
-				dimmer.style.opacity = 0;
-				speechMsgInput.value = ''; //reset user input, doesn't work?
-				cleanUpSounds();
-				console.log('end of the line');
-			};
+		soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
+		function()
+		{
+			sceneWindow.style.display = 'none';
+
+			dimmer.style.opacity = 0;
+			speechMsgInput.value = ''; //reset user input, doesn't work?
 			
-		}
+			cleanUpSounds();
+			
+			console.log('end of the line');
+		};
+	}
 }
 
 function cleanUpSounds()
 {
 	for (i in soundList) 
 	{
-				console.log('deleting sounds');
+			console.log('deleting sounds');
 		    soundList[i].pause();
 		    soundList[i].currentTime = 0;
 	}
@@ -369,24 +430,6 @@ loadVoices();
 window.speechSynthesis.onvoiceschanged = function(e)
 {
 	loadVoices();
-};
-
-/////////////////////////////////
-
-msg.onboundary = function(event)
-{
-	console.log('onboundary fired');
-  	var word = getWordAt(speechMsgInput.value,event.charIndex);
-    // Show Speaking word : x
-  	line_text_elem.innerHTML = word + " ";
-    //Increase index of span to highlight
-    
-    wordIndex++;
-};
-
-msg.onend = function()
-{
-    wordIndex = 0;
 };
 
 // Get the word of a string given the string and the index

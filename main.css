@@ -23,7 +23,7 @@ body
 	align-items: center;
 
 	background-color: var(--main-bg-color, pink);
-	background-image: url('flower.svg');
+	/*background-image: url('flower.svg');*/
 }
 /*
 //////////STYLING//////////////////////
@@ -72,7 +72,7 @@ BOXES
 	padding: 2% 1%;
 
 	background-color: #ffe6e6;
-	border: 2px solid var(--border-color, magenta);
+	/*border: 2px solid var(--border-color, magenta);*/
 	border-radius: var(--border-radius, 1%);
 
 
@@ -100,12 +100,11 @@ BOXES
 	justify-content: center;
 	align-items: center;
 
-	border: 2px solid var(--border-color, magenta);
+	border: 1px solid var(--border-color, magenta);
 
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
-
 }
 
 #line-text
@@ -125,8 +124,8 @@ BOXES
 	background-color: rgba(255, 255, 255, 0.8);
 	padding: 1em;
 
-	border-radius: rgba(216, 52, 126, 0.4);/*var(--border-color-alpha);*/
-	box-shadow: 5px 5px 0 var(--border-color, magenta);
+	border-radius: var(--border-radius);
+	/*box-shadow: 5px 5px 0 var(--border-color, magenta);*/
 
 	position: absolute;
 	display: none;
@@ -149,7 +148,7 @@ VOICE BOX
 	line-height: 1.4em;
 }
 
-input[type="text"]
+/*input[type="text"]
 {
 	width: 100%;
 	padding: 0.5em;
@@ -157,6 +156,18 @@ input[type="text"]
 	border-radius: 3px;
 	border: 1px solid #D9D9D9;
 	box-shadow: 0 2px 3px rgba(0,0,0,0.1) inset;
+}*/
+
+textarea
+{
+	width: 100%;
+	padding: 0.5em;
+	font-size: 1.2em;
+	border-radius: 3px;
+	border: 1px solid #D9D9D9;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.1) inset;
+	resize: none;
+	overflow: hidden;
 }
 
 input[type="range"]

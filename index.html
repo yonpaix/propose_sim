@@ -9,7 +9,8 @@
 <body>
 	<!-- Voice Box -->
 	<div id="voice-box">
-		<input type="text" name="speech-msg" id="speech-msg">
+		<!-- <input type="text" name="speech-msg" id="speech-msg"> -->
+		<textarea id="speech-msg" maxlength="300" rows="6"></textarea>
 		<div class="option">
 			<label for="voice">Voice</label>
 			<select name="voice" id="voice"></select>
@@ -30,6 +31,7 @@
 			<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
 		</div>
 		<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
+		<button id="preview-button">Preview Voice</button>
 	</div>
 	<div class="wrapper">
 		<!-- Compatibility Text -->
@@ -43,10 +45,12 @@
 
 		<!-- Scene Window -->
 		<div id="scene-window">
+			<button id="close-button">Close</button>
 			<div id="scene">
 				<p id = "line-text"></p>
 			</div>
 			<button id="skip-button">Skip</button>
+
 			
 		</div>
 	</div>
