@@ -68,7 +68,7 @@ BOXES
 #scene-window
 {
 	width: 50vw;
-	height: 50vh;
+	height: 60vh;
 	padding: 2% 1%;
 
 	background-color: #ffe6e6;
@@ -88,7 +88,7 @@ BOXES
 
 #scene
 {
-	transition: 1.0s linear 0s;
+	transition: background-image 0.5s linear 0s;
 
 	/*height: 453px;
 	width: 802px;*/

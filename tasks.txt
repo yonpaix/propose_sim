@@ -13,7 +13,7 @@ align window to center
 
 BUG: 
 
-7f19aae
+7f19aae FIXED
 
 Added close button. Still needs work, currently buggy. Closing is good if no further action is taken. If quickly click on another scenario. All hell breaks loose.
 
