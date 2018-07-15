@@ -53,7 +53,7 @@ class SceneSound
 
 	stopSong()
 	{
-		this.audio.pause();
+		this.audio.stop();
 	}
 
 	queueSong()
@@ -78,9 +78,10 @@ GLOBAL VARIABLES
 **********************/
 
 let scene_i = 0; //current scene #
-let currentScenario = 0; //current scenario #
+let currentScenario = null; //current scenario #
 let skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
 let close = false; //flag, exits whole process
+let cleanUp = false; //flag, can't start new scene while this is true;
 
 //KITCHEN SCENE
 
@@ -210,30 +211,60 @@ closeButton.addEventListener
 		cleanUpSounds();
 		
 		close = true;
+		cleanUp = true;
 		//debugger;
+
+		//if the scene stopped because they are in the input screen, the scene will not clean up, but the button will need to take care of it.
+		if(scene_i == 0 && currentScenario != null)
+		{
+			console.log('clean up on aisle 4');
+			cleanUpVar();
+		}
+
+		//if the scene already cleaned up but the song is still playing and the window is still up, need to manually falsify cleanUp, because it was already taken cared of, and now it's true again.
+		if(currentScenario == null)
+		{
+			close = false;
+			cleanUp = false;
+		}
+
+		//if the scene is on the proposal scene, it will create a bunch of promises and just quits, so we need to handle clean up on button click
+		if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '')
+		{	
+			cleanUpVar();
+		}
 	}
 );
 
 //master button listener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
+	debugger;
+	if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
+	{
+		console.log('cleaning up currently');
+		return;
+	}
 	if(speechMsgInput.value.length <= 0 && voiceBox.style.display == 'initial') //button does nothing if no user input on voicebox
 	{
 		console.log('need to input a message');
 		return;
 		//should put warning message in the future
 	}
-	if(scenario < 0)
+	if(scenario < 0) //for buttons that continues a scenario where it is already picked initially
 	{
 		scenario = currentScenario;
 	}
 
+	currentScenario = scenario;
+
 	dimmer.style.opacity = 0.5;
 	sceneWindow.style.display = 'initial';
-
-	currentScenario = scenario;
 	skipButton.style.display = 'initial';
 	window.speechSynthesis.cancel(); //cancel current voice audio
+
+	console.log("now playing scenario #" + currentScenario);
+
 	playScenario(scenarioList[currentScenario]);
 }
 
@@ -283,15 +314,17 @@ function speakTxt(text)
 
 function playScenario(scenario) //plays the scene, if skip is true, goes to the proposal right away
 {
+	console.log("current scene is #" + scene_i);
+
 	if(!skip)
 	{
 		voiceBox.style.display = 'none';
 	}
-	//get rid of reset button when the proposal scene is reached
+	//get rid of reset button when the scene before the proposal scene is reached
 	if(scene_i == scenario.proposal - 1)
 		skipButton.style.display = 'none';
 
-	//reset linetext
+	//reset linetext when final scene plays. The one where she's crying
 	if(scene_i == scenario.proposal + 1)
 		lineText.innerHTML = '';
 	
@@ -315,6 +348,8 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 			(
 				function()
 				{
+					if(sceneWindow.style.display == 'none') //if scene window is not there, don't even bother.
+						return;
 					var moment = new Audio('sounds/moment.mp3');
 					moment.play();
 					voiceBox.style.display = 'initial';
@@ -323,13 +358,19 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 			);
 			
 			scene_i = 0;
-			console.log('checking out');
+			
 			return;
 		}
 		else
 		{
 			msg.onboundary = function(event)
 			{
+				// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
+				// {
+				// 	msg.onboundary = null;
+				// 	return;
+				// }
+
 				console.log('onboundary fired');
 			  	var word = getWordAt(speechMsgInput.value,event.charIndex);
 			    // Show Speaking word : x
@@ -338,6 +379,12 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 
 			msg.onend = function(event)
 			{
+				// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
+				// {
+				// 	msg.onend = null;
+				// 	return;
+				// }
+				console.log(msg.onend);
 				soundIterator(scenario);
 				scene_i++;
 				sceneEnd(scenario, waitTime);
@@ -346,6 +393,10 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 			(
 				function()
 				{
+					// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
+					// {
+					// 	return;
+					// }
 					speakTxt(speechMsgInput.value);
 				},
 				1500
@@ -390,47 +441,37 @@ function soundIterator(scenario)
 
 function sceneEnd(scenario, waitTime)
 {
-	if(skip)
+	if(skip) //scene is skipped
 	{
 		skip = false;
-
 		return;
 	}
-	if(close)
+	if(close) //scene is exited by user input
 	{
 		close = false;
-		console.log('close scenario');
-
-		scene_i = 0;
 		sceneWindow.style.display = 'none';
 		dimmer.style.opacity = 0;
-		speechMsgInput.value = ''; //reset user input, doesn't work?
+		cleanUpVar();
 		window.speechSynthesis.cancel(); //cancel current voice audio
 		cleanUpSounds();
 		
 		console.log('end of the line');
 	}
-	else if(scene_i < scenario.scenes.length)
+	else if(scene_i < scenario.scenes.length) //scene continues;
 	{
 		setTimeout(function(){playScenario(scenario)}, waitTime);
 	}
-	else
+	else //scene naturally ends
 	{
-		scene_i = 0;
-
+		cleanUpVar();
 		soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
 		function()
 		{
+			console.log('scenario ends with scene #' + scene_i);
 			sceneWindow.style.display = 'none';
-
 			dimmer.style.opacity = 0;
-			speechMsgInput.value = ''; //reset user input, doesn't work?
-			
 			cleanUpSounds();
-			msg.onboundary = null;
-			msg.onend = null;
-			
-			console.log('end of the line');
+			console.log('clean up is ' + cleanUp);
 		};
 	}
 }
@@ -445,6 +486,21 @@ function cleanUpSounds()
 	}
 }
 
+function cleanUpVar()
+{
+	console.log('current scene cleaning up is #' + scene_i);
+	speechMsgInput.value = '';
+	msg.onboundary = null;
+	msg.onend = null;
+	console.log(msg.onend);
+
+	scene_i = 0; //current scene #
+	currentScenario = null; //current scenario #
+	skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
+	close = false; //flag, exits whole process
+	cleanUp = false; //flag, can't start new scene while this is true;
+}
+
 if('speechSynthesis' in window)
 {
 	supportMsg.innerHTML = "Your browser <strong>supports</strong> speech synthesis.";
@@ -452,7 +508,7 @@ if('speechSynthesis' in window)
 }
 else
 {
-	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis.";
+	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis. Get the best experience with Google Chrome";
 }
 
 loadVoices();
