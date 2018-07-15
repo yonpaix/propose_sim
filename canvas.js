@@ -4,11 +4,12 @@ CLASS DEFINITIONS
 
 class Scenario //array of scenes + information about voice box positioning
 {
-	constructor(scenarioName, scenes, proposal)
+	constructor(scenarioName, scenes, proposal, waitSpeak)
 	{
 		this.scenes = scenes;
 		this.scenarioName = scenarioName;
 		this.proposal = proposal; //scene # for proposal
+		this.waitSpeak = waitSpeak; //wait until the dude speaks at the beginning of the proposal scene
 	}
 
 	toString()
@@ -97,10 +98,10 @@ let scenario_0 = new Scenario
 		new Scene('1-3.jpg', 1700, null),
 		new Scene('1-3b.jpg', 1600, null),
 		new Scene('1-4.jpg', 3000, null),
-		new Scene('1-4b.jpg', 5000, [new SceneSound('plove', 1000)]),
+		new Scene('1-4b.jpg', 5000, [new SceneSound('plove', 250)]),
 		new Scene('1-5.jpg', 5000, null)
 	],
-	8
+	8, 1000
 ); //contains individual scene objects
 
 //TRAIN SCENE
@@ -112,10 +113,10 @@ let scenario_1 = new Scenario
 		new Scene('1.png', 5000, [new SceneSound('intro', 0)]),
 		new Scene('2.png', 5000, null),
 		new Scene('3.png', 5000, null),
-		new Scene('4.png', 5000, [new SceneSound('will', 1000)]),
+		new Scene('4.png', 5000, [new SceneSound('will', 0)]),
 		new Scene('5.png', 5000, null)
 	],
-	3
+	3, 1000
 );
 
 let scenario_2 = new Scenario
@@ -130,10 +131,10 @@ let scenario_2 = new Scenario
 		new Scene('images/2-6.jpg', 1900, null),
 		new Scene('images/2-7.jpg', 2500, null),
 		new Scene('images/2-8.jpg', 2800, null),
-		new Scene('images/2-9.jpg', 5000, [new SceneSound('plove', 1000)]),
+		new Scene('images/2-9.jpg', 5000, [new SceneSound('plove', 250)]),
 		new Scene('images/2-10.jpg', 5000, null)
 	],
-	8
+	8, 2000
 );
 //LIST OF SCENARIOS
 
@@ -354,7 +355,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 					moment.play();
 					voiceBox.style.display = 'initial';
 				},
-				2000
+				scenario.waitSpeak
 			);
 			
 			scene_i = 0;
@@ -399,7 +400,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 					// }
 					speakTxt(speechMsgInput.value);
 				},
-				1500
+				scenario.waitSpeak
 			);
 		}
 		
