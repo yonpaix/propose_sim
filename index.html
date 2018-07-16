@@ -10,7 +10,8 @@
 	<!-- Voice Box -->
 	<div id="voice-box">
 		<!-- <input type="text" name="speech-msg" id="speech-msg"> -->
-		<textarea id="speech-msg" maxlength="300" rows="6"></textarea>
+		<textarea id="speech-msg" rows="6" onkeypress="maxLengthUpdate()"></textarea>
+		<span id="max-length"></span>
 		<div class="option">
 			<label for="voice">Voice</label>
 			<select name="voice" id="voice"></select>

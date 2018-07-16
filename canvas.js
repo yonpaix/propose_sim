@@ -73,6 +73,7 @@ CONSTANTS
 **********************/
 
 const DEFAULT_LINE = "The brown fox jumps over the lazy dog."
+const DEFAULT_MAX_LENGTH = 3000;
 
 /*********************
 GLOBAL VARIABLES
@@ -165,9 +166,35 @@ let pitchInput = document.getElementById("pitch");
 
 let msg = new SpeechSynthesisUtterance();
 
+let maxLength = document.getElementById('max-length');
+let lengthCounter = DEFAULT_MAX_LENGTH;
+speechMsgInput.setAttribute("maxlength", DEFAULT_MAX_LENGTH);
+
+maxLength.innerHTML = lengthCounter;
+
+
 /*********************
 EVENT LISTENERS
 **********************/
+
+function maxLengthUpdate()
+{
+	lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
+	maxLength.innerHTML = lengthCounter;
+	console.log(speechMsgInput.value.split());
+}
+
+speechMsgInput.addEventListener
+('keydown', function(event)
+	{
+		const key = event.which;
+  		if(key == 8 || key == 46)
+  		{
+  			lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
+			maxLength.innerHTML = lengthCounter;
+  		}
+	}
+);
 
 previewButton.addEventListener
 ('click', function(e)
@@ -240,7 +267,7 @@ closeButton.addEventListener
 //master button listener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
-	debugger;
+	//debugger;
 	if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
 	{
 		console.log('cleaning up currently');
