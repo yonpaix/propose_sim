@@ -21,12 +21,13 @@ class Scenario //array of scenes + information about voice box positioning
 
 class Scene
 {
-	constructor(imgSource, duration, sounds)
+	constructor(duration, sounds, animations)
 	{
 		this.duration = duration;
-		this.imgSource = imgSource;
+		//this.imgSource = imgSource;
 		this.sounds = sounds; //array of SceneSound objects
-		//this.confession = confession; //boolean whether this scene is the proposal theme
+		this.animations = animations; //array of objects in the scene and their animation
+		//FIRST ITEM IN THE ARRAY IS ALWAYS THE BACKGROUND
 	}
 }
 
@@ -63,10 +64,18 @@ class SceneSound
 	}
 }
 
-/*class SceneImage
+class SceneAnimation
 {
-	constructor(imgSource, )
-}*/
+	constructor(imgSource, animationStyle, timing, delay, count, direction)
+	{
+		this.imgSource = imgSource;
+		this.animationStyle = animationStyle;
+		this.timing = timing;
+		this.delay = delay;
+		this.count = count;
+		this.direction = direction;
+	}
+}
 
 /*********************
 CONSTANTS
@@ -91,34 +100,92 @@ let scenario_0 = new Scenario
 (
 	"Kitchen Proposal",
 	[
-		new Scene('1-1.jpg', 3400, [new SceneSound('sounds/kitchen-love', 0)]),
-		new Scene('1-2.jpg', 1800, null),
-		new Scene('1-2b.jpg', 2500, null),
-		new Scene('1-2c.jpg', 4100, null),
-		new Scene('1-2b.jpg', 2600, null),
-		new Scene('1-3.jpg', 1700, null),
-		new Scene('1-3b.jpg', 1600, null),
-		new Scene('1-4.jpg', 3000, null),
-		new Scene('1-4b.jpg', 5000, [new SceneSound('plove', 250)]),
-		new Scene('1-5.jpg', 5000, null)
+		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
+				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(1800, null,
+				[new SceneAnimation('1-2.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2500, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(4100, null,
+				[new SceneAnimation('1-2c.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2600, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(1700, null,
+				[new SceneAnimation('1-3.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(1600, null,
+				[new SceneAnimation('1-3b.jpg', 'shiftx', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(3000, null,
+				[new SceneAnimation('1-4.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(5000, [new SceneSound('plove', 250)],
+				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(5000, null,
+				[new SceneAnimation('1-5.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			)
 	],
 	8, 1000
 ); //contains individual scene objects
 
 //TRAIN SCENE
 
+// let scenario_1 = new Scenario
+// (
+// 	"Train Proposal",
+// 	[
+// 		new Scene('1.png', 5000, [new SceneSound('intro', 0)]),
+// 		new Scene('2.png', 5000, null),
+// 		new Scene('3.png', 5000, null),
+// 		new Scene('4.png', 5000, [new SceneSound('will', 0)]),
+// 		new Scene('5.png', 5000, null)
+// 	],
+// 	3, 1000
+// );
+
 let scenario_1 = new Scenario
 (
-	"Train Proposal",
+	"Kitchen Proposal",
 	[
-		new Scene('1.png', 5000, [new SceneSound('intro', 0)]),
-		new Scene('2.png', 5000, null),
-		new Scene('3.png', 5000, null),
-		new Scene('4.png', 5000, [new SceneSound('will', 0)]),
-		new Scene('5.png', 5000, null)
+		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
+				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(1800, null,
+				[new SceneAnimation('1-2.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(2500, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(4100, null,
+				[new SceneAnimation('1-2c.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(2600, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(1700, null,
+				[new SceneAnimation('1-3.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(1600, null,
+				[new SceneAnimation('1-3b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(3000, null,
+				[new SceneAnimation('1-4.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(5000, [new SceneSound('plove', 250)],
+				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			),
+		new Scene(5000, null,
+				[new SceneAnimation('1-5.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+			)
 	],
-	3, 1000
-);
+	8, 1000
+); //contains individual scene objects
 
 let scenario_2 = new Scenario
 (
@@ -146,7 +213,7 @@ let scenarioList =
 
 let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
 
-let sceneElem = document.getElementById('scene');
+let sceneElem = document.getElementById('scene-bg');
 let sceneWindow = document.getElementById('scene-window');
 let lineText = document.getElementById('line-text');
 let dimmer = document.getElementById('dimmer');
@@ -157,6 +224,7 @@ let confessionButton = document.getElementById("confession-button");
 let skipButton = document.getElementById("skip-button");
 let previewButton = document.getElementById("preview-button");
 let closeButton = document.getElementById("close-button");
+let testButton = document.getElementById("test-button");
 
 let speechMsgInput = document.getElementById("speech-msg");
 let voiceSelect = document.getElementById("voice");
@@ -225,6 +293,14 @@ skipButton.addEventListener
 		skipButton.style.display = 'none';
 		cleanUpSounds();
 		playScenario(scenarioList[currentScenario]);
+	}
+);
+
+testButton.addEventListener
+('click', function(e)
+	{
+
+		msg.onend = null;
 	}
 );
 
@@ -340,6 +416,19 @@ function speakTxt(text)
 	
 }
 
+function animateBG(scenario)
+{
+	let animationStyle;
+	let timing;
+	for (i in scenario.scenes[scene_i].animations)
+	{
+		//sceneElem.style.animation = 'none';
+		animationStyle = scenario.scenes[scene_i].animations[i].animationStyle;
+		timing = scenario.scenes[scene_i].animations[i].timing;
+		sceneElem.style.animation = `${animationStyle} ${timing} linear`;
+	} 
+}
+
 function playScenario(scenario) //plays the scene, if skip is true, goes to the proposal right away
 {
 	console.log("current scene is #" + scene_i);
@@ -358,15 +447,8 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 	
 	let waitTime = scenario.scenes[scene_i].duration;
 
-	sceneElem.style.backgroundImage = `url(${scenario.scenes[scene_i].imgSource})`;
-
-	///////////////////////////
-	// if(scene_i == 1)
-	// {
-	// 	sceneElem.style.animationDuration = '1s';
-	// 	sceneElem.classList.add('zoom');
-	// }
-	//////////////////////////
+	sceneElem.style.backgroundImage = `url(${scenario.scenes[scene_i].animations[0].imgSource})`;
+	animateBG(scenario);
 
 	if(scene_i == scenario.proposal) //handles the scene where user inputs the dialogue
 	{
@@ -391,18 +473,20 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 		}
 		else
 		{
+			let prevIndex;
+
 			msg.onboundary = function(event)
 			{
-				// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
-				// {
-				// 	msg.onboundary = null;
-				// 	return;
-				// }
-
-				console.log('onboundary fired');
-			  	var word = getWordAt(speechMsgInput.value,event.charIndex);
-			    // Show Speaking word : x
-			  	lineText.innerHTML = word + " ";
+				const index = event.charIndex;
+				if(prevIndex === index)
+				{
+					return;
+				}
+				prevIndex = index;
+			  	const word = getWordAt(speechMsgInput.value,index);
+			    //console.log(word);
+			  	lineText.innerHTML += word + " ";
+			  	console.log('eventIndex is: ' + index);
 			};
 
 			msg.onend = function(event)
@@ -412,7 +496,6 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 				// 	msg.onend = null;
 				// 	return;
 				// }
-				console.log(msg.onend);
 				soundIterator(scenario);
 				scene_i++;
 				sceneEnd(scenario, waitTime);
@@ -439,6 +522,27 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 		scene_i++;
 		sceneEnd(scenario, waitTime);
 	}
+}
+
+// Get the word of a string given the string and the index
+function getWordAt(str, pos)
+{
+    // Perform type conversions.
+    str = String(str);
+    pos = Number(pos) >>> 0;
+    // Search for the word's beginning and end.
+    let left = str.slice(0, pos + 1).search(/\S+$/),
+        right = str.slice(pos).search(/\s/);
+
+    console.log('left position is: ' + left);
+    console.log(`right position is: ${right + pos}`);
+
+    // The last word in the string is a special case.
+    if (right < 0) {
+        return str.slice(left);
+    }
+    // Return the word, using the located bounds to extract it from the string.
+    return str.slice(left, right + pos);
 }
 
 function soundIterator(scenario)
@@ -545,22 +649,3 @@ window.speechSynthesis.onvoiceschanged = function(e)
 {
 	loadVoices();
 };
-
-// Get the word of a string given the string and the index
-function getWordAt(str, pos)
-{
-    // Perform type conversions.
-    str = String(str);
-    pos = Number(pos) >>> 0;
-
-    // Search for the word's beginning and end.
-    var left = str.slice(0, pos + 1).search(/\S+$/),
-        right = str.slice(pos).search(/\s/);
-
-    // The last word in the string is a special case.
-    if (right < 0) {
-        return str.slice(left);
-    }
-    // Return the word, using the located bounds to extract it from the string.
-    return str.slice(left, right + pos);
-}
