@@ -224,13 +224,18 @@ let confessionButton = document.getElementById("confession-button");
 let skipButton = document.getElementById("skip-button");
 let previewButton = document.getElementById("preview-button");
 let closeButton = document.getElementById("close-button");
-let testButton = document.getElementById("test-button");
+let readySceneButton = document.getElementById("ready-button");
 
 let speechMsgInput = document.getElementById("speech-msg");
+let speechMsgInputValue;
 let voiceSelect = document.getElementById("voice");
+let voiceSelectValue;
 let volumeInput = document.getElementById("volume");
+let volumeInputValue;
 let rateInput = document.getElementById("rate");
+let rateInputValue;
 let pitchInput = document.getElementById("pitch");
+let pitchInputValue;
 
 let msg = new SpeechSynthesisUtterance();
 
@@ -240,10 +245,16 @@ speechMsgInput.setAttribute("maxlength", DEFAULT_MAX_LENGTH);
 
 maxLength.innerHTML = lengthCounter;
 
+loadVoices();
 
 /*********************
 EVENT LISTENERS
 **********************/
+
+window.speechSynthesis.onvoiceschanged = function(e)
+{
+	loadVoices();
+};
 
 function maxLengthUpdate()
 {
@@ -275,7 +286,7 @@ previewButton.addEventListener
 			(
 				function()
 				{
-					speakTxt(speechMsgInput.value);
+					speakTxt();
 				},
 				250
 			);
@@ -296,11 +307,26 @@ skipButton.addEventListener
 	}
 );
 
-testButton.addEventListener
+readySceneButton.addEventListener
 ('click', function(e)
 	{
 
-		msg.onend = null;
+		//HANDLES PRECONSTRUCTED SCENARIOS from the URL
+		if(getQueryVariable("id"))
+		{
+			currentScenario = getQueryVariable("id");
+
+			dimmer.style.opacity = 0.5;
+			sceneWindow.style.display = 'initial';
+			skipButton.style.display = 'initial';
+
+			speechMsgInputValue = decodeURI(getQueryVariable('spk'));
+			volumeInputValue = getQueryVariable('vol');
+			rateInputValue = getQueryVariable('rat');
+			pitchInputValue = getQueryVariable('pit');
+
+			playScenario(scenarioList[currentScenario]);
+		}
 	}
 );
 
@@ -367,7 +393,10 @@ function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 	skipButton.style.display = 'initial';
 	window.speechSynthesis.cancel(); //cancel current voice audio
 
-	console.log("now playing scenario #" + currentScenario);
+	speechMsgInputValue = speechMsgInput.value;
+	volumeInputValue = volumeInput.value;
+	rateInputValue = rateInput.value;
+	pitchInputValue = pitchInput.value;
 
 	playScenario(scenarioList[currentScenario]);
 }
@@ -376,6 +405,17 @@ function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 /*********************
 FUNCTIONS
 **********************/
+
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
 
 function loadVoices()
 {
@@ -392,21 +432,20 @@ function loadVoices()
 	);
 }
 
-function speakTxt(text)
+function speakTxt()
 {
+	msg.text = speechMsgInputValue;
+	msg.volume = parseFloat(volumeInputValue);
+	msg.rate = parseFloat(rateInputValue);
+	msg.pitch = parseFloat(pitchInputValue);
 
-	msg.text = text;
-	msg.volume = parseFloat(volumeInput.value);
-	msg.rate = parseFloat(rateInput.value);
-	msg.pitch = parseFloat(pitchInput.value);
-
-	if(voiceSelect.value)
+	if(voiceSelectValue)
 	{
 		msg.voice = speechSynthesis.getVoices().filter
 		(
 			function(voice)
 			{
-				return voice.name == voiceSelect.value
+				return voice.name == voiceSelectValue;
 			}
 		)[0];
 	}
@@ -452,7 +491,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 
 	if(scene_i == scenario.proposal) //handles the scene where user inputs the dialogue
 	{
-		if(speechMsgInput.value == '')
+		if(!speechMsgInputValue)
 		{
 			setTimeout
 			(
@@ -480,6 +519,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 				const index = event.charIndex;
 				if(prevIndex === index)
 				{
+					console.log('something is wrong');
 					return;
 				}
 				prevIndex = index;
@@ -508,7 +548,7 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 					// {
 					// 	return;
 					// }
-					speakTxt(speechMsgInput.value);
+					speakTxt();
 				},
 				scenario.waitSpeak
 			);
@@ -533,9 +573,6 @@ function getWordAt(str, pos)
     // Search for the word's beginning and end.
     let left = str.slice(0, pos + 1).search(/\S+$/),
         right = str.slice(pos).search(/\s/);
-
-    console.log('left position is: ' + left);
-    console.log(`right position is: ${right + pos}`);
 
     // The last word in the string is a special case.
     if (right < 0) {
@@ -633,6 +670,12 @@ function cleanUpVar()
 	cleanUp = false; //flag, can't start new scene while this is true;
 }
 
+///////////////////////////////////////
+// IMPLEMENTATION
+///////////////////////////////////////
+
+
+
 if('speechSynthesis' in window)
 {
 	supportMsg.innerHTML = "Your browser <strong>supports</strong> speech synthesis.";
@@ -642,10 +685,3 @@ else
 {
 	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis. Get the best experience with Google Chrome";
 }
-
-loadVoices();
-
-window.speechSynthesis.onvoiceschanged = function(e)
-{
-	loadVoices();
-};

@@ -102,8 +102,8 @@ BOXES
 #line-text
 {
 	/*position: absolute;*/
-	/*margin-bottom: 500px;*/
-	font-size: 30px;
+	margin: 5% 3%;
+	font-size: 150%;
 	color: white;
 	text-shadow: 0 0 10px #000000;
 	font-family: 'Roboto', sans-serif;
