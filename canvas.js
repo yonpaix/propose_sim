@@ -218,6 +218,7 @@ let sceneWindow = document.getElementById('scene-window');
 let lineText = document.getElementById('line-text');
 let dimmer = document.getElementById('dimmer');
 let voiceBox = document.getElementById("voice-box");
+let endWindow = document.getElementById('end-window');
 let supportMsg = document.getElementById("support-msg");
 
 let confessionButton = document.getElementById("confession-button");
@@ -226,6 +227,8 @@ let previewButton = document.getElementById("preview-button");
 let closeButton = document.getElementById("close-button");
 let readySceneButton = document.getElementById("ready-button");
 
+
+let sceneCode = document.getElementById('code');
 let speechMsgInput = document.getElementById("speech-msg");
 let speechMsgInputValue;
 let voiceSelect = document.getElementById("voice");
@@ -279,6 +282,11 @@ previewButton.addEventListener
 ('click', function(e)
 	{
 		window.speechSynthesis.cancel(); //cancel current voice audio
+
+		speechMsgInputValue = speechMsgInput.value;
+		volumeInputValue = volumeInput.value;
+		rateInputValue = rateInput.value;
+		pitchInputValue = pitchInput.value;
 		
 		if(speechMsgInput.value.length > 0)
 		{
@@ -312,18 +320,20 @@ readySceneButton.addEventListener
 	{
 
 		//HANDLES PRECONSTRUCTED SCENARIOS from the URL
-		if(getQueryVariable("id"))
+		if(window.location.search.substring(1))
 		{
-			currentScenario = getQueryVariable("id");
+			//currentScenario = getQueryVariable("id");
 
 			dimmer.style.opacity = 0.5;
 			sceneWindow.style.display = 'initial';
 			skipButton.style.display = 'initial';
 
-			speechMsgInputValue = decodeURI(getQueryVariable('spk'));
-			volumeInputValue = getQueryVariable('vol');
-			rateInputValue = getQueryVariable('rat');
-			pitchInputValue = getQueryVariable('pit');
+			// speechMsgInputValue = decodeURI(getQueryVariable('spk'));
+			// volumeInputValue = getQueryVariable('vol');
+			// rateInputValue = getQueryVariable('rat');
+			// pitchInputValue = getQueryVariable('pit');
+
+			decodeScenario();
 
 			playScenario(scenarioList[currentScenario]);
 		}
@@ -342,7 +352,6 @@ closeButton.addEventListener
 		
 		close = true;
 		cleanUp = true;
-		//debugger;
 
 		//if the scene stopped because they are in the input screen, the scene will not clean up, but the button will need to take care of it.
 		if(scene_i == 0 && currentScenario != null)
@@ -359,7 +368,7 @@ closeButton.addEventListener
 		}
 
 		//if the scene is on the proposal scene, it will create a bunch of promises and just quits, so we need to handle clean up on button click
-		if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '')
+		if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '') //BUGBUGBUG currentScenario is undefined and throws an error if closing during the voiceBox phase
 		{	
 			cleanUpVar();
 		}
@@ -369,7 +378,6 @@ closeButton.addEventListener
 //master button listener
 function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 {
-	//debugger;
 	if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
 	{
 		console.log('cleaning up currently');
@@ -406,6 +414,85 @@ function buttonClick(scenario) //scenario = x, then scenario = currentScenario
 FUNCTIONS
 **********************/
 
+// function upperCase(str) {
+//     return str.toUpperCase();
+// }
+// function titleCase(str) {
+//     var firstLetterRx = /(^|\s)[a-z]/g;
+//     return str.replace(firstLetterRx, upperCase);
+// }
+
+function encodeScenario()
+{
+			let encodeScenario = currentScenario; //should be a single character space number
+			let encodeMsg = speechMsgInputValue; //this will go at the end of the code, due to variable length
+
+			let randNum = Math.floor(Math.random() * 9) + 1;
+			encodeMsg = CaesarCipher(encodeMsg, randNum);
+
+			encodeMsg = encodeURIComponent(encodeMsg);
+
+			let encodeRate = rateInputValue * 10 + ""; //3 digit number
+			while(encodeRate.length < 3)
+			{
+				encodeRate = '0' + encodeRate;
+			}
+			console.log("the encoderate is " + encodeRate);
+			let encodePitch = pitchInputValue * 10 + ""; //2 digit number
+			while(encodePitch.length < 2)
+			{
+				encodePitch = '0' + encodePitch;
+			}
+			console.log("the encodepitch is " + encodePitch);
+
+			let encodeCode = currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg + randNum;
+			return encodeCode;
+
+			function CaesarCipher(str, num)
+			{
+			    let result = '';
+			    let charcode = 0;
+
+			    for (let i = 0; i < str.length; i++) {
+			        charcode = (str[i].charCodeAt()) + num;
+			        result += String.fromCharCode(charcode);
+			    }
+			    return result;
+			}
+
+}
+
+function decodeScenario()
+{
+	var queryString = window.location.search.substring(1);
+	debugger;
+	currentScenario = queryString.substr(0,1);
+	volumeInputValue = 1;
+	rateInputValue = queryString.substr(1,3) / 10;
+	pitchInputValue = queryString.substr(4,2) / 10;
+
+	console.log('rate input decoded is ' + rateInputValue + '. pitch input decoded is ' + pitchInputValue);
+
+	speechMsgInputValue = decodeURIComponent(queryString.substr(6));
+	console.log(speechMsgInputValue);
+	speechMsgInputValue = speechMsgInputValue.substr(0, speechMsgInputValue.length - 1);
+	console.log(speechMsgInputValue);
+	speechMsgInputValue = deCipher(speechMsgInputValue, queryString.substr(queryString.length - 1, 1));
+	console.log(speechMsgInputValue);
+
+	function deCipher(str, num)
+	{
+		let result = '';
+		let charcode = 0;
+
+		for (let i = 0; i < str.length; i++) {
+			        charcode = (str[i].charCodeAt()) - num;
+			        result += String.fromCharCode(charcode);
+			    }
+			    return result;
+	}
+}
+
 function getQueryVariable(variable)
 {
        var query = window.location.search.substring(1);
@@ -424,20 +511,28 @@ function loadVoices()
 	(
 		function(voice, i)
 		{
-			var option = document.createElement("option");
+			if(voice.lang == 'ja-JP')
+			{
+				var option = document.createElement("option");
 			option.value = voice.name;
 			option.innerHTML = voice.name;
 			voiceSelect.appendChild(option);
+	
+			}
 		}
 	);
 }
 
 function speakTxt()
 {
+	// debugger;
 	msg.text = speechMsgInputValue;
+	console.log(speechMsgInputValue);
 	msg.volume = parseFloat(volumeInputValue);
 	msg.rate = parseFloat(rateInputValue);
 	msg.pitch = parseFloat(pitchInputValue);
+
+	voiceSelectValue = voiceSelect.value;
 
 	if(voiceSelectValue)
 	{
@@ -523,10 +618,10 @@ function playScenario(scenario) //plays the scene, if skip is true, goes to the 
 					return;
 				}
 				prevIndex = index;
-			  	const word = getWordAt(speechMsgInput.value,index);
+			  	const word = getWordAt(speechMsgInputValue,index);
 			    //console.log(word);
 			  	lineText.innerHTML += word + " ";
-			  	console.log('eventIndex is: ' + index);
+			  	console.log('word is ' + speechMsgInput.value);
 			};
 
 			msg.onend = function(event)
@@ -632,15 +727,17 @@ function sceneEnd(scenario, waitTime)
 	}
 	else //scene naturally ends
 	{
+		console.log(encodeScenario());
 		cleanUpVar();
 		soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
 		function()
 		{
 			console.log('scenario ends with scene #' + scene_i);
-			sceneWindow.style.display = 'none';
-			dimmer.style.opacity = 0;
+			//sceneWindow.style.display = 'none';
+			//dimmer.style.opacity = 0;
 			cleanUpSounds();
-			console.log('clean up is ' + cleanUp);
+			endWindow.style.display = 'initial';
+			sceneCode.value = encodeScenario();
 		};
 	}
 }
