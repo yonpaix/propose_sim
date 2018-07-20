@@ -446,34 +446,30 @@ function encodeScenario()
 
 			let encodeCode = currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg;
 
+			
+			encodeCode = Base64Encode(encodeCode);
 			encodeCode = btoa(encodeCode);
-
 			encodeCode = encodeURIComponent(encodeCode);
 
 			return encodeCode;
 
-			// function CaesarCipher(str, num)
-			// {
-			//     let result = '';
-			//     let charcode = 0;
-
-			//     for (let i = 0; i < str.length; i++) {
-			//         charcode = (str[i].charCodeAt()) + num;
-			//         result += String.fromCharCode(charcode);
-			//     }
-			//     return result;
-			// }
+			function Base64Encode(str, encoding = 'utf-8')
+			{
+			    var bytes = new (TextEncoder || TextEncoderLite)(encoding).encode(str);        
+			    return base64js.fromByteArray(bytes);
+			}
 
 }
 
 function decodeScenario()
 {
 	var queryString = window.location.search.substring(1);
-	debugger;
+	//debugger;
 	console.log(queryString);
 	queryString = decodeURIComponent(queryString);
 	console.log(queryString);
 	queryString = atob(queryString);
+	queryString = Base64Decode(queryString);
 	console.log(queryString);
 
 	currentScenario = queryString.substr(0,1);
@@ -484,24 +480,12 @@ function decodeScenario()
 	//console.log('rate input decoded is ' + rateInputValue + '. pitch input decoded is ' + pitchInputValue);
 
 	speechMsgInputValue = queryString.substr(6);
-	//console.log(speechMsgInputValue);
-	//speechMsgInputValue = speechMsgInputValue.substr(0, speechMsgInputValue.length - 1);
-	//console.log(speechMsgInputValue);
-	//speechMsgInputValue = deCipher(speechMsgInputValue, queryString.substr(queryString.length - 1, 1));
-	//speechMsgInputValue = atob(speechMsgInputValue);
-	//console.log(speechMsgInputValue);
-
-	// function deCipher(str, num)
-	// {
-	// 	let result = '';
-	// 	let charcode = 0;
-
-	// 	for (let i = 0; i < str.length; i++) {
-	// 		        charcode = (str[i].charCodeAt()) - num;
-	// 		        result += String.fromCharCode(charcode);
-	// 		    }
-	// 		    return result;
-	// }
+	
+	function Base64Decode(str, encoding = 'utf-8') 
+	{
+	    var bytes = base64js.toByteArray(str);
+	    return new (TextDecoder || TextDecoderLite)(encoding).decode(bytes);
+	}
 }
 
 function getQueryVariable(variable)
