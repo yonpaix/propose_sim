@@ -2,22 +2,6 @@
 CLASS DEFINITIONS
 **********************/
 
-class ProposalSim
-{
-	constructor(currentScenario)
-	{
-		this.scene_i = 0; //current scene #
-		this.currentScenario = currentScenario; //current scenario #
-		this.skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
-		this.close = false; //flag, exits whole process
-		this.cleanUp = false; //flag, can't start new scene while this is true;	
-
-		this.soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.	
-		this.msg = new SpeechSynthesisUtterance();
-
-	}
-}
-
 class Scenario //array of scenes + information about voice box positioning
 {
 	constructor(scenarioName, scenes, proposal, waitSpeak)
@@ -104,11 +88,11 @@ const DEFAULT_MAX_LENGTH = 3000;
 GLOBAL VARIABLES
 **********************/
 
-// let scene_i = 0; //current scene #
-// let currentScenario = null; //current scenario #
-// let skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
-// let close = false; //flag, exits whole process
-// let cleanUp = false; //flag, can't start new scene while this is true;
+let scene_i = 0; //current scene #
+let currentScenario = null; //current scenario #
+let skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
+let close = false; //flag, exits whole process
+let cleanUp = false; //flag, can't start new scene while this is true;
 
 //KITCHEN SCENE
 
@@ -227,7 +211,7 @@ let scenarioList =
 	scenario_0, scenario_1, scenario_2
 ];
 
-// let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
+let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
 
 let sceneElem = document.getElementById('scene-bg');
 let sceneWindow = document.getElementById('scene-window');
@@ -257,7 +241,7 @@ let rateInputValue;
 let pitchInput = document.getElementById("pitch");
 let pitchInputValue;
 
-// let msg = new SpeechSynthesisUtterance();
+let msg = new SpeechSynthesisUtterance();
 
 let maxLength = document.getElementById('max-length');
 let lengthCounter = DEFAULT_MAX_LENGTH;
