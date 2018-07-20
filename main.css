@@ -153,10 +153,22 @@ BOXES
 	height: 100%;
 	z-index: 5;
 	display: flex;
-
+	position: absolute;
 	display: none;
+	/*background-image: url('images/2-1.jpg');*/
+	mix-blend-mode: hard-light;
+	background-color: var(--main-bg-color);
 
-	background-color: var(--main-bg-color-alpha);
+}
+
+#end
+{
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	display: flex;
+	position: absolute;
+	display: none;
 }
 
 /*

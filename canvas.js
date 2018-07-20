@@ -219,6 +219,7 @@ let lineText = document.getElementById('line-text');
 let dimmer = document.getElementById('dimmer');
 let voiceBox = document.getElementById("voice-box");
 let endWindow = document.getElementById('end-window');
+let end = document.getElementById('end');
 let supportMsg = document.getElementById("support-msg");
 
 let confessionButton = document.getElementById("confession-button");
@@ -427,38 +428,41 @@ function encodeScenario()
 			let encodeScenario = currentScenario; //should be a single character space number
 			let encodeMsg = speechMsgInputValue; //this will go at the end of the code, due to variable length
 
-			let randNum = Math.floor(Math.random() * 9) + 1;
-			encodeMsg = CaesarCipher(encodeMsg, randNum);
-
-			encodeMsg = encodeURIComponent(encodeMsg);
+			//let randNum = Math.floor(Math.random() * 9) + 1;
+			//encodeMsg = CaesarCipher(encodeMsg, randNum);
 
 			let encodeRate = rateInputValue * 10 + ""; //3 digit number
 			while(encodeRate.length < 3)
 			{
 				encodeRate = '0' + encodeRate;
 			}
-			console.log("the encoderate is " + encodeRate);
+			//console.log("the encoderate is " + encodeRate);
 			let encodePitch = pitchInputValue * 10 + ""; //2 digit number
 			while(encodePitch.length < 2)
 			{
 				encodePitch = '0' + encodePitch;
 			}
-			console.log("the encodepitch is " + encodePitch);
+			//console.log("the encodepitch is " + encodePitch);
 
-			let encodeCode = currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg + randNum;
+			let encodeCode = currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg;
+
+			encodeCode = btoa(encodeCode);
+
+			encodeCode = encodeURIComponent(encodeCode);
+
 			return encodeCode;
 
-			function CaesarCipher(str, num)
-			{
-			    let result = '';
-			    let charcode = 0;
+			// function CaesarCipher(str, num)
+			// {
+			//     let result = '';
+			//     let charcode = 0;
 
-			    for (let i = 0; i < str.length; i++) {
-			        charcode = (str[i].charCodeAt()) + num;
-			        result += String.fromCharCode(charcode);
-			    }
-			    return result;
-			}
+			//     for (let i = 0; i < str.length; i++) {
+			//         charcode = (str[i].charCodeAt()) + num;
+			//         result += String.fromCharCode(charcode);
+			//     }
+			//     return result;
+			// }
 
 }
 
@@ -466,31 +470,38 @@ function decodeScenario()
 {
 	var queryString = window.location.search.substring(1);
 	debugger;
+	console.log(queryString);
+	queryString = decodeURIComponent(queryString);
+	console.log(queryString);
+	queryString = atob(queryString);
+	console.log(queryString);
+
 	currentScenario = queryString.substr(0,1);
 	volumeInputValue = 1;
 	rateInputValue = queryString.substr(1,3) / 10;
 	pitchInputValue = queryString.substr(4,2) / 10;
 
-	console.log('rate input decoded is ' + rateInputValue + '. pitch input decoded is ' + pitchInputValue);
+	//console.log('rate input decoded is ' + rateInputValue + '. pitch input decoded is ' + pitchInputValue);
 
-	speechMsgInputValue = decodeURIComponent(queryString.substr(6));
-	console.log(speechMsgInputValue);
-	speechMsgInputValue = speechMsgInputValue.substr(0, speechMsgInputValue.length - 1);
-	console.log(speechMsgInputValue);
-	speechMsgInputValue = deCipher(speechMsgInputValue, queryString.substr(queryString.length - 1, 1));
-	console.log(speechMsgInputValue);
+	speechMsgInputValue = queryString.substr(6);
+	//console.log(speechMsgInputValue);
+	//speechMsgInputValue = speechMsgInputValue.substr(0, speechMsgInputValue.length - 1);
+	//console.log(speechMsgInputValue);
+	//speechMsgInputValue = deCipher(speechMsgInputValue, queryString.substr(queryString.length - 1, 1));
+	//speechMsgInputValue = atob(speechMsgInputValue);
+	//console.log(speechMsgInputValue);
 
-	function deCipher(str, num)
-	{
-		let result = '';
-		let charcode = 0;
+	// function deCipher(str, num)
+	// {
+	// 	let result = '';
+	// 	let charcode = 0;
 
-		for (let i = 0; i < str.length; i++) {
-			        charcode = (str[i].charCodeAt()) - num;
-			        result += String.fromCharCode(charcode);
-			    }
-			    return result;
-	}
+	// 	for (let i = 0; i < str.length; i++) {
+	// 		        charcode = (str[i].charCodeAt()) - num;
+	// 		        result += String.fromCharCode(charcode);
+	// 		    }
+	// 		    return result;
+	// }
 }
 
 function getQueryVariable(variable)
@@ -727,7 +738,7 @@ function sceneEnd(scenario, waitTime)
 	}
 	else //scene naturally ends
 	{
-		console.log(encodeScenario());
+		let outputCode = encodeScenario();
 		cleanUpVar();
 		soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
 		function()
@@ -737,7 +748,8 @@ function sceneEnd(scenario, waitTime)
 			//dimmer.style.opacity = 0;
 			cleanUpSounds();
 			endWindow.style.display = 'initial';
-			sceneCode.value = encodeScenario();
+			end.style.display = 'initial';
+			sceneCode.value = outputCode;
 		};
 	}
 }
