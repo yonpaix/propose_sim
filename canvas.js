@@ -4,17 +4,16 @@ CLASS DEFINITIONS
 
 class ProposalSim
 {
-	constructor(currentScenario)
+	constructor(ID, currentScenario)
 	{
-		this.scene_i = 0; //current scene #
+		//this.scene_i = 0; //current scene # //now a variable in the Scenario itself
+		this.ID = ID
 		this.currentScenario = currentScenario; //current scenario #
+		this.scenario = scenarioList[currentScenario];
+
 		this.skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
 		this.close = false; //flag, exits whole process
 		this.cleanUp = false; //flag, can't start new scene while this is true;	
-
-		this.soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.	
-		this.msg = new SpeechSynthesisUtterance();
-
 	}
 }
 
@@ -26,11 +25,227 @@ class Scenario //array of scenes + information about voice box positioning
 		this.scenarioName = scenarioName;
 		this.proposal = proposal; //scene # for proposal
 		this.waitSpeak = waitSpeak; //wait until the dude speaks at the beginning of the proposal scene
+		this.scene_i = 0;
+
+		this.utterance = new SpeechSynthesisUtterance();
+
+		this.soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.	
+	}
+
+	speakTxt()
+	{
+		// debugger;
+		utterance.text = speechMsgInputValue;
+		console.log(speechMsgInputValue);
+		utterance.volume = parseFloat(volumeInputValue);
+		utterance.rate = parseFloat(rateInputValue);
+		utterance.pitch = parseFloat(pitchInputValue);
+
+		voiceSelectValue = voiceSelect.value;
+
+		if(voiceSelectValue)
+		{
+			utterance.voice = speechSynthesis.getVoices().filter
+			(
+				function(voice)
+				{
+					return voice.name == voiceSelectValue;
+				}
+			)[0];
+		}
+
+			window.speechSynthesis.speak(utterance);
+
+		
 	}
 
 	toString()
 	{
 		return this.scenarioName;
+	}
+
+	iterateSounds()
+	{
+		//let itself = this;
+		let sceneSounds = this.scenes[this.scene_i].sounds;
+		if(sceneSounds) //if the scene has sounds, iterate through them and play them
+		{
+				for(let sound_i = 0; sound_i < sceneSounds.length; sound_i++)
+				{
+					this.soundList.push(sceneSounds[sound_i]);
+
+
+					// setTimeout
+					// (
+					// 	function()
+					// 	{
+					// 		itself.soundList[itself.soundList.length - 1].play(); //might lead to issues, due to itself only being a copy of this?
+					// 	},
+					// 	sceneSounds[sound_i].startTime
+					// );
+					
+					setTimeout(() => 
+						{
+					    	this.soundList[this.soundList.length - 1].audio.play();
+					  	}, 
+					  	sceneSounds[sound_i].startTime
+					 );
+
+				}
+			
+			
+		}
+	}
+
+	playScenario() //plays the scene, if skip is true, goes to the proposal right away
+	{
+
+		// scenario = this.scenario;
+		// scene_i = scenario.scene_i;
+
+
+		/*if(!this.skip)
+		{
+			voiceBox.style.display = 'none';
+		}*/
+		//get rid of reset button when the scene before the proposal scene is reached
+		if(this.scene_i == this.proposal - 1)
+			skipButton.style.display = 'none';
+
+		//reset linetext when final scene plays. The one where she's crying
+		if(this.scene_i == this.proposal + 1)
+			lineText.innerHTML = '';
+		
+		let waitTime = this.scenes[this.scene_i].duration;
+
+		sceneElem.style.backgroundImage = `url(${this.scenes[this.scene_i].animations[0].imgSource})`;
+
+		this.scenes[this.scene_i].animateEntity();
+
+		if(this.scene_i == this.proposal) //handles the scene where user inputs the dialogue
+		{
+			if(!speechMsgInputValue) //if there is no input message
+			{
+				setTimeout
+				(
+					function()
+					{
+						if(sceneWindow.style.display == 'none') //if scene window is not there, don't even bother.
+							return;
+						let moment = new Audio('sounds/moment.mp3');
+						moment.play();
+						voiceBox.style.display = 'initial';
+					},
+					this.waitSpeak
+				);
+				
+				this.scene_i = 0;
+				
+				return;
+			}
+			else //if there is an input message
+			{
+				let prevIndex;
+
+				this.utterance.onboundary = function(event)
+				{
+					const index = event.charIndex;
+					if(prevIndex === index)
+					{
+						console.log('double first word, don\'t print');
+						return;
+					}
+					prevIndex = index;
+				  	const word = getWordAt(speechMsgInputValue,index);
+				    
+				  	lineText.innerHTML += word + " ";
+				};
+
+				this.utterance.onend = function(event)
+				{
+					// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
+					// {
+					// 	msg.onend = null;
+					// 	return;
+					// }
+					this.iterateSounds();
+					this.scene_i++; 
+					this.sceneEnd();
+	  			}				
+				setTimeout
+				(
+					function()
+					{
+						// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
+						// {
+						// 	return;
+						// }
+						speakTxt();
+					},
+					scenario.waitSpeak
+				);
+			}
+			
+		}
+
+		else
+		{
+			this.iterateSounds();
+			this.scene_i++;
+			this.sceneEnd();
+		}
+	}
+
+	sceneEnd()
+	{
+		//let itself = this;
+		let waitTime = this.scenes[this.scene_i].duration;
+		/*if(this.skip) //scene is skipped
+		{
+			skip = false;
+			return;
+		}*/
+		/*if(close) //scene is exited by user input
+		{
+			close = false;
+			sceneWindow.style.display = 'none';
+			dimmer.style.opacity = 0;
+			cleanUpVar();
+			window.speechSynthesis.cancel(); //cancel current voice audio
+			cleanUpSounds();
+			
+			console.log('end of the line');
+		}*/
+		/*else if*/
+		if(this.scene_i < this.scenes.length) //scene continues;
+		{
+			console.log('continue to next scene');
+			//setTimeout(function(){itself.playScenario();}, waitTime);
+
+			setTimeout(() => 
+						{
+					    	this.playScenario();
+					  	}, 
+					  	waitTime
+					 );
+
+		}
+		else //scene naturally ends
+		{
+			let outputCode = encodeScenario();
+			cleanUpVar();
+			soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
+			function()
+			{
+				console.log('scenario ends with scene #' + scene_i);
+				//sceneWindow.style.display = 'none';
+				//dimmer.style.opacity = 0;
+				cleanUpSounds();
+				endWindow.style.display = 'initial';
+				end.style.display = 'initial';
+				sceneCode.value = outputCode;
+			};
+		}
 	}
 }
 
@@ -45,6 +260,20 @@ class Scene
 		this.animations = animations; //array of objects in the scene and their animation
 		//FIRST ITEM IN THE ARRAY IS ALWAYS THE BACKGROUND
 	}
+
+	animateEntity(/*scenario*/)
+	{
+		let animationStyle;
+		let timing;
+		for (let i in this.animations)
+		{ 
+			//sceneElem.style.animation = 'none';
+			animationStyle = this.animations[i].animationStyle;
+			timing = this.animations[i].timing;
+			sceneElem.style.animation = `${animationStyle} ${timing} linear`;
+		} 
+	}
+
 }
 
 class SceneSound
@@ -74,10 +303,10 @@ class SceneSound
 		this.audio.stop();
 	}
 
-	queueSong()
-	{
-		soundList.push(this.audio);
-	}
+	// queueSong()
+	// {
+	// 	soundList.push(this.audio);
+	// }
 }
 
 class SceneAnimation
@@ -96,9 +325,7 @@ class SceneAnimation
 /*********************
 CONSTANTS
 **********************/
-
-const DEFAULT_LINE = "The brown fox jumps over the lazy dog."
-const DEFAULT_MAX_LENGTH = 3000;
+const DEFAULT_MAX_LENGTH = 100;
 
 /*********************
 GLOBAL VARIABLES
@@ -267,6 +494,9 @@ maxLength.innerHTML = lengthCounter;
 
 loadVoices();
 
+proposalID = 0; //index of the global proposal arrray that keeps track of scenarios being played.
+proposalSim = [];
+
 /*********************
 EVENT LISTENERS
 **********************/
@@ -360,7 +590,7 @@ readySceneButton.addEventListener
 closeButton.addEventListener
 ('click', function(e)
 	{
-		voiceBox.style.display = 'none';
+		/*voiceBox.style.display = 'none';
 		sceneWindow.style.display = 'none';
 		skipButton.style.display = 'initial';
 		dimmer.style.opacity = 0;
@@ -388,42 +618,44 @@ closeButton.addEventListener
 		if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '') //BUGBUGBUG currentScenario is undefined and throws an error if closing during the voiceBox phase
 		{	
 			cleanUpVar();
-		}
+		}*/
 	}
 );
 
 //master button listener
-function buttonClick(scenario) //scenario = x, then scenario = currentScenario
+function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenario
 {
-	if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
+	/*if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
 	{
 		console.log('cleaning up currently');
 		return;
-	}
+	}*/
 	if(speechMsgInput.value.length <= 0 && voiceBox.style.display == 'initial') //button does nothing if no user input on voicebox
 	{
 		console.log('need to input a message');
 		return;
 		//should put warning message in the future
 	}
-	if(scenario < 0) //for buttons that continues a scenario where it is already picked initially
+	/*if(scenario < 0) //for buttons that continues a scenario where it is already picked initially
 	{
-		scenario = currentScenario;
-	}
+		scenarioNum = proposalSim.currentScenario;
+	}*/
 
-	currentScenario = scenario;
+	//proposalSim.currentScenario = scenarioNum;
 
 	dimmer.style.opacity = 0.5;
 	sceneWindow.style.display = 'initial';
 	skipButton.style.display = 'initial';
-	window.speechSynthesis.cancel(); //cancel current voice audio
+	//proposalSim.speechSynthesis.cancel(); //cancel current voice audio
 
 	speechMsgInputValue = speechMsgInput.value;
 	volumeInputValue = volumeInput.value;
 	rateInputValue = rateInput.value;
 	pitchInputValue = pitchInput.value;
 
-	playScenario(scenarioList[currentScenario]);
+	proposalSim[proposalID] = new ProposalSim(proposalID, scenarioNum);
+	proposalSim[proposalID].scenario.playScenario();
+	proposalID++;
 }
 
 
@@ -550,141 +782,11 @@ function loadVoices()
 	);
 }
 
-function speakTxt()
-{
-	// debugger;
-	msg.text = speechMsgInputValue;
-	console.log(speechMsgInputValue);
-	msg.volume = parseFloat(volumeInputValue);
-	msg.rate = parseFloat(rateInputValue);
-	msg.pitch = parseFloat(pitchInputValue);
+///////////////PREVIOUS LOCATION OF speakTxt ////////////////////////////////
 
-	voiceSelectValue = voiceSelect.value;
+///////////////PREVIOUS LOCATION OF animateBG - to be called: animateEntity//////////////////////////////
 
-	if(voiceSelectValue)
-	{
-		msg.voice = speechSynthesis.getVoices().filter
-		(
-			function(voice)
-			{
-				return voice.name == voiceSelectValue;
-			}
-		)[0];
-	}
-
-		window.speechSynthesis.speak(msg);
-
-	
-}
-
-function animateBG(scenario)
-{
-	let animationStyle;
-	let timing;
-	for (i in scenario.scenes[scene_i].animations)
-	{
-		//sceneElem.style.animation = 'none';
-		animationStyle = scenario.scenes[scene_i].animations[i].animationStyle;
-		timing = scenario.scenes[scene_i].animations[i].timing;
-		sceneElem.style.animation = `${animationStyle} ${timing} linear`;
-	} 
-}
-
-function playScenario(scenario) //plays the scene, if skip is true, goes to the proposal right away
-{
-	console.log("current scene is #" + scene_i);
-
-	if(!skip)
-	{
-		voiceBox.style.display = 'none';
-	}
-	//get rid of reset button when the scene before the proposal scene is reached
-	if(scene_i == scenario.proposal - 1)
-		skipButton.style.display = 'none';
-
-	//reset linetext when final scene plays. The one where she's crying
-	if(scene_i == scenario.proposal + 1)
-		lineText.innerHTML = '';
-	
-	let waitTime = scenario.scenes[scene_i].duration;
-
-	sceneElem.style.backgroundImage = `url(${scenario.scenes[scene_i].animations[0].imgSource})`;
-	animateBG(scenario);
-
-	if(scene_i == scenario.proposal) //handles the scene where user inputs the dialogue
-	{
-		if(!speechMsgInputValue)
-		{
-			setTimeout
-			(
-				function()
-				{
-					if(sceneWindow.style.display == 'none') //if scene window is not there, don't even bother.
-						return;
-					var moment = new Audio('sounds/moment.mp3');
-					moment.play();
-					voiceBox.style.display = 'initial';
-				},
-				scenario.waitSpeak
-			);
-			
-			scene_i = 0;
-			
-			return;
-		}
-		else
-		{
-			let prevIndex;
-
-			msg.onboundary = function(event)
-			{
-				const index = event.charIndex;
-				if(prevIndex === index)
-				{
-					console.log('something is wrong');
-					return;
-				}
-				prevIndex = index;
-			  	const word = getWordAt(speechMsgInputValue,index);
-			    //console.log(word);
-			  	lineText.innerHTML += word + " ";
-			  	console.log('word is ' + speechMsgInput.value);
-			};
-
-			msg.onend = function(event)
-			{
-				// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
-				// {
-				// 	msg.onend = null;
-				// 	return;
-				// }
-				soundIterator(scenario);
-				scene_i++;
-				sceneEnd(scenario, waitTime);
-  			}				
-			setTimeout
-			(
-				function()
-				{
-					// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
-					// {
-					// 	return;
-					// }
-					speakTxt();
-				},
-				scenario.waitSpeak
-			);
-		}
-		
-	}
-
-	else
-	{
-		soundIterator(scenario);
-		scene_i++;
-		sceneEnd(scenario, waitTime);
-	}
-}
+///////////////PREVIOUS LOCATION FOR playScenario//////////////////////////
 
 // Get the word of a string given the string and the index
 function getWordAt(str, pos)
@@ -704,71 +806,9 @@ function getWordAt(str, pos)
     return str.slice(left, right + pos);
 }
 
-function soundIterator(scenario)
-{
-	
-	if(scenario.scenes[scene_i].sounds) //if the scene has sounds, iterate through them and play them
-	{
-			for(let sound_i = 0; sound_i < scenario.scenes[scene_i].sounds.length; sound_i++)
-			{
-				scenario.scenes[scene_i].sounds[sound_i].queueSong();
+/////////////////PREVIOUS LOCATION OF iterateSounds//////////////////////
 
-
-				setTimeout
-				(
-					function()
-					{
-						
-							soundList[soundList.length - 1].play();
-					},
-					scenario.scenes[scene_i].sounds[sound_i].startTime
-				);
-				
-			}
-		
-		
-	}
-}
-
-function sceneEnd(scenario, waitTime)
-{
-	if(skip) //scene is skipped
-	{
-		skip = false;
-		return;
-	}
-	if(close) //scene is exited by user input
-	{
-		close = false;
-		sceneWindow.style.display = 'none';
-		dimmer.style.opacity = 0;
-		cleanUpVar();
-		window.speechSynthesis.cancel(); //cancel current voice audio
-		cleanUpSounds();
-		
-		console.log('end of the line');
-	}
-	else if(scene_i < scenario.scenes.length) //scene continues;
-	{
-		setTimeout(function(){playScenario(scenario)}, waitTime);
-	}
-	else //scene naturally ends
-	{
-		let outputCode = encodeScenario();
-		cleanUpVar();
-		soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
-		function()
-		{
-			console.log('scenario ends with scene #' + scene_i);
-			//sceneWindow.style.display = 'none';
-			//dimmer.style.opacity = 0;
-			cleanUpSounds();
-			endWindow.style.display = 'initial';
-			end.style.display = 'initial';
-			sceneCode.value = outputCode;
-		};
-	}
-}
+/////////////////ORIGINAL LOCATION OF sceneEnd///////////////////////////
 
 function cleanUpSounds()
 {
