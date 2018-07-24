@@ -4,16 +4,19 @@ CLASS DEFINITIONS
 
 class ProposalSim
 {
-	constructor(ID, currentScenario)
+	constructor(/*currentScenario*/)
 	{
 		//this.scene_i = 0; //current scene # //now a variable in the Scenario itself
-		this.ID = ID
-		this.currentScenario = currentScenario; //current scenario #
-		this.scenario = scenarioList[currentScenario];
+		//this.ID = ID
+		// this.currentScenario = currentScenario; //current scenario #
+		// this.scenario = scenarioList[currentScenario];
 
-		this.skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
-		this.close = false; //flag, exits whole process
-		this.cleanUp = false; //flag, can't start new scene while this is true;	
+		// this.skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
+		// this.close = false; //flag, exits whole process
+		// this.cleanUp = false; //flag, can't start new scene while this is true;	
+
+		this.scenarios = [];
+		this.close = false;
 	}
 }
 
@@ -35,17 +38,17 @@ class Scenario //array of scenes + information about voice box positioning
 	speakTxt()
 	{
 		// debugger;
-		utterance.text = speechMsgInputValue;
+		this.utterance.text = speechMsgInputValue;
 		console.log(speechMsgInputValue);
-		utterance.volume = parseFloat(volumeInputValue);
-		utterance.rate = parseFloat(rateInputValue);
-		utterance.pitch = parseFloat(pitchInputValue);
+		this.utterance.volume = parseFloat(volumeInputValue);
+		this.utterance.rate = parseFloat(rateInputValue);
+		this.utterance.pitch = parseFloat(pitchInputValue);
 
 		voiceSelectValue = voiceSelect.value;
 
 		if(voiceSelectValue)
 		{
-			utterance.voice = speechSynthesis.getVoices().filter
+			this.utterance.voice = speechSynthesis.getVoices().filter
 			(
 				function(voice)
 				{
@@ -62,6 +65,17 @@ class Scenario //array of scenes + information about voice box positioning
 	toString()
 	{
 		return this.scenarioName;
+	}
+
+	cleanUpSounds()
+	{
+		for (let i in this.soundList) 
+		{
+				console.log('deleting sounds');
+			    this.soundList[i].pause();
+			    //soundList[i].currentTime = 0;
+		}
+		soundList = null;
 	}
 
 	iterateSounds()
@@ -99,7 +113,8 @@ class Scenario //array of scenes + information about voice box positioning
 
 	playScenario() //plays the scene, if skip is true, goes to the proposal right away
 	{
-
+		if(this.close)
+			return;
 		// scenario = this.scenario;
 		// scene_i = scenario.scene_i;
 
@@ -224,6 +239,7 @@ class Scenario //array of scenes + information about voice box positioning
 
 			setTimeout(() => 
 						{
+							console.log(this);
 					    	this.playScenario();
 					  	}, 
 					  	waitTime
@@ -240,7 +256,7 @@ class Scenario //array of scenes + information about voice box positioning
 				console.log('scenario ends with scene #' + scene_i);
 				//sceneWindow.style.display = 'none';
 				//dimmer.style.opacity = 0;
-				cleanUpSounds();
+				this.cleanUpSounds();
 				endWindow.style.display = 'initial';
 				end.style.display = 'initial';
 				sceneCode.value = outputCode;
@@ -495,7 +511,7 @@ maxLength.innerHTML = lengthCounter;
 loadVoices();
 
 proposalID = 0; //index of the global proposal arrray that keeps track of scenarios being played.
-proposalSim = [];
+proposalSim = new ProposalSim();
 
 /*********************
 EVENT LISTENERS
@@ -554,11 +570,11 @@ skipButton.addEventListener
 ('click', function(e)
 	{
 
-		scene_i = scenarioList[currentScenario].proposal - 1;
-		skip = true;
-		skipButton.style.display = 'none';
-		cleanUpSounds();
-		playScenario(scenarioList[currentScenario]);
+		// scene_i = scenarioList[currentScenario].proposal - 1;
+		// skip = true;
+		// skipButton.style.display = 'none';
+		// cleanUpSounds();
+		// playScenario(scenarioList[currentScenario]);
 	}
 );
 
@@ -590,32 +606,34 @@ readySceneButton.addEventListener
 closeButton.addEventListener
 ('click', function(e)
 	{
-		/*voiceBox.style.display = 'none';
+		voiceBox.style.display = 'none';
 		sceneWindow.style.display = 'none';
 		skipButton.style.display = 'initial';
 		dimmer.style.opacity = 0;
-		window.speechSynthesis.cancel(); //cancel current voice audio
-		cleanUpSounds();
+		speechSynthesis.cancel(); //cancel current voice audio
+		//proposalSim.scenario.cleanUpSounds();
+		//debugger;
+		proposalSim.scenarios[proposalSim.scenarios.length - 1].close = true;
 		
-		close = true;
-		cleanUp = true;
+		// close = true;
+		// cleanUp = true;
 
 		//if the scene stopped because they are in the input screen, the scene will not clean up, but the button will need to take care of it.
-		if(scene_i == 0 && currentScenario != null)
+		/*if(scene_i == 0 && currentScenario != null)
 		{
 			console.log('clean up on aisle 4');
 			cleanUpVar();
-		}
+		}*/
 
 		//if the scene already cleaned up but the song is still playing and the window is still up, need to manually falsify cleanUp, because it was already taken cared of, and now it's true again.
-		if(currentScenario == null)
+		/*if(currentScenario == null)
 		{
 			close = false;
 			cleanUp = false;
-		}
+		}*/
 
 		//if the scene is on the proposal scene, it will create a bunch of promises and just quits, so we need to handle clean up on button click
-		if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '') //BUGBUGBUG currentScenario is undefined and throws an error if closing during the voiceBox phase
+		/*if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '') //BUGBUGBUG currentScenario is undefined and throws an error if closing during the voiceBox phase
 		{	
 			cleanUpVar();
 		}*/
@@ -653,9 +671,13 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 	rateInputValue = rateInput.value;
 	pitchInputValue = pitchInput.value;
 
-	proposalSim[proposalID] = new ProposalSim(proposalID, scenarioNum);
-	proposalSim[proposalID].scenario.playScenario();
-	proposalID++;
+	console.log(scenarioList[scenarioNum]);
+	console.log(proposalSim.scenarios);
+
+	console.log($.extend(true,{},scenarioList[scenarioNum]));
+
+	proposalSim.scenarios.push($.extend(true,{},scenarioList[scenarioNum]));
+	proposalSim.scenarios[proposalSim.scenarios.length - 1].playScenario();
 }
 
 
@@ -717,7 +739,7 @@ function encodeScenario()
 function decodeScenario()
 {
 	var queryString = window.location.search.substring(1);
-	debugger;
+	//debugger;
 	console.log(queryString);
 	queryString = decodeURIComponent(queryString);
 	console.log(queryString);
@@ -810,15 +832,7 @@ function getWordAt(str, pos)
 
 /////////////////ORIGINAL LOCATION OF sceneEnd///////////////////////////
 
-function cleanUpSounds()
-{
-	for (i in soundList) 
-	{
-			console.log('deleting sounds');
-		    soundList[i].pause();
-		    soundList[i].currentTime = 0;
-	}
-}
+/////////////////ORIGINAL LOCATION OF cleanUpSounds///////////////////////
 
 function cleanUpVar()
 {
