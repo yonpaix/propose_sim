@@ -15,7 +15,6 @@ class ProposalSim
 		this.close = false; //flag, exits whole process
 		// this.cleanUp = false; //flag, can't start new scene while this is true;	
 		this.scene_i = 0;
-		this.utterance = new SpeechSynthesisUtterance();
 		this.soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.	
 		this.nextSounds = [];
 	}
@@ -23,17 +22,17 @@ class ProposalSim
 	speakTxt()
 	{
 		// debugger;
-		this.utterance.text = speechMsgInputValue;
-		console.log(speechMsgInputValue);
-		this.utterance.volume = parseFloat(volumeInputValue);
-		this.utterance.rate = parseFloat(rateInputValue);
-		this.utterance.pitch = parseFloat(pitchInputValue);
+		utterance.text = speechMsgInputValue;
+		//console.log(speechMsgInputValue);
+		utterance.volume = parseFloat(volumeInputValue);
+		utterance.rate = parseFloat(rateInputValue);
+		utterance.pitch = parseFloat(pitchInputValue);
 
 		voiceSelectValue = voiceSelect.value;
 
 		if(voiceSelectValue)
 		{
-			this.utterance.voice = speechSynthesis.getVoices().filter
+			utterance.voice = speechSynthesis.getVoices().filter
 			(
 				function(voice)
 				{
@@ -42,7 +41,7 @@ class ProposalSim
 			)[0];
 		}
 
-			window.speechSynthesis.speak(this.utterance);
+			window.speechSynthesis.speak(utterance);
 	}
 
 	playScenario() //plays the scene, if skip is true, goes to the proposal right away
@@ -97,7 +96,7 @@ class ProposalSim
 			{
 				let prevIndex;
 
-				this.utterance.onboundary = function(event)
+				utterance.onboundary = function(event)
 				{
 					const index = event.charIndex;
 					if(prevIndex === index)
@@ -111,7 +110,7 @@ class ProposalSim
 				  	lineText.innerHTML += word + " ";
 				};
 				let that = this;
-				this.utterance.onend = function(event)
+				utterance.onend = function(event)
 				{
 					// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
 					// {
@@ -134,13 +133,13 @@ class ProposalSim
 				// 	},
 				// 	this.scenario.waitSpeak
 				// );
-				setTimeout(() => 
+				this.nextSounds.push(setTimeout(() => 
 						{
 							//console.log(this);
 					    	this.speakTxt();
 					  	}, 
 					  	this.scenario.waitSpeak
-					 );
+					 ));
 			}
 			
 		}
@@ -365,122 +364,7 @@ GLOBAL VARIABLES
 // let close = false; //flag, exits whole process
 // let cleanUp = false; //flag, can't start new scene while this is true;
 
-//KITCHEN SCENE
 
-let scenario_0 = new Scenario
-(
-	"Kitchen Proposal",
-	[
-		new Scene(3400, [new SceneSound('sounds/kitchen-love', 3000)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1800, null,
-				[new SceneAnimation('1-2.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(2500, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(4100, null,
-				[new SceneAnimation('1-2c.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(2600, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1700, null,
-				[new SceneAnimation('1-3.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(1600, null,
-				[new SceneAnimation('1-3b.jpg', 'shiftx', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(3000, null,
-				[new SceneAnimation('1-4.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, null,
-				[new SceneAnimation('1-5.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			)
-	],
-	8, 1000
-); //contains individual scene objects
-
-//TRAIN SCENE
-
-// let scenario_1 = new Scenario
-// (
-// 	"Train Proposal",
-// 	[
-// 		new Scene('1.png', 5000, [new SceneSound('intro', 0)]),
-// 		new Scene('2.png', 5000, null),
-// 		new Scene('3.png', 5000, null),
-// 		new Scene('4.png', 5000, [new SceneSound('will', 0)]),
-// 		new Scene('5.png', 5000, null)
-// 	],
-// 	3, 1000
-// );
-
-let scenario_1 = new Scenario
-(
-	"Kitchen Proposal",
-	[
-		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1800, null,
-				[new SceneAnimation('1-2.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(2500, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(4100, null,
-				[new SceneAnimation('1-2c.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(2600, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1700, null,
-				[new SceneAnimation('1-3.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1600, null,
-				[new SceneAnimation('1-3b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(3000, null,
-				[new SceneAnimation('1-4.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, null,
-				[new SceneAnimation('1-5.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			)
-	],
-	8, 1000
-); //contains individual scene objects
-
-let scenario_2 = new Scenario
-(
-	"Office Proposal",
-	[
-		new Scene('images/2-1.jpg', 3000, [new SceneSound('sounds/office-love', 0)]),
-		new Scene('images/2-2.jpg', 3000, null),
-		new Scene('images/2-3.jpg', 2800, null),
-		new Scene('images/2-4.jpg', 1100, null),
-		new Scene('images/2-5.jpg', 2400, null),
-		new Scene('images/2-6.jpg', 1900, null),
-		new Scene('images/2-7.jpg', 2500, null),
-		new Scene('images/2-8.jpg', 2800, null),
-		new Scene('images/2-9.jpg', 5000, [new SceneSound('plove', 250)]),
-		new Scene('images/2-10.jpg', 5000, null)
-	],
-	8, 2000
-);
-//LIST OF SCENARIOS
-
-let scenarioList = 
-[
-	scenario_0, scenario_1, scenario_2
-];
 
 // let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
 
@@ -524,6 +408,7 @@ loadVoices();
 
 //proposalID = 0; //index of the global proposal arrray that keeps track of scenarios being played.
 let proposalSims = [];
+utterance = new SpeechSynthesisUtterance();
 
 /*********************
 EVENT LISTENERS
@@ -632,7 +517,8 @@ closeButton.addEventListener
 		{
 			clearTimeout(nextSound);
 		}
-
+		cleanUpVar();
+		//speechMsgInput.value = '';
 		proposalSims[proposalSims.length - 1].close = true;
 		proposalSims.pop();
 		
@@ -855,21 +741,20 @@ function getWordAt(str, pos)
 
 /////////////////ORIGINAL LOCATION OF cleanUpSounds///////////////////////
 
+
+/////////////////ORIGINAL LOCATION OF cleanUpVar/////////////////////////
 function cleanUpVar()
-{
-	console.log('current scene cleaning up is #' + scene_i);
-	speechMsgInput.value = '';
-	msg.onboundary = null;
-	msg.onend = null;
-	console.log(msg.onend);
-
-	scene_i = 0; //current scene #
-	currentScenario = null; //current scenario #
-	skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
-	close = false; //flag, exits whole process
-	cleanUp = false; //flag, can't start new scene while this is true;
-}
-
+	{
+		console.log('current utterance is ' + proposalSims[proposalSims.length - 1]);
+		speechMsgInput.value = '';
+		utterance.onboundary = null;
+		utterance.onend = null;
+		//scene_i = 0; //current scene #
+		//currentScenario = null; //current scenario #
+		//skip = false; //flag, playScenario checks this at first, if true, exit out of recursion.
+		//close = false; //flag, exits whole process
+		//cleanUp = false; //flag, can't start new scene while this is true;
+	}
 ///////////////////////////////////////
 // IMPLEMENTATION
 ///////////////////////////////////////

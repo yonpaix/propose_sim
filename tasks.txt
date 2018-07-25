@@ -1,15 +1,3 @@
-tasks:
-
-----------
-
-fix japanese audio
-figure out audio
-
--
-
-CSS---
-
-align window to center
 
 BUG: 
 
@@ -18,3 +6,5 @@ BUG:
 Added close button. Still needs work, currently buggy. Closing is good if no further action is taken. If quickly click on another scenario. All hell breaks loose.
 
 BUG: Playing though the first time, after the second time, using the PREVIEW button replays the scene. Once this happens. Weird shit can happen if you click on Watch Scene or Preview multiple times.
+
+7/25/18 BUG: Part of the message stays on the screen if closed half way through the message being spoken.
