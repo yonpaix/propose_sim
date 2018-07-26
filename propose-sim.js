@@ -463,9 +463,10 @@ readySceneButton.addEventListener
 			// rateInputValue = getQueryVariable('rat');
 			// pitchInputValue = getQueryVariable('pit');
 
-			decodeScenario();
+			let cScenario = decodeScenario();
 
-			playScenario(scenarioList[currentScenario]);
+			proposalSims.push(new ProposalSim(cScenario));
+			proposalSims[proposalSims.length - 1].playScenario();
 		}
 	}
 );
@@ -564,40 +565,17 @@ FUNCTIONS
 
 function decodeScenario()
 {
-	var queryString = window.location.search.substring(1);
-	//debugger;
+	let queryString = window.location.search.substring(1);
 	console.log(queryString);
 	queryString = decodeURIComponent(queryString);
 	console.log(queryString);
 	queryString = atob(queryString);
-	console.log(queryString);
-
-	currentScenario = queryString.substr(0,1);
 	volumeInputValue = 1;
 	rateInputValue = queryString.substr(1,3) / 10;
 	pitchInputValue = queryString.substr(4,2) / 10;
-
-	//console.log('rate input decoded is ' + rateInputValue + '. pitch input decoded is ' + pitchInputValue);
-
 	speechMsgInputValue = queryString.substr(6);
-	//console.log(speechMsgInputValue);
-	//speechMsgInputValue = speechMsgInputValue.substr(0, speechMsgInputValue.length - 1);
-	//console.log(speechMsgInputValue);
-	//speechMsgInputValue = deCipher(speechMsgInputValue, queryString.substr(queryString.length - 1, 1));
-	//speechMsgInputValue = atob(speechMsgInputValue);
-	//console.log(speechMsgInputValue);
 
-	// function deCipher(str, num)
-	// {
-	// 	let result = '';
-	// 	let charcode = 0;
-
-	// 	for (let i = 0; i < str.length; i++) {
-	// 		        charcode = (str[i].charCodeAt()) - num;
-	// 		        result += String.fromCharCode(charcode);
-	// 		    }
-	// 		    return result;
-	// }
+	return queryString.substr(0,1); //the currentScenario number;
 }
 
 function getQueryVariable(variable)
