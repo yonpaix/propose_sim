@@ -152,28 +152,11 @@ class ProposalSim
 
 	sceneEnd()
 	{
-		console.log(this.scene_i);
-		console.log(this.scenario.scenes[this.scene_i]);
 		let waitTime = this.scenario.scenes[this.scene_i].duration;
 		this.scene_i++; 
-		/*if(this.skip) //scene is skipped
-		{
-			skip = false;
-			return;
-		}*/
-		/*if(close) //scene is exited by user input
-		{
-			close = false;
-			sceneWindow.style.display = 'none';
-			dimmer.style.opacity = 0;
-			cleanUpVar();
-			window.speechSynthesis.cancel(); //cancel current voice audio
-			cleanUpSounds();
-			
-			console.log('end of the line');
-		}*/
-		/*else if*/
-		console.log('scene_i is ' + this.scene_i + '. scene length is ' + this.scenario.scenes.length);
+
+		console.log(this.soundList);
+
 		if(this.scene_i < this.scenario.scenes.length) //scene continues;
 		{
 			console.log('continue to next scene');
@@ -190,21 +173,51 @@ class ProposalSim
 		}
 		else //scene naturally ends
 		{
-			let outputCode = encodeScenario();
-			cleanUpVar();
-			soundList[soundList.length - 1].onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
+			let outputCode = this.encodeScenario();
+			// console.log(this.soundList);
+			this.soundList[this.soundList.length - 1].audio.onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
 			function()
 			{
-				console.log('scenario ends with scene #' + scene_i);
+				//cleanUpVar();
 				//sceneWindow.style.display = 'none';
 				//dimmer.style.opacity = 0;
-				this.cleanUpSounds();
+				//this.cleanUpSounds();
 				endWindow.style.display = 'initial';
 				end.style.display = 'initial';
 				sceneCode.value = outputCode;
 			};
 		}
 	}
+
+	encodeScenario()
+{
+			let encodeScenario = this.currentScenario; //should be a single character space number
+			let encodeMsg = speechMsgInputValue; //this will go at the end of the code, due to variable length
+
+			//let randNum = Math.floor(Math.random() * 9) + 1;
+			//encodeMsg = CaesarCipher(encodeMsg, randNum);
+
+			let encodeRate = rateInputValue * 10 + ""; //3 digit number
+			while(encodeRate.length < 3)
+			{
+				encodeRate = '0' + encodeRate;
+			}
+			//console.log("the encoderate is " + encodeRate);
+			let encodePitch = pitchInputValue * 10 + ""; //2 digit number
+			while(encodePitch.length < 2)
+			{
+				encodePitch = '0' + encodePitch;
+			}
+			//console.log("the encodepitch is " + encodePitch);
+
+			let encodeCode = this.currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg;
+
+			encodeCode = btoa(encodeCode);
+
+			encodeCode = encodeURIComponent(encodeCode);
+
+			return encodeCode;
+}
 
 	iterateSounds()
 	{
@@ -472,20 +485,6 @@ skipButton.addEventListener
 closeButton.addEventListener
 ('click', function(e)
 	{
-		voiceBox.style.display = 'none';
-		sceneWindow.style.display = 'none';
-		skipButton.style.display = 'initial';
-		dimmer.style.opacity = 0;
-		speechSynthesis.cancel(); //cancel current voice audio
-		proposalSims[proposalSims.length - 1].cleanUpSounds();
-
-
-		//clearTimeout(proposalSims[proposalSims.length - 1].nextSounds);
-
-		for (const nextSound of proposalSims[proposalSims.length - 1].nextSounds)
-		{
-			clearTimeout(nextSound);
-		}
 		cleanUpVar();
 		//speechMsgInput.value = '';
 		proposalSims[proposalSims.length - 1].close = true;
@@ -561,56 +560,7 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 FUNCTIONS
 **********************/
 
-// function upperCase(str) {
-//     return str.toUpperCase();
-// }
-// function titleCase(str) {
-//     var firstLetterRx = /(^|\s)[a-z]/g;
-//     return str.replace(firstLetterRx, upperCase);
-// }
-
-function encodeScenario()
-{
-			let encodeScenario = currentScenario; //should be a single character space number
-			let encodeMsg = speechMsgInputValue; //this will go at the end of the code, due to variable length
-
-			//let randNum = Math.floor(Math.random() * 9) + 1;
-			//encodeMsg = CaesarCipher(encodeMsg, randNum);
-
-			let encodeRate = rateInputValue * 10 + ""; //3 digit number
-			while(encodeRate.length < 3)
-			{
-				encodeRate = '0' + encodeRate;
-			}
-			//console.log("the encoderate is " + encodeRate);
-			let encodePitch = pitchInputValue * 10 + ""; //2 digit number
-			while(encodePitch.length < 2)
-			{
-				encodePitch = '0' + encodePitch;
-			}
-			//console.log("the encodepitch is " + encodePitch);
-
-			let encodeCode = currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg;
-
-			encodeCode = btoa(encodeCode);
-
-			encodeCode = encodeURIComponent(encodeCode);
-
-			return encodeCode;
-
-			// function CaesarCipher(str, num)
-			// {
-			//     let result = '';
-			//     let charcode = 0;
-
-			//     for (let i = 0; i < str.length; i++) {
-			//         charcode = (str[i].charCodeAt()) + num;
-			//         result += String.fromCharCode(charcode);
-			//     }
-			//     return result;
-			// }
-
-}
+////////////////////////ORIGINAL LOCATION FOR encodeScenario()///////////////////////////////////////////////
 
 function decodeScenario()
 {
@@ -714,6 +664,21 @@ function getWordAt(str, pos)
 /////////////////ORIGINAL LOCATION OF cleanUpVar/////////////////////////
 function cleanUpVar()
 	{
+		voiceBox.style.display = 'none';
+		sceneWindow.style.display = 'none';
+		skipButton.style.display = 'initial';
+		dimmer.style.opacity = 0;
+		speechSynthesis.cancel(); //cancel current voice audio
+		proposalSims[proposalSims.length - 1].cleanUpSounds();
+
+
+		//clearTimeout(proposalSims[proposalSims.length - 1].nextSounds);
+
+		for (const nextSound of proposalSims[proposalSims.length - 1].nextSounds)
+		{
+			clearTimeout(nextSound);
+		}
+
 		console.log('current utterance is ' + proposalSims[proposalSims.length - 1]);
 		speechMsgInput.value = '';
 		utterance.onboundary = null;
