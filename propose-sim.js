@@ -57,15 +57,14 @@ class ProposalSim
 			voiceBox.style.display = 'none';
 		}
 		//get rid of reset button when the scene before the proposal scene is reached
-		console.log("the scenario is" + this.scenario);
-		if(this.scene_i === this.scenario.proposal - 1)
+		if(this.scene_i === this.scenario.proposal)
 			skipButton.style.display = 'none';
 
 		//reset linetext when final scene plays. The one where she's crying
 		if(this.scene_i == this.scenario.proposal + 1)
 			lineText.innerHTML = '';
 		
-		let waitTime = this.scenario.scenes[this.scene_i].duration;
+		//let waitTime = this.scenario.scenes[this.scene_i].duration;
 
 		sceneElem.style.backgroundImage = `url(${this.scenario.scenes[this.scene_i].animations[0].imgSource})`;
 
@@ -118,7 +117,7 @@ class ProposalSim
 					// 	return;
 					// }
 					that.iterateSounds();
-					that.scene_i++; 
+					// that.scene_i++; 
 					that.sceneEnd();
 	  			}				
 				// setTimeout
@@ -135,7 +134,6 @@ class ProposalSim
 				// );
 				this.nextSounds.push(setTimeout(() => 
 						{
-							//console.log(this);
 					    	this.speakTxt();
 					  	}, 
 					  	this.scenario.waitSpeak
@@ -147,15 +145,17 @@ class ProposalSim
 		else
 		{
 			this.iterateSounds();
-			this.scene_i++;
+			//this.scene_i++;
 			this.sceneEnd();
 		}
 	}
 
 	sceneEnd()
 	{
-		//let itself = this;
+		console.log(this.scene_i);
+		console.log(this.scenario.scenes[this.scene_i]);
 		let waitTime = this.scenario.scenes[this.scene_i].duration;
+		this.scene_i++; 
 		/*if(this.skip) //scene is skipped
 		{
 			skip = false;
@@ -173,6 +173,7 @@ class ProposalSim
 			console.log('end of the line');
 		}*/
 		/*else if*/
+		console.log('scene_i is ' + this.scene_i + '. scene length is ' + this.scenario.scenes.length);
 		if(this.scene_i < this.scenario.scenes.length) //scene continues;
 		{
 			console.log('continue to next scene');
@@ -305,35 +306,6 @@ class SceneSound
 		this.audio =  new Audio(`${this.songName}.ogg`);
 	}
 
-	// playSong()
-	// {
-	// 	// let playAudio = this.audio;
-	// 	// setTimeout
-	// 	// (
-	// 	// 	function()
-	// 	// 	{
-	// 	// 		playAudio.play();
-	// 	// 	},
-	// 	// 	this.startTime
-	// 	// );
-
-	// 	setTimeout(() => 
-	// 					{
-	// 				    	this.audio.play();
-	// 				  	}, 
-	// 				  	this.startTime
-	// 				 );
-	// }
-
-	// stopSong()
-	// {
-	// 	this.audio.stop();
-	// }
-
-	// queueSong()
-	// {
-	// 	soundList.push(this.audio);
-	// }
 }
 
 class SceneAnimation
@@ -406,7 +378,6 @@ maxLength.innerHTML = lengthCounter;
 
 loadVoices();
 
-//proposalID = 0; //index of the global proposal arrray that keeps track of scenarios being played.
 let proposalSims = [];
 utterance = new SpeechSynthesisUtterance();
 
@@ -419,24 +390,22 @@ window.speechSynthesis.onvoiceschanged = function(e)
 	loadVoices();
 };
 
-function maxLengthUpdate()
-{
-	lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
-	maxLength.innerHTML = lengthCounter;
-	console.log(speechMsgInput.value.split());
-}
+speechMsgInput.addEventListener('keydown', updateLengthCounter);
+speechMsgInput.onpaste = function(){updateLengthCounter();};
 
-speechMsgInput.addEventListener
-('keydown', function(event)
-	{
-		const key = event.which;
-  		if(key == 8 || key == 46)
-  		{
-  			lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
+function updateLengthCounter()
+{
+	setTimeout
+	(
+		()=>
+		{
+			lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
 			maxLength.innerHTML = lengthCounter;
-  		}
-	}
-);
+		}, 50
+	);
+	// lengthCounter = DEFAULT_MAX_LENGTH - speechMsgInput.value.split('').length;
+	// maxLength.innerHTML = lengthCounter;
+}
 
 previewButton.addEventListener
 ('click', function(e)
@@ -447,31 +416,19 @@ previewButton.addEventListener
 		volumeInputValue = volumeInput.value;
 		rateInputValue = rateInput.value;
 		pitchInputValue = pitchInput.value;
-		
-		if(speechMsgInput.value.length > 0)
-		{
-			setTimeout
-			(
-				function()
-				{
-					proposalSims[proposalSims.length - 1].speakTxt();
-				},
-				250
-			);
-		}
+		proposalSims[proposalSims.length - 1].speakTxt();
+		// if(speechMsgInput.value.length > 0)
+		// {
+		// 	setTimeout
+		// 	(
+		// 		function()
+		// 		{
+		// 			proposalSims[proposalSims.length - 1].speakTxt();
+		// 		},
+		// 		50
+		// 	);
+		// }
 
-	}
-);
-
-skipButton.addEventListener
-('click', function(e)
-	{
-
-		// scene_i = scenarioList[currentScenario].proposal - 1;
-		// skip = true;
-		// skipButton.style.display = 'none';
-		// cleanUpSounds();
-		// playScenario(scenarioList[currentScenario]);
 	}
 );
 
@@ -497,6 +454,18 @@ readySceneButton.addEventListener
 
 			playScenario(scenarioList[currentScenario]);
 		}
+	}
+);
+
+skipButton.addEventListener
+('click', function(e)
+	{
+
+		proposalSims[proposalSims.length - 1].scene_i = proposalSims[proposalSims.length - 1].scenario.proposal;//scenarioList[currentScenario].proposal - 1;
+		//skip = true;
+		skipButton.style.display = 'none';
+		proposalSims[proposalSims.length - 1].cleanUpSounds();
+		//playScenario(scenarioList[currentScenario]);
 	}
 );
 
