@@ -31,7 +31,7 @@ class ProposalSim
 		voiceSelectValue = voiceSelect.value;
 
 		if(voiceSelectValue)
-		{
+		{	
 			utterance.voice = speechSynthesis.getVoices().filter
 			(
 				function(voice)
@@ -211,12 +211,17 @@ class ProposalSim
 			//console.log("the encodepitch is " + encodePitch);
 
 			let encodeCode = this.currentScenario + "" + encodeRate + "" + encodePitch + "" + encodeMsg;
-
+			encodeCode = Base64Encode(encodeCode);
 			encodeCode = btoa(encodeCode);
 
 			encodeCode = encodeURIComponent(encodeCode);
 
 			return encodeCode;
+			function Base64Encode(str, encoding = 'utf-8')
+			{
+			    var bytes = new (TextEncoder || TextEncoderLite)(encoding).encode(str);        
+			    return base64js.fromByteArray(bytes);
+			}
 }
 
 	iterateSounds()
@@ -575,12 +580,19 @@ function decodeScenario()
 	queryString = decodeURIComponent(queryString);
 	console.log(queryString);
 	queryString = atob(queryString);
+	queryString = Base64Decode(queryString);
 	volumeInputValue = 1;
 	rateInputValue = queryString.substr(1,3) / 10;
 	pitchInputValue = queryString.substr(4,2) / 10;
 	speechMsgInputValue = queryString.substr(6);
 
 	return queryString.substr(0,1); //the currentScenario number;
+
+	function Base64Decode(str, encoding = 'utf-8') 
+	{
+	    var bytes = base64js.toByteArray(str);
+	    return new (TextDecoder || TextDecoderLite)(encoding).decode(bytes);
+	}
 }
 
 function getQueryVariable(variable)
@@ -601,14 +613,14 @@ function loadVoices()
 	(
 		function(voice, i)
 		{
-			// if(voice.lang == 'ja-JP')
-			// {
+			if(voice.lang == 'ja-JP')
+			{
 				var option = document.createElement("option");
 			option.value = voice.name;
 			option.innerHTML = voice.name;
 			voiceSelect.appendChild(option);
 	
-			// }
+			}
 		}
 	);
 }

@@ -11,3 +11,6 @@ BUG: Playing though the first time, after the second time, using the PREVIEW but
 
 7/26/18 BUG: base64.min.js is missing, need to dig that part of the code.
 
+7/29/18 BUG: Japanese does not show up correctly when the guy speaks. The algorithm for getting rid of duplicates only catches periods. It needs to catch other punctuation and japanese punctuation.
+
+7/29/18 TASK: need to get rid of end screen on 'close'.
