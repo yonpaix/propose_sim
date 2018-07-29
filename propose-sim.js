@@ -65,28 +65,11 @@ class ProposalSim
 			lineText.innerHTML = '';
 		
 		//let waitTime = this.scenario.scenes[this.scene_i].duration;
-
-		let bgDiv = document.createElement("div");
-		//var node = document.createTextNode("This is new.");
-		bgDiv.classList.add("scene-bg");
-		//para.appendChild(node);
-
-		//var element = document.getElementById("div1");
-		sceneDiv.appendChild(bgDiv);
-
-		// var eElement; // some E DOM instance
-		// var newFirstElement; //element which should be first in E
-
-		//insertAfter(lineText, bgDiv);
-
-
-// 		function insertAfter(referenceNode, newNode) {
-//     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-// }
-
-		bgDiv.style.backgroundImage = `url(${this.scenario.scenes[this.scene_i].animations[0].imgSource})`;
-
-		this.scenario.scenes[this.scene_i].animateEntity(bgDiv);
+		for(let i in this.scenario.scenes[this.scene_i].animations)
+		{
+			this.scenario.scenes[this.scene_i].animations[i].animateEntity(i);
+		}
+		//this.scenario.scenes[this.scene_i].animateEntity();
 
 		if(this.scene_i == this.scenario.proposal) //handles the scene where user inputs the dialogue
 		{
@@ -318,22 +301,40 @@ class Scene
 		//FIRST ITEM IN THE ARRAY IS ALWAYS THE BACKGROUND
 	}
 
-	animateEntity(entity)
+	/*animateEntity()
 	{
 		let animationStyle;
 		let timing;
+		
+		let bgDiv = document.createElement("div");
+		bgDiv.classList.add("scene-bg");
+		sceneDiv.appendChild(bgDiv);
+		$(bgDiv).hide().fadeIn(500);
+		//bgDiv.style.backgroundImage = `url(${this.animations[scene_i].imgSource})`;
 
-		for (let i in this.animations)
+		for (let scene_i in this.animations)
 		{ 
-			//sceneElem.style.animation = 'none';
-			animationStyle = this.animations[i].animationStyle;
-			timing = this.animations[i].timing;
-			entity.style.animation = `${animationStyle} ${timing} linear forwards`;
+			console.log('scene_i is ' + scene_i);
+
+			animationStyle = this.animations[scene_i].animationStyle;
+			timing = this.animations[scene_i].timing;
+			if(scene_i == 0)
+			{
+				bgDiv.style.backgroundImage = `url(${this.animations[scene_i].imgSource})`;
+				bgDiv.style.animation = `${animationStyle} ${timing} linear forwards`;
+			}
+			else
+			{
+				console.log('animating entity');
+				let entity = document.createElement("div");
+				entity.classList.add('test-entity');
+				sceneDiv.appendChild(entity);
+				entity.style.animation = `${animationStyle} ${timing} linear forwards`;
+			}
+			
 		} 
 
-		//sceneElem.classList.add("animation");
-
-	}
+	}*/
 
 }
 
@@ -350,14 +351,44 @@ class SceneSound
 
 class SceneAnimation
 {
-	constructor(imgSource, animationStyle, timing, delay, count, direction)
+	constructor(imgSource, animationStyle, timing, duration, delay, fillMode)
 	{
 		this.imgSource = imgSource;
 		this.animationStyle = animationStyle;
 		this.timing = timing;
+		this.duration = duration;
 		this.delay = delay;
-		this.count = count;
-		this.direction = direction;
+		this.fillMode = fillMode;
+		//this.bg = bg; //boolean, background or not
+	}
+
+	animateEntity(entity)
+	{
+		// let animationStyle;
+		// let duration;
+		// let timing;
+		console.log('entity is ' + entity);
+		let div = document.createElement("div");
+		if(entity == 0) //first entity is the background
+		{
+			console.log('bg animate');
+			div.classList.add("scene-bg");
+			$(div).hide().fadeIn(500);
+		}
+		else
+		{
+			div.classList.add('entity');
+		}
+		sceneDiv.appendChild(div);
+
+		div.style.backgroundImage = `url(${this.imgSource})`;
+		// div.style.animation = `${this.animationStyle} ${this.duration} ${this.timing} ${this.delay} ${this.fillMode}`;
+		//name duration timing-function delay iteration-count direction fill-mode play-state;
+		let animationSpec = `${this.animationStyle} ${this.duration} ${this.timing} ${this.delay} ${this.fillMode}`;
+		console.log('spec is ' + animationSpec);
+
+		div.style.animation = animationSpec;
+		
 	}
 }
 
