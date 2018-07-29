@@ -8,3 +8,6 @@ Added close button. Still needs work, currently buggy. Closing is good if no fur
 BUG: Playing though the first time, after the second time, using the PREVIEW button replays the scene. Once this happens. Weird shit can happen if you click on Watch Scene or Preview multiple times.
 
 7/25/18 BUG: Part of the message stays on the screen if closed half way through the message being spoken.
+
+7/26/18 BUG: base64.min.js is missing, need to dig that part of the code.
+

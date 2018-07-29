@@ -69,6 +69,7 @@ BOXES
 #scene-window
 {
 	width: 50vw;
+	min-width: 500px;
 	/*height: 60vh;*/
 	padding: 1% 1%;
 
@@ -93,6 +94,7 @@ BOXES
 	border: 1px solid var(--border-color, magenta);
 	/*height: 90%;*/
 	height: 60vh;
+	min-height: 400px;
 	width: 100%;
 	margin: 2% 0;
 
@@ -128,6 +130,8 @@ BOXES
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
+
+	animation: zoomin 10s linear forwards;
 }
 
 #voice-box
@@ -274,17 +278,20 @@ button:active
 ANIMATION
 /////////////////////*/
 
+.animation
+{
 
+}
 
 @keyframes zoomin
 {
 	0%
 	{
-		transform: scale(1);
+		transform: scale(1.15);
 	}
 	100%
 	{
-		transform: scale(1.2);
+		transform: scale(1.3);
 	}
 }
 

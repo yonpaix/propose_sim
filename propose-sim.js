@@ -299,13 +299,17 @@ class Scene
 	{
 		let animationStyle;
 		let timing;
-		for (let i in this.animations)
-		{ 
-			//sceneElem.style.animation = 'none';
-			animationStyle = this.animations[i].animationStyle;
-			timing = this.animations[i].timing;
-			sceneElem.style.animation = `${animationStyle} ${timing} linear`;
-		} 
+
+		// for (let i in this.animations)
+		// { 
+		// 	//sceneElem.style.animation = 'none';
+		// 	animationStyle = this.animations[i].animationStyle;
+		// 	timing = this.animations[i].timing;
+		// 	sceneElem.style.animation = `${animationStyle} ${timing} linear forwards`;
+		// } 
+
+		// sceneElem.classList.add("animation");
+
 	}
 
 }
@@ -380,6 +384,7 @@ let rateInput = document.getElementById("rate");
 let rateInputValue;
 let pitchInput = document.getElementById("pitch");
 let pitchInputValue;
+//let animationClass = document.getElementById("speech-msg");
 
 // let msg = new SpeechSynthesisUtterance();
 
@@ -596,14 +601,14 @@ function loadVoices()
 	(
 		function(voice, i)
 		{
-			if(voice.lang == 'ja-JP')
-			{
+			// if(voice.lang == 'ja-JP')
+			// {
 				var option = document.createElement("option");
 			option.value = voice.name;
 			option.innerHTML = voice.name;
 			voiceSelect.appendChild(option);
 	
-			}
+			// }
 		}
 	);
 }
