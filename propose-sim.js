@@ -66,9 +66,27 @@ class ProposalSim
 		
 		//let waitTime = this.scenario.scenes[this.scene_i].duration;
 
-		sceneElem.style.backgroundImage = `url(${this.scenario.scenes[this.scene_i].animations[0].imgSource})`;
+		let bgDiv = document.createElement("div");
+		//var node = document.createTextNode("This is new.");
+		bgDiv.classList.add("scene-bg");
+		//para.appendChild(node);
 
-		this.scenario.scenes[this.scene_i].animateEntity();
+		//var element = document.getElementById("div1");
+		sceneDiv.appendChild(bgDiv);
+
+		// var eElement; // some E DOM instance
+		// var newFirstElement; //element which should be first in E
+
+		//insertAfter(lineText, bgDiv);
+
+
+// 		function insertAfter(referenceNode, newNode) {
+//     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+// }
+
+		bgDiv.style.backgroundImage = `url(${this.scenario.scenes[this.scene_i].animations[0].imgSource})`;
+
+		this.scenario.scenes[this.scene_i].animateEntity(bgDiv);
 
 		if(this.scene_i == this.scenario.proposal) //handles the scene where user inputs the dialogue
 		{
@@ -300,20 +318,20 @@ class Scene
 		//FIRST ITEM IN THE ARRAY IS ALWAYS THE BACKGROUND
 	}
 
-	animateEntity(/*scenario*/)
+	animateEntity(entity)
 	{
 		let animationStyle;
 		let timing;
 
-		// for (let i in this.animations)
-		// { 
-		// 	//sceneElem.style.animation = 'none';
-		// 	animationStyle = this.animations[i].animationStyle;
-		// 	timing = this.animations[i].timing;
-		// 	sceneElem.style.animation = `${animationStyle} ${timing} linear forwards`;
-		// } 
+		for (let i in this.animations)
+		{ 
+			//sceneElem.style.animation = 'none';
+			animationStyle = this.animations[i].animationStyle;
+			timing = this.animations[i].timing;
+			entity.style.animation = `${animationStyle} ${timing} linear forwards`;
+		} 
 
-		// sceneElem.classList.add("animation");
+		//sceneElem.classList.add("animation");
 
 	}
 
@@ -362,6 +380,7 @@ GLOBAL VARIABLES
 
 // let soundList = []; //list of sounds that can be accessed globally. Needed to turn them off whenever a scene is skipped, and to keep tabs.
 
+let sceneDiv = document.getElementById('scene');
 let sceneElem = document.getElementById('scene-bg');
 let sceneWindow = document.getElementById('scene-window');
 let lineText = document.getElementById('line-text');
@@ -616,9 +635,9 @@ function loadVoices()
 			if(voice.lang == 'ja-JP')
 			{
 				var option = document.createElement("option");
-			option.value = voice.name;
-			option.innerHTML = voice.name;
-			voiceSelect.appendChild(option);
+				option.value = voice.name;
+				option.innerHTML = voice.name;
+				voiceSelect.appendChild(option);
 	
 			}
 		}

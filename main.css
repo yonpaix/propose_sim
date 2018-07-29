@@ -116,10 +116,10 @@ BOXES
 	z-index: 3;
 }
 
-#scene-bg
+.scene-bg
 {
 	position: absolute;
-	transition: background-image 0.5s linear 0s;
+	/*transition: background-image 0.5s linear 0s;*/
 
 	/*height: 453px;
 	width: 802px;*/
@@ -131,7 +131,7 @@ BOXES
 	background-size: cover;
 	background-repeat: no-repeat;
 
-	animation: zoomin 10s linear forwards;
+	/*animation: zoomin 10s linear forwards;*/
 }
 
 #voice-box
@@ -288,7 +288,12 @@ ANIMATION
 	0%
 	{
 		transform: scale(1.15);
+		/*opacity: 0;*/
 	}
+	/*5%
+	{
+		opacity: 100%;
+	}*/
 	100%
 	{
 		transform: scale(1.3);
