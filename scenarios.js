@@ -5,31 +5,69 @@ let scenario_0 = new Scenario
 	"Kitchen Proposal",
 	[
 		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/1-1.jpg', 'zoomin', 'linear', '50s', '0s', 'forwards')]
 			),
 		new Scene(1800, null,
-				[new SceneAnimation('1-2.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/1-2.jpg', 'shiftx', 'linear', '50s', '0s', 'forwards')]
 			),
 		new Scene(2500, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/1-3.jpg', 'shiftx', 'ease-out', '50s', '0s', 'forwards')]
 			),
 		new Scene(4100, null,
-				[new SceneAnimation('1-2c.jpg', 'shiftx', '1s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/1-4.jpg', null, 'linear', '4.1s', '0s', 'forwards')]
 			),
 		new Scene(2600, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/1-3.jpg', 'zoomin', 'linear', '20s', '0s', 'forwards')]
+			),
+		new Scene(1700, null,
+				[new SceneAnimation('images/1-5.jpg', 'scene15', 'linear', '8s', '0s', 'forwards')]
+			),
+		new Scene(1600, null,
+				[new SceneAnimation('images/1-6.jpg', 'scene16', 'linear', '10s', '0s', 'forwards')]
+			),
+		new Scene(3000, null,
+				[new SceneAnimation('images/1-7.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+			),
+		new Scene(5000, [new SceneSound('plove', 250)],
+				[new SceneAnimation('images/1-8.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+			),
+		new Scene(5000, null,
+				[new SceneAnimation('images/1-9.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+			)
+	],
+	8, 1000
+); //contains individual scene objects
+
+let scenario_1 = new Scenario
+(
+	"Kitchen Proposal",
+	[
+		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
+				[new SceneAnimation('1-1.jpg', 'zoomin', '1s', 0, 1, 'forwards'), new SceneAnimation('1-2.jpg', 'shiftx', '1s', 0, 1, 'forwards'),  new SceneAnimation('1-2.jpg', 'shiftx', '3s', 0, 1, 'forwards')]
+			),
+		new Scene(1800, null,
+				[new SceneAnimation('1-2.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2500, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(4100, null,
+				[new SceneAnimation('1-2c.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2600, null,
+				[new SceneAnimation('1-2b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(1700, null,
 				[new SceneAnimation('1-3.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(1600, null,
-				[new SceneAnimation('1-3b.jpg', 'shiftx', '10s', 0, 1, 'forwards')]
+				[new SceneAnimation('1-3b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(3000, null,
 				[new SceneAnimation('1-4.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
+				[new SceneAnimation('1-4b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(5000, null,
 				[new SceneAnimation('1-5.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
@@ -52,44 +90,6 @@ let scenario_0 = new Scenario
 // 	],
 // 	3, 1000
 // );
-
-let scenario_1 = new Scenario
-(
-	"Kitchen Proposal",
-	[
-		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1800, null,
-				[new SceneAnimation('1-2.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(2500, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(4100, null,
-				[new SceneAnimation('1-2c.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(2600, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1700, null,
-				[new SceneAnimation('1-3.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(1600, null,
-				[new SceneAnimation('1-3b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(3000, null,
-				[new SceneAnimation('1-4.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('1-4b.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			),
-		new Scene(5000, null,
-				[new SceneAnimation('1-5.jpg', 'zoomin', '10s', 0, 1, 'forwards')]
-			)
-	],
-	8, 1000
-); //contains individual scene objects
 
 let scenario_2 = new Scenario
 (
