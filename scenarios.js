@@ -29,10 +29,10 @@ let scenario_0 = new Scenario
 				[new SceneAnimation('images/1-7.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
 			),
 		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('images/1-8.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+				[new SceneAnimation('images/1-8.jpg', 'scene18', 'ease-out', '1s', '0s', 'forwards')]
 			),
 		new Scene(5000, null,
-				[new SceneAnimation('images/1-9.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+				[new SceneAnimation('images/1-9.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards')]
 			)
 	],
 	8, 1000

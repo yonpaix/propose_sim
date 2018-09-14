@@ -121,18 +121,7 @@ class ProposalSim
 					// that.scene_i++; 
 					that.sceneEnd();
 	  			}				
-				// setTimeout
-				// (
-				// 	function()
-				// 	{
-				// 		// if(!currentScene) //if current scene is null, close button was pressed, don't go into these promises
-				// 		// {
-				// 		// 	return;
-				// 		// }
-				// 		this.speakTxt();
-				// 	},
-				// 	this.scenario.waitSpeak
-				// );
+				
 				this.nextSounds.push(setTimeout(() => 
 						{
 					    	this.speakTxt();
@@ -179,10 +168,6 @@ class ProposalSim
 			this.soundList[this.soundList.length - 1].audio.onended = //last sound should be exile song. Clean up when song ends. Later can be used to show social media screen
 			function()
 			{
-				//cleanUpVar();
-				//sceneWindow.style.display = 'none';
-				//dimmer.style.opacity = 0;
-				//this.cleanUpSounds();
 				endWindow.style.display = 'initial';
 				end.style.display = 'initial';
 				sceneCode.value = outputCode;
@@ -300,41 +285,6 @@ class Scene
 		this.animations = animations; //array of objects in the scene and their animation
 		//FIRST ITEM IN THE ARRAY IS ALWAYS THE BACKGROUND
 	}
-
-	/*animateEntity()
-	{
-		let animationStyle;
-		let timing;
-		
-		let bgDiv = document.createElement("div");
-		bgDiv.classList.add("scene-bg");
-		sceneDiv.appendChild(bgDiv);
-		$(bgDiv).hide().fadeIn(500);
-		//bgDiv.style.backgroundImage = `url(${this.animations[scene_i].imgSource})`;
-
-		for (let scene_i in this.animations)
-		{ 
-			console.log('scene_i is ' + scene_i);
-
-			animationStyle = this.animations[scene_i].animationStyle;
-			timing = this.animations[scene_i].timing;
-			if(scene_i == 0)
-			{
-				bgDiv.style.backgroundImage = `url(${this.animations[scene_i].imgSource})`;
-				bgDiv.style.animation = `${animationStyle} ${timing} linear forwards`;
-			}
-			else
-			{
-				console.log('animating entity');
-				let entity = document.createElement("div");
-				entity.classList.add('test-entity');
-				sceneDiv.appendChild(entity);
-				entity.style.animation = `${animationStyle} ${timing} linear forwards`;
-			}
-			
-		} 
-
-	}*/
 
 }
 
@@ -550,40 +500,12 @@ closeButton.addEventListener
 		//speechMsgInput.value = '';
 		proposalSims[proposalSims.length - 1].close = true;
 		proposalSims.pop();
-		
-		// close = true;
-		// cleanUp = true;
-
-		//if the scene stopped because they are in the input screen, the scene will not clean up, but the button will need to take care of it.
-		/*if(scene_i == 0 && currentScenario != null)
-		{
-			console.log('clean up on aisle 4');
-			cleanUpVar();
-		}*/
-
-		//if the scene already cleaned up but the song is still playing and the window is still up, need to manually falsify cleanUp, because it was already taken cared of, and now it's true again.
-		/*if(currentScenario == null)
-		{
-			close = false;
-			cleanUp = false;
-		}*/
-
-		//if the scene is on the proposal scene, it will create a bunch of promises and just quits, so we need to handle clean up on button click
-		/*if(scene_i == scenarioList[currentScenario].proposal && speechMsgInput.value != '') //BUGBUGBUG currentScenario is undefined and throws an error if closing during the voiceBox phase
-		{	
-			cleanUpVar();
-		}*/
 	}
 );
 
 //master button listener
 function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenario
 {
-	/*if(cleanUp) //can't start new scenario while the variables are getting cleaned up.
-	{
-		console.log('cleaning up currently');
-		return;
-	}*/
 	if(speechMsgInput.value.length <= 0 && voiceBox.style.display == 'initial') //button does nothing if no user input on voicebox
 	{
 		console.log('need to input a message');
@@ -606,11 +528,6 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 	volumeInputValue = volumeInput.value;
 	rateInputValue = rateInput.value;
 	pitchInputValue = pitchInput.value;
-
-	// console.log(scenarioList[scenarioNum]);
-	// console.log(proposalSim.scenarios);
-
-	// console.log($.extend(true,{},scenarioList[scenarioNum]));
 
 	proposalSims.push(new ProposalSim(scenarioNum));
 	proposalSims[proposalSims.length - 1].playScenario();
@@ -711,13 +628,18 @@ function cleanUpVar()
 	{
 		voiceBox.style.display = 'none';
 		sceneWindow.style.display = 'none';
+		endWindow.style.display = 'none';
+		end.style.display = 'none';
 		skipButton.style.display = 'initial';
 		dimmer.style.opacity = 0;
 		speechSynthesis.cancel(); //cancel current voice audio
 		proposalSims[proposalSims.length - 1].cleanUpSounds();
 
+		//get rid of all bg items in the scene window
+		let bgDivs = document.getElementsByClassName('scene-bg');
 
-		//clearTimeout(proposalSims[proposalSims.length - 1].nextSounds);
+		while(bgDivs[0])
+		    bgDivs[0].parentNode.removeChild(bgDivs[0]);
 
 		for (const nextSound of proposalSims[proposalSims.length - 1].nextSounds)
 		{
