@@ -19,12 +19,35 @@ body
 	width: 100vw;
 	position: relative;
 
-	/*display: flex;
+	display: flex;
 	justify-content: center;
-	align-items: center;*/
+	align-items: center;
 
 	background-color: var(--main-bg-color, pink);
 	/*background-image: url('flower.svg');*/
+}
+
+h1
+{
+	margin: 0 0 5vh 0;
+	color: var(--border-color);
+	font-size: 3vh;
+
+	/*font-family: 'Baloo Tammudu', cursive;*/
+	font-family: "houschka-rounded",sans-serif;
+}
+
+#web-body
+{
+	height: 100%;
+	width: 100%;
+	position: relative;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	transition: 0.5s linear 0s;
 }
 
 /*
@@ -58,24 +81,6 @@ body
 	animation: intrologo 10s linear forwards;
 }
 
-/*
-//////////STYLING//////////////////////
-*/
-
-#dimmer /*allows the bg to dim when scene is playing*/
-{
-	height: 100%;
-	width: 100%;
-	background-color: black;
-	position: absolute;
-	top: 0;
-	left: 0;
-
-	opacity: 0;
-	transition: 1.0s linear 0s;
-	z-index: -1;
-}
-
 
 /*
 **********WRAPPING BODIES**************
@@ -83,13 +88,15 @@ body
 
 .wrapper
 {
-	width: 75%;
+	width: 50%;
 	height: 100%;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: flex-start;
+
+	/*filter: blur(10px);*/
 }
 
 /*
@@ -121,7 +128,7 @@ header
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 }
 
 #scene-picker
@@ -148,7 +155,8 @@ BOXES
 
 	/*background-color: #ffe6e6;*/
 	/*border: 2px solid var(--border-color, magenta);*/
-	border-radius: var(--border-radius, 1%);
+	
+	/*border-radius: var(--border-radius, 1%);*/
 
 
 	/*display: flex;*/
@@ -158,13 +166,13 @@ BOXES
 
 	display: none;
 	z-index: 2;
-	position: absolute;
+	position: fixed;
 }
 
 #scene
 {
 	position: relative;
-	border: 1px solid var(--border-color, magenta);
+	/*border: 1px solid var(--border-color, magenta);*/
 	width: 50vw;
 	min-width: 500px;
 	max-width: 1000px;
@@ -322,13 +330,45 @@ BUTTONS
 {
 	display: flex;
 	position: relative;
-	width: 70%;
-	height: 15vh;
-	background-color: blue;
+	width: 100%;
+	height: 12vh;
+	/*background-color: blue;*/
 	justify-content: flex-end;
 	align-items: center;
 	overflow: hidden;
-	margin: 1vh 0;
+	margin: 0.5vh 0;
+
+	cursor: pointer;
+	
+
+	
+	/*border: 3px solid var(--border-color);*/
+}
+
+.color-overlay
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	mix-blend-mode: hard-light;
+	background-color: var(--main-bg-color);
+
+	transition: 0.2s ease-in-out 0s;
+}
+
+/*.color-overlay:hover
+{
+	background-color: unset;
+	mix-blend-mode: unset;
+}*/
+
+.scene-pick-bg
+{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	/*transition: filter 0.2s ease-in-out 0s;*/
+	/*filter: blur(5px);*/
 }
 
 .scene-description
@@ -339,15 +379,26 @@ BUTTONS
 	padding: 3%;
 	border: 1px solid black;
 	margin-right: 2%;
-	transition: right 1.0s ease-in 0s;
+	transition: right 0.5s ease-in-out 0s;
 
 	position: absolute;
-	right: -50%;
+	right: -100%;
 	overflow: hidden;
 	text-overflow: clip;
 }
 
-#play-button:hover .scene-description
+.scene-pick:hover .scene-pick-bg
+{
+	/*filter: unset;*/
+}
+
+.scene-pick:hover .color-overlay
+{
+	background-color: unset;
+	/*mix-blend-mode: unset;*/
+}
+
+.scene-pick:hover .scene-description
 {
 	right: 0;
 }
@@ -359,7 +410,7 @@ BUTTONS
 
 #play-button:hover
 {
-	cursor: pointer;
+	/*cursor: pointer;*/
 	background: center / cover no-repeat url('images/kitchen-button-after.png');
 }
 

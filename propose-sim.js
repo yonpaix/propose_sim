@@ -365,7 +365,7 @@ let sceneDiv = document.getElementById('scene');
 let sceneElem = document.getElementById('scene-bg');
 let sceneWindow = document.getElementById('scene-window');
 let lineText = document.getElementById('line-text');
-let dimmer = document.getElementById('dimmer');
+let dimmer = document.getElementById('web-body');
 let voiceBox = document.getElementById("voice-box");
 let endWindow = document.getElementById('end-window');
 let end = document.getElementById('end');
@@ -464,7 +464,7 @@ readySceneButton.addEventListener
 		{
 			//currentScenario = getQueryVariable("id");
 
-			dimmer.style.opacity = 0.5;
+			dimmer.style.filter = 'blur(5px)';
 			sceneWindow.style.display = 'initial';
 			skipButton.style.display = 'initial';
 
@@ -519,7 +519,9 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 
 	//proposalSim.currentScenario = scenarioNum;
 
-	dimmer.style.opacity = 0.5;
+	// dimmer.style.opacity = 0.5;
+	dimmer.style.filter = 'blur(5px)';
+
 	sceneWindow.style.display = 'initial';
 	skipButton.style.display = 'initial';
 	speechSynthesis.cancel(); //cancel current voice audio
@@ -631,7 +633,7 @@ function cleanUpVar()
 		endWindow.style.display = 'none';
 		end.style.display = 'none';
 		skipButton.style.display = 'initial';
-		dimmer.style.opacity = 0;
+		dimmer.style.filter = 'unset';
 		speechSynthesis.cancel(); //cancel current voice audio
 		proposalSims[proposalSims.length - 1].cleanUpSounds();
 

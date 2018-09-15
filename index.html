@@ -3,7 +3,8 @@
 <head>
 		<meta charset = "UTF-8">
 		<title>Proposal Simulator</title>
-		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet"> -->
+		<link rel="stylesheet" href="https://use.typekit.net/wvn7nbf.css">
 		<link rel="stylesheet" type="text/css" href="animations.css">
 		<link rel="stylesheet" type="text/css" href="main.css">
 		
@@ -12,29 +13,8 @@
 	<!-- <div id="intro">
 		<div id="intro-logo"></div>
 	</div> -->
-	<!-- Voice Box -->
-	
-	<div class="wrapper">
-		<header>
-			<div id=site-logo></div>
-		</header>
-		<section id="main-section">
-			<!-- Compatibility Text -->
-			<!-- <p id="support-msg"></p> -->
-			
-			<!-- Scene Buttons go here -->
-			<div id="scene-picker">
-				<a class="scene-pick" id="play-button" onClick="buttonClick(0)">
-					<div class="scene-description">
-						Cohabiting With My Boyfriend
-					</div>
-				</a>
-				<a class="scene-pick" id="play-button2" onClick="buttonClick(1)">Meeting Him for the First Time</a>
-				<a class="scene-pick" id="play-button3" onClick="buttonClick(2)">My Cute Subordinate</a>
-				<a class="scene-pick" id="ready-button">Ready</a>
-			</div>
 
-			<!-- Scene Window -->
+<!-- Scene Window -->
 			<div id="scene-window">
 				<button id="close-button">Close</button>
 				<div id="scene">
@@ -78,10 +58,38 @@
 		<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
 		<button id="preview-button">Preview Voice</button>
 	</div>
-		</section>
+
+	<!-- Voice Box -->
+	<div id="web-body">
+		<div class="wrapper">
+			<header>
+				<div id=site-logo></div>
+			</header>
+			<section id="main-section">
+				<!-- Compatibility Text -->
+				<!-- <p id="support-msg"></p> -->
+				
+				<!-- <h1>Please Select A Proposal Scenario</h1> -->
+
+				<!-- Scene Buttons go here -->
+
+				<div id="scene-picker">
+					<a class="scene-pick" onClick="buttonClick(0)">
+					<div class="color-overlay"></div>
+					<div class="scene-pick-bg" id="play-button"></div>
+						<div class="scene-description">
+							Cohabiting With My Boyfriend
+						</div>
+					</a>
+					<a class="scene-pick" id="play-button2" onClick="buttonClick(1)">Meeting Him for the First Time</a>
+					<a class="scene-pick" id="play-button3" onClick="buttonClick(2)">My Cute Subordinate</a>
+					<a class="scene-pick" id="ready-button">Ready</a>
+				</div>
+			</section>
+		</div>
 	</div>
 
-	<div id="dimmer"></div>
+	<!-- <div id="dimmer"></div> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="base64js.min.js"></script>
 	<script src="propose-sim.js"></script>
