@@ -19,4 +19,8 @@ FIXED
 
 7/29/18 TASK: need to get rid of end screen on 'close'. DONE
 
-9/14/18 TASK: Closing the first scenario. If you play another scanario, the last scene pops up briefly.
+9/14/18 TASK: Closing the first scenario. If you play another scanario, the last scene pops up briefly. DONE
+
+9/15/18 TASK: Need to only show Ready button if there is URL data, need to get rid of the Ready button and show the others again when the scene finishes.
+
+9/15/18 TASK: Need to Get rid of all scene objects, not just scene background when a new scenario is played after playing the first one.

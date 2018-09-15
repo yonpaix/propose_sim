@@ -1,3 +1,38 @@
+/*INTRO*/
+
+@keyframes intrologo
+{
+	0%
+	{
+		opacity: 0;
+	}
+	5%
+	{
+		opacity: 1;
+	}
+}
+
+@keyframes intro
+{
+	0%
+	{
+		opacity: 1;
+	}
+	95%
+	{
+		opacity: 1;
+	}
+	99%
+	{
+		z-index: -5;
+	}
+	100%
+	{
+		z-index: -5;
+		opacity: 0;
+	}
+}
+
 /*GENERIC*/
 
 @keyframes zoomin

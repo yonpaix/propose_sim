@@ -662,7 +662,7 @@ function cleanUpVar()
 
 
 
-if('speechSynthesis' in window)
+/*if('speechSynthesis' in window)
 {
 	supportMsg.innerHTML = "Your browser <strong>supports</strong> speech synthesis.";
 
@@ -670,4 +670,4 @@ if('speechSynthesis' in window)
 else
 {
 	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis. Get the best experience with Google Chrome";
-}
+}*/

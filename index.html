@@ -4,12 +4,55 @@
 		<meta charset = "UTF-8">
 		<title>Proposal Simulator</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="main.css">
 		<link rel="stylesheet" type="text/css" href="animations.css">
+		<link rel="stylesheet" type="text/css" href="main.css">
+		
 	</head>
 <body>
+	<!-- <div id="intro">
+		<div id="intro-logo"></div>
+	</div> -->
 	<!-- Voice Box -->
-	<div id="voice-box">
+	
+	<div class="wrapper">
+		<header>
+			<div id=site-logo></div>
+		</header>
+		<section id="main-section">
+			<!-- Compatibility Text -->
+			<!-- <p id="support-msg"></p> -->
+			
+			<!-- Scene Buttons go here -->
+			<div id="scene-picker">
+				<a class="scene-pick" id="play-button" onClick="buttonClick(0)">
+					<div class="scene-description">
+						Cohabiting With My Boyfriend
+					</div>
+				</a>
+				<a class="scene-pick" id="play-button2" onClick="buttonClick(1)">Meeting Him for the First Time</a>
+				<a class="scene-pick" id="play-button3" onClick="buttonClick(2)">My Cute Subordinate</a>
+				<a class="scene-pick" id="ready-button">Ready</a>
+			</div>
+
+			<!-- Scene Window -->
+			<div id="scene-window">
+				<button id="close-button">Close</button>
+				<div id="scene">
+					<div id="end-window">
+					</div>
+					<div id="end">
+						<label for="code">Grab the scene URL</label>
+						<input type="text" name="code" id="code">
+					</div>
+					<p id = "line-text"></p>
+					<!-- <div id="scene-bg"></div> GENERATES HERE-->
+					
+				</div>
+				<button id="skip-button">Skip</button>
+
+				
+			</div>
+			<div id="voice-box">
 		<!-- <input type="text" name="speech-msg" id="speech-msg"> -->
 		<textarea id="speech-msg" rows="6"></textarea>
 		<span id="max-length"></span>
@@ -35,36 +78,7 @@
 		<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
 		<button id="preview-button">Preview Voice</button>
 	</div>
-	<div class="wrapper">
-		<!-- Compatibility Text -->
-		<p id="support-msg"></p>
-		
-		<!-- Scene Buttons go here -->
-		<div id="scene-picker">
-			<button id="play-button" onClick="buttonClick(0)">Kitchen Scenario</button>
-			<button id="play-button2" onClick="buttonClick(1)">Train Scenario</button>
-			<button id="play-button3" onClick="buttonClick(2)">Office Scenario</button>
-			<button id="ready-button">Ready</button>
-		</div>
-
-		<!-- Scene Window -->
-		<div id="scene-window">
-			<button id="close-button">Close</button>
-			<div id="scene">
-				<div id="end-window">
-				</div>
-				<div id="end">
-					<label for="code">Grab the scene URL</label>
-					<input type="text" name="code" id="code">
-				</div>
-				<p id = "line-text"></p>
-				<!-- <div id="scene-bg"></div> -->
-				
-			</div>
-			<button id="skip-button">Skip</button>
-
-			
-		</div>
+		</section>
 	</div>
 
 	<div id="dimmer"></div>
