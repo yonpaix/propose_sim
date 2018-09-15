@@ -33,6 +33,60 @@
 	}
 }
 
+/*HEARTS*/
+#heart-container
+{
+	width: 100%;
+	height: 1vh;
+	position: absolute;
+	bottom: -100px;
+	left: 0;
+	filter: blur(15px);
+}
+
+.stray-heart
+{
+	/*display: block;*/
+	position: absolute;
+	/*width: 80px;
+	height: 80px;*/
+	background: center / contain no-repeat url('images/heart.png');
+
+	-webkit-animation: stray-heart 10s infinite linear, sway 2s infinite ease-in-out alternate;
+	-moz-animation: stray-heart 10s infinite linear, sway 2s infinite ease-in-out alternate;
+}
+
+/*.stray-heart:nth-child(5n+5) {
+-webkit-animation-delay: 1s;
+-moz-animation-delay: 1s;
+}
+.stray-heart:nth-child(3n+2) {
+-webkit-animation-delay: 1.5s;
+-moz-animation-delay: 1.5s;
+}
+
+.stray-heart:nth-child(2n+5) {
+-webkit-animation-delay: 1.7s;
+-moz-animation-delay: 1.7s;
+}*/
+
+@-webkit-keyframes stray-heart 
+{
+	100% 
+	{
+		opacity: 0;
+		-webkit-transform: translate(0, -100vh);
+	}
+}
+
+@-webkit-keyframes sway 
+{
+	100% 
+	{
+		margin-left: 8vw;
+	}
+}
+
 /*GENERIC*/
 
 @keyframes zoomin

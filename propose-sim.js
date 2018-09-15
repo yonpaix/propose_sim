@@ -370,6 +370,8 @@ let voiceBox = document.getElementById("voice-box");
 let endWindow = document.getElementById('end-window');
 let end = document.getElementById('end');
 let supportMsg = document.getElementById("support-msg");
+let heartContainer = document.getElementById("heart-container");
+
 
 let confessionButton = document.getElementById("confession-button");
 let skipButton = document.getElementById("skip-button");
@@ -403,6 +405,8 @@ loadVoices();
 
 let proposalSims = [];
 utterance = new SpeechSynthesisUtterance();
+
+strayHearts();
 
 /*********************
 EVENT LISTENERS
@@ -594,11 +598,34 @@ function loadVoices()
 	);
 }
 
-///////////////PREVIOUS LOCATION OF speakTxt ////////////////////////////////
+//stray hearts functionality
 
-///////////////PREVIOUS LOCATION OF animateBG - to be called: animateEntity//////////////////////////////
+function strayHearts()
+{
+	
+	while(heartContainer.childElementCount < 10)
+	{
+		let div = document.createElement("div");
+		console.log('add heart');
+		div.classList.add("stray-heart");
+		
 
-///////////////PREVIOUS LOCATION FOR playScenario//////////////////////////
+		let randNum = (Math.floor(Math.random() * 9) + 3) * 20;
+		console.log('rand number is: ' + randNum);
+		div.style.width = `${randNum}px`;
+		div.style.height = `${randNum}px`;
+
+		let position = Math.floor(window.innerWidth * Math.random());
+		console.log(position);
+		div.style.left = `${position}px`;
+
+		let delay = Math.random() * 5;
+		console.log('delay is '+ delay);
+		div.style.animationDelay = `${delay}s`;
+
+		heartContainer.appendChild(div);
+	}
+}
 
 // Get the word of a string given the string and the index
 function getWordAt(str, pos)
@@ -618,14 +645,6 @@ function getWordAt(str, pos)
     return str.slice(left, right + pos);
 }
 
-/////////////////PREVIOUS LOCATION OF iterateSounds//////////////////////
-
-/////////////////ORIGINAL LOCATION OF sceneEnd///////////////////////////
-
-/////////////////ORIGINAL LOCATION OF cleanUpSounds///////////////////////
-
-
-/////////////////ORIGINAL LOCATION OF cleanUpVar/////////////////////////
 function cleanUpVar()
 	{
 		voiceBox.style.display = 'none';

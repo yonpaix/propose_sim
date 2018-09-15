@@ -24,6 +24,7 @@ body
 	align-items: center;
 
 	background-color: var(--main-bg-color, pink);
+	overflow: hidden;
 	/*background-image: url('flower.svg');*/
 }
 
@@ -110,25 +111,32 @@ header
 	/*position: absolute;*/
 	top: 0;
 	left: 0;
+
+	/*display: flex;*/
+	display: none;
+	justify-content: center;
+	align-items: center;
 }
 
 #site-logo
 {
 	background: center / contain no-repeat url('images/proposal-logo.png');
 	/*height: 10vh;*/
-	width: 20%;
-	height: 100%;
+	width: 50%;
+	/*height: 100%;*/
+	height: 20vh;
 }
 
 #main-section
 {
-	height: 80vh;
+	/*height: 80vh;*/
+	height: 100%;
 	width: 100%;
 
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: flex-start;
+	justify-content: center;
 }
 
 #scene-picker
@@ -140,6 +148,26 @@ header
 	width: 100%;
 }
 
+/*#scene-picker > a:nth-child(odd)
+{
+	margin-left: 6vh;
+}
+
+#scene-picker > a:nth-child(even)
+{
+	margin-left: -6vh;
+}*/
+
+/*#scene-picker > a:nth-child(1)
+{
+	margin-left: -6vh;
+}
+
+#scene-picker > a:nth-child(2)
+{
+	margin-left: -3vh;
+}
+*/
 /*
 //
 BOXES
@@ -151,12 +179,13 @@ BOXES
 	/*width: 50vw;
 	min-width: 500px;*/
 	/*height: 60vh;*/
-	padding: 1% 1%;
+
+	/*padding: 1% 1%;*/
 
 	/*background-color: #ffe6e6;*/
-	/*border: 2px solid var(--border-color, magenta);*/
+	/*border: 2px solid var(--border-color, magenta);
 	
-	/*border-radius: var(--border-radius, 1%);*/
+	border-radius: var(--border-radius, 1%);*/
 
 
 	/*display: flex;*/
@@ -165,6 +194,9 @@ BOXES
 	justify-content: center;
 
 	display: none;
+	/*opacity: 0;*/
+	transition: 3s linear 0s;;
+
 	z-index: 2;
 	position: fixed;
 }
@@ -172,7 +204,7 @@ BOXES
 #scene
 {
 	position: relative;
-	/*border: 1px solid var(--border-color, magenta);*/
+	border: 1px solid var(--border-color, magenta);
 	width: 50vw;
 	min-width: 500px;
 	max-width: 1000px;
@@ -236,6 +268,7 @@ BOXES
 	/*height: 500px;*/
 	background-color: rgba(255, 255, 255, 0.8);
 	padding: 1em;
+	border: 1px solid var(--border-color);
 
 	border-radius: var(--border-radius);
 	/*box-shadow: 5px 5px 0 var(--border-color, magenta);*/
@@ -330,13 +363,15 @@ BUTTONS
 {
 	display: flex;
 	position: relative;
-	width: 100%;
-	height: 12vh;
+	width: 60%;
+	height: 10vh;
 	/*background-color: blue;*/
 	justify-content: flex-end;
 	align-items: center;
 	overflow: hidden;
-	margin: 0.5vh 0;
+	margin: 1vh 0;
+
+	border: 2px solid var(--border-color);
 
 	cursor: pointer;
 	
@@ -408,7 +443,7 @@ BUTTONS
 	background: center / cover no-repeat url('images/kitchen-button-before.png');
 }
 
-#play-button:hover
+.scene-pick:hover #play-button
 {
 	/*cursor: pointer;*/
 	background: center / cover no-repeat url('images/kitchen-button-after.png');
