@@ -346,6 +346,7 @@ class SceneAnimation
 CONSTANTS
 **********************/
 const DEFAULT_MAX_LENGTH = 100;
+const HEART_CONST = 20;
 
 /*********************
 GLOBAL VARIABLES
@@ -459,31 +460,31 @@ previewButton.addEventListener
 	}
 );
 
-readySceneButton.addEventListener
-('click', function(e)
-	{
+// readySceneButton.addEventListener
+// ('click', function(e)
+// 	{
 
-		//HANDLES PRECONSTRUCTED SCENARIOS from the URL
-		if(window.location.search.substring(1))
-		{
-			//currentScenario = getQueryVariable("id");
+// 		//HANDLES PRECONSTRUCTED SCENARIOS from the URL
+// 		if(window.location.search.substring(1))
+// 		{
+// 			//currentScenario = getQueryVariable("id");
 
-			dimmer.style.filter = 'blur(5px)';
-			sceneWindow.style.display = 'initial';
-			skipButton.style.display = 'initial';
+// 			dimmer.style.filter = 'blur(5px)';
+// 			sceneWindow.style.display = 'initial';
+// 			skipButton.style.display = 'initial';
 
-			// speechMsgInputValue = decodeURI(getQueryVariable('spk'));
-			// volumeInputValue = getQueryVariable('vol');
-			// rateInputValue = getQueryVariable('rat');
-			// pitchInputValue = getQueryVariable('pit');
+// 			// speechMsgInputValue = decodeURI(getQueryVariable('spk'));
+// 			// volumeInputValue = getQueryVariable('vol');
+// 			// rateInputValue = getQueryVariable('rat');
+// 			// pitchInputValue = getQueryVariable('pit');
 
-			let cScenario = decodeScenario();
+// 			let cScenario = decodeScenario();
 
-			proposalSims.push(new ProposalSim(cScenario));
-			proposalSims[proposalSims.length - 1].playScenario();
-		}
-	}
-);
+// 			proposalSims.push(new ProposalSim(cScenario));
+// 			proposalSims[proposalSims.length - 1].playScenario();
+// 		}
+// 	}
+// );
 
 skipButton.addEventListener
 ('click', function(e)
@@ -525,6 +526,14 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 
 	// dimmer.style.opacity = 0.5;
 	dimmer.style.filter = 'blur(5px)';
+	
+	console.log("playstate is " + heartContainer.children[0].style.animationPlayState);
+	// pauses all the hearts when the scenario plays
+	for(let k = 0; k < heartContainer.children.length; k++)
+	{
+		heartContainer.children[k].style.animationPlayState = "paused";
+	}
+	
 
 	sceneWindow.style.display = 'initial';
 	skipButton.style.display = 'initial';
@@ -603,7 +612,7 @@ function loadVoices()
 function strayHearts()
 {
 	
-	while(heartContainer.childElementCount < 10)
+	while(heartContainer.childElementCount < HEART_CONST)
 	{
 		let div = document.createElement("div");
 		console.log('add heart');
@@ -653,6 +662,13 @@ function cleanUpVar()
 		end.style.display = 'none';
 		skipButton.style.display = 'initial';
 		dimmer.style.filter = 'unset';
+
+		//continue to move the background hearts
+		for(let k = 0; k < heartContainer.children.length; k++)
+		{
+			heartContainer.children[k].style.animationPlayState = "running";
+		}
+
 		speechSynthesis.cancel(); //cancel current voice audio
 		proposalSims[proposalSims.length - 1].cleanUpSounds();
 

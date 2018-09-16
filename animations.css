@@ -56,6 +56,11 @@
 	-moz-animation: stray-heart 10s infinite linear, sway 2s infinite ease-in-out alternate;
 }
 
+.paused
+{
+	animation-play-state: paused;
+}
+
 /*.stray-heart:nth-child(5n+5) {
 -webkit-animation-delay: 1s;
 -moz-animation-delay: 1s;
