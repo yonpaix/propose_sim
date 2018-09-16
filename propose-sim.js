@@ -58,7 +58,8 @@ class ProposalSim
 		}
 		//get rid of reset button when the scene before the proposal scene is reached
 		if(this.scene_i === this.scenario.proposal)
-			skipButton.style.display = 'none';
+			skipButton.style.visibility = "hidden";
+			// skipButton.style.display = 'none';
 
 		//reset linetext when final scene plays. The one where she's crying
 		if(this.scene_i == this.scenario.proposal + 1)
@@ -346,7 +347,7 @@ class SceneAnimation
 CONSTANTS
 **********************/
 const DEFAULT_MAX_LENGTH = 100;
-const HEART_CONST = 20;
+const HEART_CONST = 10;
 
 /*********************
 GLOBAL VARIABLES
@@ -492,7 +493,8 @@ skipButton.addEventListener
 
 		proposalSims[proposalSims.length - 1].scene_i = proposalSims[proposalSims.length - 1].scenario.proposal;//scenarioList[currentScenario].proposal - 1;
 		//skip = true;
-		skipButton.style.display = 'none';
+		// skipButton.style.display = 'none';
+		skipButton.style.visibility = "hidden";
 		proposalSims[proposalSims.length - 1].cleanUpSounds();
 		//playScenario(scenarioList[currentScenario]);
 	}
@@ -536,7 +538,8 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 	
 
 	sceneWindow.style.display = 'initial';
-	skipButton.style.display = 'initial';
+	// skipButton.style.display = 'initial';
+	skipButton.style.visibility = "visible";
 	speechSynthesis.cancel(); //cancel current voice audio
 
 	speechMsgInputValue = speechMsgInput.value;
@@ -660,7 +663,8 @@ function cleanUpVar()
 		sceneWindow.style.display = 'none';
 		endWindow.style.display = 'none';
 		end.style.display = 'none';
-		skipButton.style.display = 'initial';
+		// skipButton.style.display = 'initial';
+		skipButton.style.visibility = "visible";
 		dimmer.style.filter = 'unset';
 
 		//continue to move the background hearts

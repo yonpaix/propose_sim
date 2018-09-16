@@ -42,6 +42,8 @@
 	bottom: -100px;
 	left: 0;
 	filter: blur(15px);
+
+	/*display: none;*/
 }
 
 .stray-heart
@@ -77,6 +79,27 @@
 
 @-webkit-keyframes stray-heart 
 {
+	/*0%
+	{
+		opacity: 1;
+		-webkit-transform: scale(1.3) translate(0,0);
+	}
+	20%
+	{
+		-webkit-transform: scale(0.7) translate(0,-20vh);
+	}
+	40%
+	{
+		-webkit-transform: scale(1.3) translate(0,-40vh);
+	}
+	60%
+	{
+		-webkit-transform: scale(0.7) translate(0,-60vh);
+	}
+	80%
+	{
+		-webkit-transform: scale(1.3) translate(0,-80vh);
+	}*/
 	100% 
 	{
 		opacity: 0;

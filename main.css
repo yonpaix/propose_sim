@@ -20,6 +20,7 @@ body
 	position: relative;
 
 	display: flex;
+	/*flex-direction: column;*/
 	justify-content: center;
 	align-items: center;
 
@@ -39,6 +40,22 @@ h1
 	font-family: "houschka-rounded",sans-serif;
 }
 
+footer
+{
+	color: var(--border-color);
+	font-family: "houschka-rounded",sans-serif;
+	font-size: 10pt;
+}
+
+hr
+{
+	width: 100%;
+	margin: 1vh 0;
+	background-color: var(--border-color);
+	border-width: 0;
+	height: 1px;
+}
+
 #web-body
 {
 	height: 100%;
@@ -46,6 +63,7 @@ h1
 	position: relative;
 
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 
@@ -90,7 +108,7 @@ h1
 
 .wrapper
 {
-	width: 50%;
+	width: 75%;
 	/*height: 100%;*/
 	margin: 0 auto;
 	/*display: flex;*/
@@ -131,7 +149,7 @@ header
 {
 	background: center / contain no-repeat url('images/proposal-logo.png');
 	/*height: 10vh;*/
-	width: 20%;
+	width: 25%;
 	/*height: 100%;*/
 	height: 20vh;
 }
@@ -144,7 +162,7 @@ header
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 }
 
@@ -379,6 +397,7 @@ BUTTONS
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	cursor: pointer;
 }
 
 .scene-pick
@@ -507,13 +526,14 @@ BUTTONS
 	font-family: "houschka-rounded",sans-serif;
 
 	background-color: white;
-	padding: 15% 6% 15% 6%;
+	padding: 6%;
 	border: 1.5px solid var(--border-color);
-	margin-right: -1%;
-	transition: right 0.5s ease-in-out 0s;
+	margin-right: -3%;
+	margin-bottom: 3%;
+	transition: 0.5s ease-in-out 0s;
 
 	position: absolute;
-	right: -300%;
+	bottom: -300%;
 	overflow: hidden;
 	text-overflow: clip;
 }
@@ -531,7 +551,7 @@ BUTTONS
 
 .scene-pick:hover .scene-description
 {
-	right: 0;
+	bottom: 0;
 }
 
 #play-button
@@ -559,23 +579,23 @@ BUTTONS
 	background: center / cover no-repeat url('images/boss-button-before.png');
 }
 
-.scene-pick:hover #play-button
+/*.scene-pick:hover #play-button
 {
-	/*cursor: pointer;*/
+
 	background: center / cover no-repeat url('images/kitchen-button-after.png');
 }
 
 .scene-pick:hover #play-button1
 {
-	/*cursor: pointer;*/
+
 	background: center / cover no-repeat url('images/office-button-after.png');
 }
 
 .scene-pick:hover #play-button2
 {
-	/*cursor: pointer;*/
+
 	background: center / cover no-repeat url('images/boss-button-after.png');
-}
+}*/
 
 
 button
@@ -609,5 +629,6 @@ button:active
 
 #skip-button
 {
-	display: none;
+	/*display: none;*/
+	visibility: hidden;
 }
