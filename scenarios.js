@@ -42,38 +42,38 @@ let scenario_1 = new Scenario
 (
 	"Office Proposal",
 	[
-		new Scene(3400, [new SceneSound('sounds/office-love', 0)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '1s', 0, 1, 'forwards'), new SceneAnimation('images/proposal-logo.png', 'shiftx', '1s', 0, 1, 'forwards', '50%', '50%', '25%', '25%'),  new SceneAnimation('images/proposal-logo.png', 'shiftx', '3s', 0, 1, 'forwards')]
-			),
-		new Scene(1800, null,
-				[new SceneAnimation('1-2.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(2500, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(4100, null,
-				[new SceneAnimation('1-2c.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(2600, null,
-				[new SceneAnimation('1-2b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(1700, null,
-				[new SceneAnimation('1-3.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
-			),
-		new Scene(1600, null,
-				[new SceneAnimation('1-3b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+		new Scene(3000, [new SceneSound('sounds/office-love', 0)], 
+				[new SceneAnimation('images/2-1.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(3000, null,
-				[new SceneAnimation('1-4.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/2-2.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2800, null,
+				[new SceneAnimation('images/2-3.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(1100, null,
+				[new SceneAnimation('images/2-4.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2400, null,
+				[new SceneAnimation('images/2-5.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(1900, null,
+				[new SceneAnimation('images/2-6.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2500, null,
+				[new SceneAnimation('images/2-7.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+			),
+		new Scene(2800, null,
+				[new SceneAnimation('images/2-8.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(5000, [new SceneSound('plove', 250)],
-				[new SceneAnimation('1-4b.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/2-9.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			),
 		new Scene(5000, null,
-				[new SceneAnimation('1-5.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
+				[new SceneAnimation('images/2-10.jpg', 'zoomin', '1s', 0, 1, 'forwards')]
 			)
 	],
-	8, 1000
+	8, 2000
 ); //contains individual scene objects
 
 //TRAIN SCENE

@@ -46,6 +46,7 @@ class ProposalSim
 
 	playScenario() //plays the scene, if skip is true, goes to the proposal right away
 	{
+
 		if(this.close)
 			return;
 		// scenario = this.scenario;
@@ -388,6 +389,7 @@ let endWindow = document.getElementById('end-window');
 let end = document.getElementById('end');
 let supportMsg = document.getElementById("support-msg");
 let heartContainer = document.getElementById("heart-container");
+let noClick = document.getElementById('no-click');
 
 
 let confessionButton = document.getElementById("confession-button");
@@ -542,8 +544,9 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 	//proposalSim.currentScenario = scenarioNum;
 
 	// dimmer.style.opacity = 0.5;
+	noClick.style.display = 'initial';
 	dimmer.style.filter = 'blur(5px)';
-	
+
 	console.log("playstate is " + heartContainer.children[0].style.animationPlayState);
 	// pauses all the hearts when the scenario plays
 	for(let k = 0; k < heartContainer.children.length; k++)
@@ -564,6 +567,8 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 
 	proposalSims.push(new ProposalSim(scenarioNum));
 	proposalSims[proposalSims.length - 1].playScenario();
+
+
 }
 
 
@@ -680,6 +685,7 @@ function cleanUpVar()
 		end.style.display = 'none';
 		// skipButton.style.display = 'initial';
 		skipButton.style.visibility = "visible";
+		noClick.style.display = 'none';
 		dimmer.style.filter = 'unset';
 
 		//continue to move the background hearts
