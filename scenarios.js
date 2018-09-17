@@ -32,7 +32,7 @@ let scenario_0 = new Scenario
 				[new SceneAnimation('images/1-8.jpg', 'scene18', 'ease-out', '1s', '0s', 'forwards')]
 			),
 		new Scene(5000, null,
-				[new SceneAnimation('images/1-9.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards')]
+				[new SceneAnimation('images/1-9.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards'), new SceneAnimation('images/proposal-logo-glow.png', 'logo', 'linear', '12s', '0s', 'forwards', '75%', '75%', '12.5%', '12.5%')]
 			)
 	],
 	8, 1000
@@ -40,10 +40,10 @@ let scenario_0 = new Scenario
 
 let scenario_1 = new Scenario
 (
-	"Kitchen Proposal",
+	"Office Proposal",
 	[
-		new Scene(3400, [new SceneSound('sounds/kitchen-love', 0)], 
-				[new SceneAnimation('1-1.jpg', 'zoomin', '1s', 0, 1, 'forwards'), new SceneAnimation('1-2.jpg', 'shiftx', '1s', 0, 1, 'forwards'),  new SceneAnimation('1-2.jpg', 'shiftx', '3s', 0, 1, 'forwards')]
+		new Scene(3400, [new SceneSound('sounds/office-love', 0)], 
+				[new SceneAnimation('1-1.jpg', 'zoomin', '1s', 0, 1, 'forwards'), new SceneAnimation('images/proposal-logo.png', 'shiftx', '1s', 0, 1, 'forwards', '50%', '50%', '25%', '25%'),  new SceneAnimation('images/proposal-logo.png', 'shiftx', '3s', 0, 1, 'forwards')]
 			),
 		new Scene(1800, null,
 				[new SceneAnimation('1-2.jpg', 'zoomin', '1s', 0, 1, 'forwards')]

@@ -302,7 +302,7 @@ class SceneSound
 
 class SceneAnimation
 {
-	constructor(imgSource, animationStyle, timing, duration, delay, fillMode)
+	constructor(imgSource, animationStyle, timing, duration, delay, fillMode, width, height, px, py, special)
 	{
 		this.imgSource = imgSource;
 		this.animationStyle = animationStyle;
@@ -310,6 +310,12 @@ class SceneAnimation
 		this.duration = duration;
 		this.delay = delay;
 		this.fillMode = fillMode;
+
+		this.width = width;
+		this.height = height;
+		this.px = px;
+		this.py = py;
+		this.special = special; //this will be a class added to the entity. Special effects dictated by this class.
 		//this.bg = bg; //boolean, background or not
 	}
 
@@ -339,6 +345,15 @@ class SceneAnimation
 		console.log('spec is ' + animationSpec);
 
 		div.style.animation = animationSpec;
+
+		div.style.width = this.width;
+		div.style.height = this.height;
+		div.style.left = this.px;
+		div.style.top = this.py;
+
+		div.classList.add(`${this.special}`);
+
+		// console.log("ENTITY LEFT " + div.style.left + "ENTITY TOP " + div.style.top + "ENTITY WIDTH " + div.style.width + "ENTITY HEIGHT" + div.style.height);
 		
 	}
 }
@@ -678,9 +693,12 @@ function cleanUpVar()
 
 		//get rid of all bg items in the scene window
 		let bgDivs = document.getElementsByClassName('scene-bg');
+		let enDivs = document.getElementsByClassName('entity');
 
 		while(bgDivs[0])
 		    bgDivs[0].parentNode.removeChild(bgDivs[0]);
+		while(enDivs[0])
+			enDivs[0].parentNode.removeChild(enDivs[0]);
 
 		for (const nextSound of proposalSims[proposalSims.length - 1].nextSounds)
 		{
