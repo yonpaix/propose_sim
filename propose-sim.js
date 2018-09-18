@@ -100,6 +100,7 @@ class ProposalSim
 
 				utterance.onboundary = function(event)
 				{
+					console.log("onboundary fire");
 					const index = event.charIndex;
 					if(prevIndex === index)
 					{
@@ -423,7 +424,7 @@ maxLength.innerHTML = lengthCounter;
 loadVoices();
 
 let proposalSims = [];
-utterance = new SpeechSynthesisUtterance();
+let utterance = new SpeechSynthesisUtterance();
 
 strayHearts();
 
@@ -618,14 +619,14 @@ function loadVoices()
 	(
 		function(voice, i)
 		{
-			if(voice.lang == 'ja-JP')
-			{
+			// if(voice.lang == 'ja-JP')
+			// {
 				var option = document.createElement("option");
 				option.value = voice.name;
 				option.innerHTML = voice.name;
 				voiceSelect.appendChild(option);
 	
-			}
+			// }
 		}
 	);
 }
@@ -727,12 +728,12 @@ function cleanUpVar()
 
 
 
-/*if('speechSynthesis' in window)
+if('speechSynthesis' in window)
 {
-	supportMsg.innerHTML = "Your browser <strong>supports</strong> speech synthesis.";
+	supportMsg.innerHTML = "";//"Your browser <strong>supports</strong> speech synthesis.";
 
 }
 else
 {
 	supportMsg.innerHTML = "Sorry, your browser <strong>does not support</strong> speech synthesis. Get the best experience with Google Chrome";
-}*/
+}

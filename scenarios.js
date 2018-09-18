@@ -93,21 +93,42 @@ let scenario_1 = new Scenario
 
 let scenario_2 = new Scenario
 (
-	"Office Proposal",
+	"Boss Proposal",
 	[
-		new Scene('images/2-1.jpg', 3000, [new SceneSound('sounds/office-love', 0)]),
-		new Scene('images/2-2.jpg', 3000, null),
-		new Scene('images/2-3.jpg', 2800, null),
-		new Scene('images/2-4.jpg', 1100, null),
-		new Scene('images/2-5.jpg', 2400, null),
-		new Scene('images/2-6.jpg', 1900, null),
-		new Scene('images/2-7.jpg', 2500, null),
-		new Scene('images/2-8.jpg', 2800, null),
-		new Scene('images/2-9.jpg', 5000, [new SceneSound('plove', 250)]),
-		new Scene('images/2-10.jpg', 5000, null)
+		new Scene(1510, [new SceneSound('sounds/boss-love', 0)], 
+				[new SceneAnimation('images/3-1.jpg', 'zoomin', 'linear', '50s', '0s', 'forwards')]
+			),
+		new Scene(2640, null,
+				[new SceneAnimation('images/3-2.jpg', 'shiftx', 'linear', '50s', '0s', 'forwards')]
+			),
+		new Scene(2100, null,
+				[new SceneAnimation('images/3-3.jpg', 'shiftx', 'ease-out', '50s', '0s', 'forwards')]
+			),
+		new Scene(2880, null,
+				[new SceneAnimation('images/3-4.jpg', null, 'linear', '4.1s', '0s', 'forwards')]
+			),
+		new Scene(2020, null,
+				[new SceneAnimation('images/3-5.jpg', 'zoomin', 'linear', '20s', '0s', 'forwards')]
+			),
+		new Scene(2730, null,
+				[new SceneAnimation('images/3-6.jpg', 'scene15', 'linear', '8s', '0s', 'forwards')]
+			),
+		new Scene(2770, null,
+				[new SceneAnimation('images/3-7.jpg', 'scene16', 'linear', '10s', '0s', 'forwards')]
+			),
+		new Scene(2510, null,
+				[new SceneAnimation('images/3-8.jpg', 'zoomin', 'linear', '10s', '0s', 'forwards')]
+			),
+		new Scene(5000, [new SceneSound('plove', 250)],
+				[new SceneAnimation('images/3-9.jpg', 'scene18', 'ease-out', '1s', '0s', 'forwards')]
+			),
+		new Scene(5000, null,
+				[new SceneAnimation('images/3-10.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards'), new SceneAnimation('images/proposal-logo-glow.png', 'logo', 'linear', '12s', '0s', 'forwards', '75%', '75%', '12.5%', '12.5%')]
+			)
 	],
 	8, 2000
-);
+); //contains individual scene objects
+
 //LIST OF SCENARIOS
 
 let scenarioList = 

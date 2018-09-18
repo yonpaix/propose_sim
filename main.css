@@ -591,12 +591,12 @@ BUTTONS
 
 #play-button3
 {
-	background: center / cover no-repeat url('images/boss-button-before.png');
+	background: center / cover no-repeat url('images/rock-button-before.png');
 }
 
 #play-button4
 {
-	background: center / cover no-repeat url('images/boss-button-before.png');
+	background: center / cover no-repeat url('images/samurai-button-before.png');
 }
 
 /*.scene-pick:hover #play-button

@@ -25,4 +25,6 @@ FIXED
 
 9/15/18 TASK: Need to Get rid of all scene objects, not just scene background when a new scenario is played after playing the first one.
 
-9/16/18 BUG: Need to prevent users from interacting with the scene picking buttons while the scenario is playing.
+9/16/18 BUG: Need to prevent users from interacting with the scene picking buttons while the scenario is playing. FIXED
+
+9/17/18 BUG: ONBOUNDARY no longer fires when a non-native voice is used.
