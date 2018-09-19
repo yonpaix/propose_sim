@@ -19,7 +19,7 @@ class ProposalSim
 		this.nextSounds = [];
 	}
 
-	speakTxt()
+	defineUtterance()
 	{
 		// debugger;
 		utterance.text = speechMsgInputValue;
@@ -41,7 +41,7 @@ class ProposalSim
 			)[0];
 		}
 
-			window.speechSynthesis.speak(utterance);
+			// window.speechSynthesis.speak(utterance);
 	}
 
 	playScenario() //plays the scene, if skip is true, goes to the proposal right away
@@ -96,22 +96,37 @@ class ProposalSim
 			}
 			else //if there is an input message
 			{
-				let prevIndex;
+				this.defineUtterance(); //populate the utterance with pitch, voice, etc.
 
-				utterance.onboundary = function(event)
+				let prevIndex;
+				console.log('utterance is ' + utterance);
+				console.log(utterance);
+				if(utterance.voice.localService)
 				{
-					console.log("onboundary fire");
-					const index = event.charIndex;
-					if(prevIndex === index)
+					utterance.onboundary = function(event)
 					{
-						console.log('double first word, don\'t print');
-						return;
+						console.log("onboundary fire");
+						const index = event.charIndex;
+						if(prevIndex === index)
+						{
+							console.log('double first word, don\'t print');
+							return;
+						}
+						prevIndex = index;
+					  	const word = getWordAt(speechMsgInputValue,index);
+					    
+					  	lineText.innerHTML += word + " ";
+					};
+				}
+				else
+				{
+					utterance.onstart = function(event)
+					{
+						lineText.innerHTML = utterance.text;
 					}
-					prevIndex = index;
-				  	const word = getWordAt(speechMsgInputValue,index);
-				    
-				  	lineText.innerHTML += word + " ";
-				};
+					
+				}
+				
 				let that = this;
 				utterance.onend = function(event)
 				{
@@ -127,7 +142,7 @@ class ProposalSim
 				
 				this.nextSounds.push(setTimeout(() => 
 						{
-					    	this.speakTxt();
+					    	window.speechSynthesis.speak(utterance);
 					  	}, 
 					  	this.scenario.waitSpeak
 					 ));
@@ -463,14 +478,15 @@ previewButton.addEventListener
 		volumeInputValue = volumeInput.value;
 		rateInputValue = rateInput.value;
 		pitchInputValue = pitchInput.value;
-		proposalSims[proposalSims.length - 1].speakTxt();
+		proposalSims[proposalSims.length - 1].defineUtterance();
+		window.speechSynthesis.speak(utterance);
 		// if(speechMsgInput.value.length > 0)
 		// {
 		// 	setTimeout
 		// 	(
 		// 		function()
 		// 		{
-		// 			proposalSims[proposalSims.length - 1].speakTxt();
+		// 			proposalSims[proposalSims.length - 1].defineUtterance();
 		// 		},
 		// 		50
 		// 	);
@@ -544,10 +560,10 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 
 	//proposalSim.currentScenario = scenarioNum;
 
-	// dimmer.style.opacity = 0.5;
+	
 	noClick.style.display = 'initial';
 	dimmer.style.filter = 'blur(5px)';
-
+	lineText.innerHTML = ''; //this is to make sure that the line text did not linger.
 	console.log("playstate is " + heartContainer.children[0].style.animationPlayState);
 	// pauses all the hearts when the scenario plays
 	for(let k = 0; k < heartContainer.children.length; k++)
@@ -726,6 +742,7 @@ function cleanUpVar()
 		console.log('current utterance is ' + proposalSims[proposalSims.length - 1]);
 		speechMsgInput.value = '';
 		utterance.onboundary = null;
+		utterance.onstart = null;
 		utterance.onend = null;
 		//scene_i = 0; //current scene #
 		//currentScenario = null; //current scenario #

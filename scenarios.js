@@ -152,7 +152,7 @@ let scenario_3 = new Scenario
 				[new SceneAnimation('images/4-10.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards'), new SceneAnimation('images/proposal-logo-glow.png', 'logo', 'linear', '12s', '0s', 'forwards', '75%', '75%', '12.5%', '12.5%')]
 			)
 	],
-	8, 1500
+	8, 2000
 ); //contains individual scene objects
 
 let scenario_4 = new Scenario

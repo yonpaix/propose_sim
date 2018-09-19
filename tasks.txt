@@ -23,8 +23,10 @@ FIXED
 
 9/15/18 TASK: Need to only show Ready button if there is URL data, need to get rid of the Ready button and show the others again when the scene finishes.
 
-9/15/18 TASK: Need to Get rid of all scene objects, not just scene background when a new scenario is played after playing the first one.
+9/15/18 TASK: Need to Get rid of all scene objects, not just scene background when a new scenario is played after playing the first one. DONE
 
 9/16/18 BUG: Need to prevent users from interacting with the scene picking buttons while the scenario is playing. FIXED
 
-9/17/18 BUG: ONBOUNDARY no longer fires when a non-native voice is used.
+9/17/18 BUG: ONBOUNDARY no longer fires when a non-native voice is used. FIXED (This is a verified problem. Now when non-native voice is detected it will just print out the full line text.)
+
+9/18/18 BUG: For some reason, the speechMsgInput.value isn't cleared when using localService voice and closing the scene window before the talking has stopped. FIXED
