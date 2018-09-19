@@ -306,9 +306,28 @@ BOXES
 	width: 100%;
 	height: 100%;
 	z-index: 5;
-	display: flex;
+	/*display: flex;*/
 	position: absolute;
 	display: none;
+	justify-content: center;
+	align-items: center;
+}
+
+#end .wrapper
+{
+	width: 70%;
+	height: 70%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: flex-start;
+}
+
+#end .wrapper > div
+{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 }
 
 /*

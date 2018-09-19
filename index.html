@@ -4,6 +4,7 @@
 		<meta charset = "UTF-8">
 		<title>Proposal Simulator</title>
 		<!-- <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet"> -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://use.typekit.net/wvn7nbf.css">
 		<link rel="stylesheet" type="text/css" href="animations.css">
 		<link rel="stylesheet" type="text/css" href="main.css">
@@ -25,8 +26,20 @@
 					<div id="end-window">
 					</div>
 					<div id="end">
-						<label for="code">Grab the scene URL</label>
-						<input type="text" name="code" id="code">
+						<div class="wrapper">
+							<div>
+								<button onClick="buttonClick(-1)"><i class="fas fa-reply"></i></button>
+								<p>Play it again!</p>
+							</div>
+							<div>
+								<button><i class="fab fa-twitter"></i></button>
+								<p>Tweet this proposal!</p>
+							</div>
+							<div>
+								<label for="code">Grab the proposal URL</label>
+								<input type="text" name="code" id="code">
+							</div>
+						</div>
 					</div>
 					<p id = "line-text"></p>
 					<!-- <div id="scene-bg"></div> GENERATES HERE-->

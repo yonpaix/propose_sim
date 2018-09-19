@@ -196,9 +196,26 @@ let scenario_4 = new Scenario
 	8, 1500
 ); //contains individual scene objects
 
+let scenario_5 = new Scenario
+(
+	"Test",
+	[
+		new Scene(1000, [new SceneSound('sounds/samurai-love', 0)], 
+				[new SceneAnimation('images/5-1.jpg', 'zoomin', 'linear', '50s', '0s', 'forwards')]
+			),
+		new Scene(1000, null,
+				[new SceneAnimation('images/5-2.jpg', 'shiftx', 'linear', '50s', '0s', 'forwards')]
+			),
+		new Scene(5000, null,
+				[new SceneAnimation('images/5-11.jpg', 'scene18', 'ease-out', '3s', '0s', 'forwards'), new SceneAnimation('images/proposal-logo-glow.png', 'logo', 'linear', '12s', '0s', 'forwards', '75%', '75%', '12.5%', '12.5%')]
+			)
+	],
+	1, 1500
+); //contains individual scene objects
+
 //LIST OF SCENARIOS
 
 let scenarioList = 
 [
-	scenario_0, scenario_1, scenario_2, scenario_3, scenario_4
+	scenario_5, scenario_1, scenario_2, scenario_3, scenario_4
 ];

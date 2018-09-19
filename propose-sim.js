@@ -172,7 +172,7 @@ class ProposalSim
 			function()
 			{
 				endWindow.style.display = 'initial';
-				end.style.display = 'initial';
+				end.style.display = 'flex';
 				sceneCode.value = outputCode;
 			};
 		}
@@ -555,6 +555,9 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 		heartContainer.children[k].style.animationPlayState = "paused";
 	}
 	
+	//replaying the scenario calls buttonClick(-1), this gets rid of the end and end-window divs.
+	end.style.display = "none";
+	endWindow.style.display = "none";
 
 	sceneWindow.style.display = 'initial';
 	// skipButton.style.display = 'initial';
