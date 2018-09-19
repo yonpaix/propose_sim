@@ -580,7 +580,15 @@ function buttonClick(scenarioNum) //scenario = x, then scenario = currentScenari
 FUNCTIONS
 **********************/
 
-////////////////////////ORIGINAL LOCATION FOR encodeScenario()///////////////////////////////////////////////
+function copyToClipboard(element)
+{
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).val()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+
 
 function decodeScenario()
 {
