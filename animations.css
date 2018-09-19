@@ -142,6 +142,19 @@
 	}
 }
 
+@keyframes woosh
+{
+	0%
+	{
+		transform: scale(1.05);
+		/*opacity: 0;*/
+	}
+	100%
+	{
+		transform: scale(1.2);
+	}
+}
+
 @keyframes zoomin
 {
 	0%
@@ -149,13 +162,21 @@
 		transform: scale(1.1);
 		/*opacity: 0;*/
 	}
-	/*5%
-	{
-		opacity: 100%;
-	}*/
 	100%
 	{
 		transform: scale(1.5);
+	}
+}
+@keyframes zoomout
+{
+	0%
+	{
+		transform: scale(1.5);
+		/*opacity: 0;*/
+	}
+	100%
+	{
+		transform: scale(1.1);
 	}
 }
 
@@ -168,6 +189,40 @@
 	100%
 	{
 		transform: translateX(50%);
+	}
+}
+@keyframes shiftup
+{
+	0%
+	{
+		transform: scale(1.2);
+	}
+	100%
+	{
+		transform: translateY(-50%);
+	}
+}
+@keyframes shiftdown
+{
+	0%
+	{
+		transform: scale(1.2);
+	}
+	100%
+	{
+		transform: translateY(50%);
+	}
+}
+
+@keyframes endzoom
+{
+	0%
+	{
+		transform: scale(1.1);
+	}
+	100%
+	{
+		transform: scale(1.14);
 	}
 }
 
@@ -194,7 +249,7 @@
 	}
 	100%
 	{
-		transform: scale(1.2);
+		/*transform: scale(1.2);*/
 		transform: translate(-20%, 20%);
 	}
 }
@@ -215,14 +270,65 @@
 	}
 }
 
-@keyframes scene18
+
+
+/*OFFICE*/
+
+@keyframes scene25
 {
 	0%
 	{
-		transform: scale(1.1);
+		transform: scale(1.06);
+		/*opacity: 0;*/
 	}
 	100%
 	{
-		transform: scale(1.14);
+		transform: scale(1.005);
+	}
+}
+
+/*BOSS*/
+
+@keyframes scene36
+{
+	0%
+	{
+		transform: scale(2.5);
+	}
+	10%
+	{
+		transform: scale(1.2);
+	}
+	100%
+	{
+		transform: scale(1.1) rotate(3deg);
+	}
+}
+
+@keyframes scene37
+{
+	0%
+	{
+		transform: scale(1.05) translate(4%, 0%);
+	}
+	5%
+	{
+		transform: translate(1%, 0%);
+	}
+	100%
+	{
+		transform: translate(0%, 0%);
+	}
+}
+
+@keyframes scene3end
+{
+	0%
+	{
+		transform: scale(1.1) translate(0%, 3%);
+	}
+	100%
+	{
+		transform: scale(1.1) translate(0%, -3%);
 	}
 }

@@ -36,32 +36,33 @@
 
 				
 			</div>
+			<div id="bubble-tail"></div>
 			<div id="voice-box">
-		<!-- <input type="text" name="speech-msg" id="speech-msg"> -->
-		<textarea id="speech-msg" rows="6"></textarea>
-		<span id="max-length"></span>
-		<div class="option">
-			<label for="voice">Voice</label>
-			<select name="voice" id="voice"></select>
-		</div>
-		
-		<div class="option">
-			<label for="volume">Volume</label>
-			<input type="range" min="0" max="1" step="0.1" name="volume" id="volume" value="1" />
-		</div>
+				<!-- <input type="text" name="speech-msg" id="speech-msg"> -->
+				<textarea id="speech-msg" rows="6"></textarea>
+				<span id="max-length"></span>
+				<div class="option">
+					<label for="voice">Voice</label>
+					<select name="voice" id="voice"></select>
+				</div>
+				
+				<div class="option">
+					<label for="volume">Volume</label>
+					<input type="range" min="0" max="1" step="0.1" name="volume" id="volume" value="1" />
+				</div>
 
-		<div class="option">
-			<label for="rate">Rate</label>
-			<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value="1" />
-		</div>
+				<div class="option">
+					<label for="rate">Rate</label>
+					<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value="1" />
+				</div>
 
-		<div class="option">
-			<label for="pitch">Pitch</label>
-			<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
-		</div>
-		<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
-		<button id="preview-button">Preview Voice</button>
-	</div>
+				<div class="option">
+					<label for="pitch">Pitch</label>
+					<input type="range" min="0" max="2" step="0.1" name="pitch" id="pitch" value="1" />
+				</div>
+				<button id="confession-button" onClick="buttonClick(-1)">Watch Scene</button>
+				<button id="preview-button">Preview Voice</button>
+			</div>
 
 	<!-- Voice Box -->
 
@@ -133,18 +134,72 @@
 							Ready	
 						</a> -->
 					</div>
+
+					<!-- Mobile version -->
+				<div id="scene-picker-mobile">
+						
+							<a class="scene-pick" onClick="buttonClick(0)">
+								<div class="color-overlay"></div>
+								<div class="scene-pick-bg" id="play-button"></div>
+									<div class="scene-description">
+										That Morning Together
+								</div>
+							</a>
+						
+						
+						<a class="scene-pick" onClick="buttonClick(1)">
+							<div class="color-overlay"></div>
+							<div class="scene-pick-bg" id="play-button1"></div>
+								<div class="scene-description">
+									My Cute Subordinate
+							</div>
+						</a>
+					
+						
+						<a class="scene-pick" onClick="buttonClick(2)">
+							<div class="color-overlay"></div>
+							<div class="scene-pick-bg" id="play-button2"></div>
+								<div class="scene-description">
+									A Big Promotion
+							</div>
+						</a>
+					
+						
+						<a class="scene-pick" onClick="buttonClick(3)">
+							<div class="color-overlay"></div>
+							<div class="scene-pick-bg" id="play-button3"></div>
+								<div class="scene-description">
+									My Rockstar Boyfriend
+							</div>
+						</a>
+						
+						
+						<a class="scene-pick" onClick="buttonClick(4)">
+							<div class="color-overlay"></div>
+							<div class="scene-pick-bg" id="play-button4"></div>
+								<div class="scene-description">
+									Forbidden Love
+							</div>
+						</a>
+					
+						<!-- <a class="scene-pick" id="ready-button">
+							Ready	
+						</a> -->
+					</div>
 				</div>
+
+				
+				
+
 			</section>
+		</div>
 			<div class="wrapper">
 				<hr />
 			</div>
-			<section>
-			</section>
-			
 			<footer>
 		<div class="wrapper">
-			<p>Recreated, programmed by David Li</p>
-			<p>Disclaimer: This is an HTML5 recreation of the 2014 flash simulator, Imetore Propose by Zexy. I do not own the images/sounds/music related to this project. The official site has since been removed from the web and this is a recreation that is not commercial and aims to help me become a better developer and to share this wonderful simulator to the world.
+			<p>Recreated by David Li</p>
+			<p>Disclaimer: This is an HTML5 recreation of the 2014 flash simulator, Imetore Propose by Zexy. I do not own the images/sounds/music related to this project. The official site has since been removed from the web and this is a recreation that is not commercially motivated.
 			</p>
 		</div>
 
